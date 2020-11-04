@@ -14,8 +14,35 @@ import time
 import numdifftools as nd
 import concurrent.futures
 
+
+
+
 abc_file_path = "./solution_abc_2020-06-29_w_noise_h=10e-6.csv"
 voronov_file_path = "./voronov_k.csv"
+
+
+
+
+
+##############################################################################
+# Set the code parameters below.                                             #
+##############################################################################
+    
+qs = [6]
+ne_lo = 11
+ne_hi = 12.41664051
+Te_lo = 10
+Te_hi = 10e3
+MC_unc_lo = -.6
+MC_unc_hi = .6
+N = 100
+number_of_MC_iters = 1
+
+##############################################################################
+# No need to touch anything below this line!                                 #
+##############################################################################
+
+
 
 
 
@@ -265,23 +292,7 @@ def fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N):
 
 
 
-##############################################################################
-# Set the code parameters below.                                             #
-##############################################################################
-    
-qs = [6]
-ne_lo = 11
-ne_hi = 12.41664051
-Te_lo = 10
-Te_hi = 10e3
-MC_unc_lo = -.6
-MC_unc_hi = .6
-N = 10
-number_of_MC_iters = 1
 
-##############################################################################
-# No need to touch anything below this line!                                 #
-##############################################################################
 
 
 
