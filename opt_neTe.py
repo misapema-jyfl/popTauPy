@@ -14,8 +14,8 @@ import time
 import numdifftools as nd
 import concurrent.futures
 
-abc_file_path = "/home/miha/uni/research/ppp/popTauPy/results/solution_abc_2020-06-29_w_noise_h=10e-6.csv"
-voronov_file_path = "/home/miha/uni/research/ppp/popTauPy/voronov_k.csv"
+abc_file_path = "./solution_abc_2020-06-29_w_noise_h=10e-6.csv"
+voronov_file_path = "./voronov_k.csv"
 
 
 
@@ -277,8 +277,8 @@ Te_lo = 10
 Te_hi = 10e3
 MC_unc_lo = -.6
 MC_unc_hi = .6
-N = 100
-number_of_MC_iters = 8
+N = 1000
+number_of_MC_iters = 100
 
 ##############################################################################
 # No need to touch anything below this line!                                 #
