@@ -135,7 +135,7 @@ def F(Te, ne, q, bias_coefficients):
     tau = calculate_confinement_time(q, Te, ne, bias_coefficients)
     tau_h = calculate_confinement_time(q+1, Te, ne, bias_coefficients)
     
-    F = np.abs(tau_ratio - tau/tau_h)
+    F = 100*np.abs(tau_ratio - tau/tau_h)/tau_ratio
         
     return F
 
