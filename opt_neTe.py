@@ -154,7 +154,6 @@ def fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N):
     #
     bCoeffs = set_bias_coefficients(unc_lo=MC_unc_lo, unc_hi=MC_unc_hi, length=cStates)
     
-    
     #
     # Create the ne vector, and displace points on vector by small random amount.
     # Make the displacement s.t. each n-point may be displaced at most halfway 
@@ -206,7 +205,7 @@ def fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N):
     # For each n-point, perform the minimization of the penalty function.
     #
     for n in ns:
-         
+        
         
         T0 = np.random.uniform(low=Te_lo, high=Te_hi) #Set initial guess T0
         
@@ -228,7 +227,7 @@ def fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N):
             
             opt_nes.append(n)
             opt_Tes.append(Te)
-            opt_Fs.append(F(Te, n, q))
+            opt_Fs.append(F(Te, n, q, bCoeffs))
             
             # Calculate tau and save
             tau = calculate_confinement_time(q, Te, n, bCoeffs)
@@ -277,8 +276,8 @@ Te_lo = 10
 Te_hi = 10e3
 MC_unc_lo = -.6
 MC_unc_hi = .6
-N = 1000
-number_of_MC_iters = 100
+N = 10
+number_of_MC_iters = 1
 
 ##############################################################################
 # No need to touch anything below this line!                                 #
