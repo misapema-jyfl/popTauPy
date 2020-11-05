@@ -35,8 +35,8 @@ Te_lo = 10
 Te_hi = 10e3
 MC_unc_lo = -.6
 MC_unc_hi = .6
-N = 500
-number_of_MC_iters = 1
+N = 10
+number_of_MC_iters = 5
 
 ##############################################################################
 # No need to touch anything below this line!                                 #
@@ -168,18 +168,20 @@ def F(Te, ne, q, bias_coefficients):
 
 
 
-def set_bias_coefficients(unc_lo, unc_hi, length):
+def set_bias_coefficients(unc_lo, unc_hi):
+    
     bias_coefficients = np.random.uniform(unc_lo,unc_hi,len(cStates)) 
+    
     return bias_coefficients
 
 
-def fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N):
+def fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N, bias_coefficients):
     
 
     #
     # Create Voronov bias coefficients.
     #
-    bCoeffs = set_bias_coefficients(unc_lo=MC_unc_lo, unc_hi=MC_unc_hi, length=cStates)
+    bCoeffs = bias_coefficients
     
     #
     # Create the ne vector, and displace points on vector by small random amount.
@@ -299,14 +301,15 @@ def fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N):
 
 
 def helper(arguments):
-    return fun(arguments[0])
+    
+    return fun(arguments[0],arguments[1])
 
 
-def fun(q):
+def fun(q, bCoeffs):
     '''
     Wrapper function for multithreading.
     '''
-    result = fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N)
+    result = fill_solution_space(q, ne_lo, ne_hi, Te_lo, Te_hi, MC_unc_lo, MC_unc_hi, N, bCoeffs)
     return result
 
 def main():
@@ -315,8 +318,9 @@ def main():
     '''
     
     for q in qs:        
-               
-        iterList = [(q, iteration) for iteration in range(number_of_MC_iters)]
+        
+        bCs = [set_bias_coefficients(unc_lo=MC_unc_lo, unc_hi=MC_unc_hi) for i in range(number_of_MC_iters)]
+        iterList = [(q, bC, iteration) for bC, iteration in zip(bCs, range(number_of_MC_iters))]
         
         opt_nes = [] # To collect solutions
         opt_Tes = [] 
@@ -326,7 +330,7 @@ def main():
         opt_cx_rates = []
         opt_eCs = [] # Energy contents (n*T)
         
-        with concurrent.futures.ProcessPoolExecutor() as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=(5)) as executor:
             
             iteration = 0
             
