@@ -35,8 +35,8 @@ Te_lo = 10
 Te_hi = 10e3
 MC_unc_lo = -.6
 MC_unc_hi = .6
-N = 500
-number_of_MC_iters = 1
+N = 100
+number_of_MC_iters = 24
 
 ##############################################################################
 # No need to touch anything below this line!                                 #
