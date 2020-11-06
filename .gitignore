@@ -1,3 +1,7 @@
 results/
 __pycache__/
 data/
+*.job
+errorout
+out
+
