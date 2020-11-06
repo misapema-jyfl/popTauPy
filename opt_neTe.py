@@ -15,33 +15,23 @@ import numdifftools as nd
 import concurrent.futures
 
 
-
-
-abc_file_path = "./solution_abc_2020-06-29_w_noise_h=10e-6.csv"
-voronov_file_path = "./voronov_k.csv"
+from parameters import p
 
 
 
 
-
-##############################################################################
-# Set the code parameters below.                                             #
-##############################################################################
+abc_file_path = p["abc_file_path"]
+voronov_file_path = p["voronov_file_path"]
     
-qs = [6]
-ne_lo = 11
-ne_hi = 12.41664051
-Te_lo = 10
-Te_hi = 10e3
-MC_unc_lo = -.6
-MC_unc_hi = .6
-N = 10
-number_of_MC_iters = 5
-
-##############################################################################
-# No need to touch anything below this line!                                 #
-##############################################################################
-
+qs = p["cStates"]
+ne_lo = p["ne_lo"]
+ne_hi = p["ne_hi"]
+Te_lo = p["Te_lo"]
+Te_hi = p["Te_hi"]
+MC_unc_lo = p["MC_unc_lo"]
+MC_unc_hi = p["MC_unc_hi"]
+N = p["N"]
+number_of_MC_iters = p["number_of_MC_iters"]
 
 
 
@@ -330,7 +320,7 @@ def main():
         opt_cx_rates = []
         opt_eCs = [] # Energy contents (n*T)
         
-        with concurrent.futures.ProcessPoolExecutor(max_workers=(5)) as executor:
+        with concurrent.futures.ProcessPoolExecutor() as executor:
             
             iteration = 0
             
