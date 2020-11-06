@@ -13,12 +13,16 @@ from scipy.optimize import minimize
 import time
 import numdifftools as nd
 import concurrent.futures
+import os
 
 
+# If the results folder doesn't exist, create it:
+if not os.path.exists("./results"):
+    os.mkdir("./results")
+
+
+# Import parameters from parameters.py
 from parameters import p
-
-
-
 
 abc_file_path = p["abc_file_path"]
 voronov_file_path = p["voronov_file_path"]
