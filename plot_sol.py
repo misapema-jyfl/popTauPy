@@ -25,18 +25,18 @@ font = {'family' : 'normal',
 matplotlib.rc('font', **font)
 
 fNames = [
-"/home/miha/uni/research/ppp/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
-"/home/miha/uni/research/ppp/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
-"/home/miha/uni/research/ppp/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
-"/home/miha/uni/research/ppp/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
-"/home/miha/uni/research/ppp/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
-"/home/miha/uni/research/ppp/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
+"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
+"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
+"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
+"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
+"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
+"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
 ]
 
 cStates=[5,6,7,8,9,10]
 
 
-penaltyLim = 1e-3 # The penalty function value upper limit
+penaltyLim = 1e-4 # The penalty function value upper limit
 
 
 def find_confidence_interval(list_of_values, condition_percentage):
@@ -649,54 +649,3 @@ ax.set_yscale("log")
 plt.tight_layout()
 plt.savefig("./results/fig_triple-products.png", dpi=300)
 plt.close()
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-Results vs penalty function value
-'''
-# for q, fName in zip(cStates, fNames):
-    
-#     df = pd.read_csv(fName)
-#     Ts = df["T"]
-#     ns = df["n"]
-#     taus = df["tau"]
-#     taus = np.array([1e3*t for t in taus])
-#     Fs = df["F"]
-    
-#     fig, ax = plt.subplots()
-#     ax.scatter(Fs, ns)
-#     ax.set_xscale("log")
-#     ax.set_yscale("log")
-#     ax.set_xlabel("Penalty function value")
-#     ax.set_ylabel(r"$n_e$ (cm$^{-3}$)")
-#     plt.close()
-    
-#     fig, ax = plt.subplots()
-#     ax.scatter(Fs, Ts)
-#     ax.set_xscale("log")
-#     ax.set_yscale("log")
-#     ax.set_xlabel("Penalty function value")
-#     ax.set_ylabel(r"$T_e$ (eV)")
-#     ax.set_ylim(bottom=1)
-#     plt.tight_layout
-#     plt.close()
-    
-#     fig, ax = plt.subplots()
-#     ax.scatter(Fs, taus)
-#     ax.set_xscale("log")
-#     ax.set_yscale("log")
-#     ax.set_xlabel("Penalty function value")
-#     ax.set_ylabel(r"$\tau^q$ (ms)")
-#     ax.set_ylim(bottom=-1)
-#     plt.tight_layout
-#     plt.close()
