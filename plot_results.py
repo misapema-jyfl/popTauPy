@@ -31,6 +31,7 @@ fNames = [
 "/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
 ]
 
+
 cStates=[5,6,7,8,9,10]
 
 
@@ -507,6 +508,8 @@ class Data:
     
 d = Data(fNames, cStates)
 
+
+
 '''
 Plot characteristic time vs F.
 Use the keys "tau", "cx_time", "inz_time" to plot each respectively.
@@ -573,10 +576,10 @@ Plot plasma energy contents against charge state.
 '''
 Plot plasma triple product against charge state.
 '''
-Data.F_hi=1e-4
-fig, ax = d.plot_nTtau_against_q(qs=[5,6,7,8,9,10], marker="s", color="m")
-ax.set_ylim(bottom=1e11,top=1e14)
-plt.savefig("./results/fig_nTtau_vs_q.png",dpi=300)
+# Data.F_hi=1e-4
+# fig, ax = d.plot_nTtau_against_q(qs=[5,6,7,8,9,10], marker="s", color="m")
+# ax.set_ylim(bottom=1e11,top=1e14)
+# plt.savefig("./results/fig_nTtau_vs_q.png",dpi=300)
 
 
 '''

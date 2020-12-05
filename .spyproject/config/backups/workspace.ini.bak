@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['../../miscellaneous/F<X_analysis/plot_number_of_solutions.py', '../../miscellaneous/F<X_analysis/plot_times.py', 'plot_sol.py', 'plot_results.py', '../../miscellaneous/n0_analysis/n0.py']
+recent_files = ['../../../../../.config/spyder-py3/temp.py', 'plot_results.py']
 
