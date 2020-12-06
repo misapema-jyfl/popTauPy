@@ -143,6 +143,7 @@ class Data:
 
     def set_limits(self, df):
         
+        # Set the desired ne, Te, F limits on the data
         df = df[df["F"]<self.F_hi]
         df = df[(df["n"]<self.ne_hi)&(df["n"]>self.ne_lo)]
         df = df[(df["T"]<self.Te_hi)&(df["T"]>self.Te_lo)]
