@@ -514,16 +514,19 @@ d = Data(fNames, cStates)
 '''
 Plot characteristic time vs F.
 Use the keys "tau", "cx_time", "inz_time" to plot each respectively.
+Make sure to change figure name appropriately!
+Remember to change the marker!
+Remember to change the markercolor!
 '''
-# for q in[5,6,7,8,9,10]:
-#     fig,ax=d.plot_time_against_F(Fs=[1,1e-1,1e-2,1e-3,1e-4,1e-5,1e-6],
-#                                   q=q,
-#                                   key="tau",
-#                                   marker=".",
-#                                   color="r")
-#     fig.tight_layout()
-#     plt.savefig("./results/time_{}_vs_F_q={}.png".format("CONF",q),dpi=300)
-#     plt.close(fig)
+for q in[5,6,7,8,9,10]:
+    fig,ax=d.plot_time_against_F(Fs=[1,1e-1,1e-2,1e-3,1e-4,1e-5,1e-6],
+                                  q=q,
+                                  key="tau",
+                                  marker=".",
+                                  color="r")
+    fig.tight_layout()
+    plt.savefig("./results/time_{}_vs_F_q={}.eps".format("CONF",q),format="eps")
+    plt.close(fig)
 
 
 '''
@@ -533,30 +536,34 @@ Plot number of solutions vs F.
 #     fig, ax = d.plot_number_of_solutions(Fs=[1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6], q=q)
 #     ax.set_ylim(bottom=10,top=1e5)
 #     fig.tight_layout()
-#     plt.savefig("./results/number_of_solutions_vs_F_q={}".format(q), dpi=300)
+#     plt.savefig("./results/number_of_solutions_vs_F_q={}.eps".format(q), format="eps")
 #     plt.close(fig)
 
 
 '''
 Plot characteristic time vs charge state, with error bars.
 Use the keys "tau", "cx_time", "inz_time" to plot each respectively.
-Remember to set F_hi as you wish before running this!
+Remember to change the plot name!
+Remember to change the marker!
+Remember to change the markercolor!
+Remember to change the ylim!
+Remember to change the yscale!
 '''
 # Data.F_hi = 1e-4
-# fig, ax = d.plot_time_against_q("cx_time",
+# fig, ax = d.plot_time_against_q("tau",
 #                                 qs=[5,6,7,8,9,10],
-#                                 marker="^", 
-#                                 color="b")
-# ax.set_ylim(bottom=1,top=1e3)
-# ax.set_yscale("log")
-# plt.savefig("./results/fig_{}_vs_q.png".format("CX"),dpi=300)
+#                                 marker=".", 
+#                                 color="r")
+# # ax.set_ylim(bottom=1,top=1e3)
+# # ax.set_yscale("log")
+# plt.savefig("./results/fig_{}_vs_q.eps".format("CONF"), format="eps")
 # plt.close()
 
 '''
 Output characteristic times in a .csv file.
 '''
-# df_out=d.output_time_results(qs=[5,6,7,8,9,10], key="cx_time")
-# df_out.to_csv("./results/output_time_{}_vs_q.csv".format("CX"))
+# df_out=d.output_time_results(qs=[5,6,7,8,9,10], key="tau")
+# df_out.to_csv("./results/output_time_{}_vs_q.csv".format("CONF"))
 
 '''
 Plot plasma energy contents against charge state.
@@ -564,11 +571,11 @@ Plot plasma energy contents against charge state.
 # Data.F_hi=1e-4
 # fig, ax = d.plot_nT_against_q(qs=[5,6,7,8,9,10], marker="s", color="k")
 # ax.set_ylim(bottom=1e13,top=1e16)
-# plt.savefig("./results/fig_nT_vs_q.png",dpi=300)
+# plt.savefig("./results/fig_nT_vs_q.eps", format="eps")
 
-# '''
-# Output energy contents in a .csv file.
-# '''
+'''
+Output energy contents in a .csv file.
+'''
 # df_out=d.output_nT_results(qs=[5,6,7,8,9,10])
 # df_out.to_csv("./results/output_nT_vs_q.csv")
 
@@ -580,7 +587,7 @@ Plot plasma triple product against charge state.
 # Data.F_hi=1e-4
 # fig, ax = d.plot_nTtau_against_q(qs=[5,6,7,8,9,10], marker="s", color="m")
 # ax.set_ylim(bottom=1e11,top=1e14)
-# plt.savefig("./results/fig_nTtau_vs_q.png",dpi=300)
+# plt.savefig("./results/fig_nTtau_vs_q.eps",format="eps")
 
 
 '''
@@ -589,11 +596,21 @@ Output triple products in a .csv file.
 # df_out=d.output_nTtau_results(qs=[5,6,7,8,9,10])
 # df_out.to_csv("./results/output_nTtau_vs_q.csv")
 
+
+
+
+
+
+
+
+
+
 '''
 Plot solution sets.
+N.B! This is old! Don't use this! Use plot_solution_sets.py!
 '''
 # Data.F_hi=1e-4
 # fig, ax = d.plot_solution_sets(qs=[5,6,7,8,9,10])
 # ax.set_xscale("log")
-# plt.savefig("./results/fig_solution_sets.png",dpi=300)
+# plt.savefig("./results/fig_solution_sets.eps",format="eps")
 

@@ -120,7 +120,7 @@ class Data:
         ax.set_ylabel(r"$n_e$ (cm$^{-3}$)")
         fig.tight_layout()
         
-        plt.savefig("./results/solution_set_q={}+.png".format(str(q)),dpi=500)
+        plt.savefig("./results/solution_set_q={}+.eps".format(str(q)),format="eps")
         plt.close()
         
         

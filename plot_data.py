@@ -100,7 +100,7 @@ for s in ss:
         ax2.legend()
         
 
-fig.savefig("./results/data_upto6+.png",dpi=500)
-fig2.savefig("./results/data_upto12+.png",dpi=500)
+fig.savefig("./results/data_upto6+.eps", format="eps")
+fig2.savefig("./results/data_upto12+.eps", format="eps")
 
 
