@@ -52,65 +52,6 @@ ss = zip(cStates, dataFilePaths, colors)
 
 
 # Make the figures
-# fig, ax = plt.subplots()
-# fig2, ax2 = plt.subplots()
-# fig3, ax3 = plt.subplots()
-
-# # Make the plots
-# for s in ss:
-    
-#     # unpack the iterable
-#     cState = s[0]
-#     fName = s[1]
-#     color = s[2]
-    
-#     # get the data from the data file
-#     df = pd.read_csv(fName, names=["time", "current"])
-#     t = df["time"]*1e3 # Convert to ms
-#     i = df["current"]*1e3 # Convert to nA
-    
-    
-#     # Create the data label
-#     c = "{" + str(cState) + "+}"
-#     lbl = r"K$^{}$".format(c)
-    
-#     if cState < 5:
-        
-#         # plot the data
-#         ax.plot(t,i,label=lbl)
-#         ax.set_xlim(left=-10, right=30)
-#         ax.set_xlabel("Time (ms)")
-#         ax.set_ylabel("Current (enA)")
-#         ax.legend()
-        
-        
-#     elif cState < 9:
-    
-#         # plot the data
-#         ax2.plot(t,i,label=lbl)
-        
-#         ax2.set_xlim(left=-10, right=150)
-#         ax2.set_xlabel("Time (ms)")
-#         ax2.set_ylabel("Current (enA)")
-        
-#         ax2.legend()
-        
-#     else:
-#         # plot the data
-#         ax3.plot(t,i,label=lbl)
-#         ax3.set_xlabel("Time (ms)")
-#         ax3.set_ylabel("Current (enA)")
-        
-#         ax3.set_xlim(left=-10,right=360)
-#         ax3.legend()
-        
-
-
-# fig.savefig("./results/data_upto4+.png",dpi=500)
-# fig2.savefig("./results/data_upto8+.png",dpi=500)
-# fig3.savefig("./results/data_upto12+.png",dpi=500)
-
-# Make the figures
 fig, ax = plt.subplots()
 fig2, ax2 = plt.subplots()
 
