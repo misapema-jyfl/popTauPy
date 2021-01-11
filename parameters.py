@@ -1,5 +1,42 @@
 # -*- coding: utf-8 -*-
 
+
+'''
+Parameters for running the optimisation routine 'opt_abc.py'
+
+charge_states = list of available charge states (in numerical order)
+parsed_data_files = list of the parsed data files (t=0 set the same, b.g. reduced, in numerical order)
+h = Runge-Kutta algorithm time step (units of s)
+output_file_name = file name under which to save the obtained abc parameters  
+'''
+d = {
+     
+     "charge_states" : [1,2,3,4,5,6,7,8,9,10,11,12],
+     
+     "parsed_data_files": ["/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K1+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K2+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K3+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K4+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K5+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K6+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K7+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K8+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K9+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K10+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K11+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K12+.csv"],
+     
+     "h" : 1000e-6,
+     
+     "output_file_name" : "abc_2020-06-29_w_noise_h=1e-3.csv"
+     
+     }
+
+
+
+
+
+
 '''
 Parameters for running the optimisation routine 'opt_neTe.py'
 '''
@@ -17,3 +54,6 @@ p = {
      "N" 			: 100, 						# Number of elements in the ne-vector
      "number_of_MC_iters" 	: 10 							# Number of Monte Carlo iterations to perform
      }
+
+
+

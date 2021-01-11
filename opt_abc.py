@@ -12,7 +12,7 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 import numpy as np
 from scipy import interpolate
-
+from parameters import d
 
 # Set font for plots
 font = {'family' : 'normal',
@@ -22,31 +22,8 @@ font = {'family' : 'normal',
 matplotlib.rc('font', **font)
 
 
-'''
-Give the data file file paths. Must be in numerical order!
-'''
-
-dataFilePaths = [
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K1+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K2+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K3+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K4+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K5+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K6+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K7+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K8+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K9+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K10+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K11+.csv",
-"/home/miha/uni/research/ppp/data/data_2020-06-29_w_noise/K12+.csv"
-]
-
-'''
-Give the charge states corresponding to data files. Must be in numerical order!
-'''
-chargeStates = [1,2,3,4,5,6,7,8,9,10,11,12]
-
-
+dataFilePaths = d["parsed_data_files"]
+chargeStates = d["charge_states"]
 
 
 def get_data_dict(chargeStates, dataFilePaths):
@@ -182,7 +159,7 @@ def rk4(t0, y0, tf, f,**kwargs):
 
     '''
     
-    h = 1000e-6 # Time step (units of s) for the RK4 integrator. #TODO! Change this as per need.
+    h = d["h"] # Time step (units of s) for the RK4 integrator. 
     Y = []
     T = []
     yn = y0
@@ -468,7 +445,7 @@ df_res.index=["a", "b", "c", "da", "db", "dc", "chi2"]
 
 print(df_res)
 
-# df_res.to_csv("./results/solution_abc_2020-06-29_w_noise_h=10e-6.csv") #TODO! Change save to directory as you wish.
+df_res.to_csv("./results/" + d["output_file_name"])
 
 
 
