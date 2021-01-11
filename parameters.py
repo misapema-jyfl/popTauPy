@@ -57,3 +57,26 @@ p = {
 
 
 
+
+
+
+'''
+Parameters for plotting.
+'''
+
+# RK4 fits
+# charge_states = list of charge states for which to perform fitting
+# h = RK4 time step to use in fitting
+plotting_fits = {
+    "charge_states" : [5,6,7,8,9,10],
+    "h" : 10e-6,
+    "output_file_name" : "fit_h=10e-6", # Will automatically append "_q=X+"
+    "output_file_type" : ".eps"
+    }
+
+
+
+
+
+
+
