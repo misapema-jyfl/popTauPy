@@ -88,6 +88,19 @@ plotting_fits = {
     }
 
 
+# solution_set_files = list of files containing the solution sets obtained from opt_neTe.py
+# charge_states = list of charge states corresponding to above files
+plotting_results = {
+    "solution_set_files" : ["/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
+],
+    
+"charge_states" : [5,6,7,8,9,10]
+    }
 
 
 

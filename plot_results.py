@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
+from parameters import plotting_results
+
 
 # Set font for plots
 font = {'family' : 'normal',
@@ -22,17 +24,8 @@ matplotlib.rc('font', **font)
 
 
 
-fNames = [
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
-]
-
-
-cStates=[5,6,7,8,9,10]
+fNames = plotting_results["solution_set_files"]
+cStates= plotting_results["charge_states"]
 
 
 
@@ -308,7 +301,18 @@ class Data:
                     label=lbl)
         
         # ax.set_xscale("log")
-        ax.set_ylabel("Milliseconds")
+        
+        if key == "inz_time":
+            
+            ax.set_ylabel(r"$[\left\langle\sigma v\right\rangle^{\mathrm{inz}}_{q\to q+1} n_e]^{-1}$ (ms)")
+            
+        elif key == "cx_time":
+            
+            ax.set_ylabel(r"$[\left\langle\sigma v\right\rangle^{\mathrm{cx}}_{q\to q-1} n_0]^{-1}$ (ms)")
+
+        else:
+            ax.set_ylabel(r"$\tau^q$ (ms)")
+                
         ax.set_xlabel("Charge state")
         ax.set_xticks(qs)
         ax.set_ylim(bottom=0)
@@ -518,15 +522,15 @@ Make sure to change figure name appropriately!
 Remember to change the marker!
 Remember to change the markercolor!
 '''
-for q in[5,6,7,8,9,10]:
-    fig,ax=d.plot_time_against_F(Fs=[1,1e-1,1e-2,1e-3,1e-4,1e-5,1e-6],
-                                  q=q,
-                                  key="tau",
-                                  marker=".",
-                                  color="r")
-    fig.tight_layout()
-    plt.savefig("./results/time_{}_vs_F_q={}.eps".format("CONF",q),format="eps")
-    plt.close(fig)
+# for q in[5,6,7,8,9,10]:
+#     fig,ax=d.plot_time_against_F(Fs=[1,1e-1,1e-2,1e-3,1e-4,1e-5,1e-6],
+#                                   q=q,
+#                                   key="tau",
+#                                   marker=".",
+#                                   color="r")
+#     fig.tight_layout()
+#     plt.savefig("./results/time_{}_vs_F_q={}.eps".format("CONF",q),format="eps")
+#     plt.close(fig)
 
 
 '''
@@ -550,13 +554,13 @@ Remember to change the ylim!
 Remember to change the yscale!
 '''
 # Data.F_hi = 1e-4
-# fig, ax = d.plot_time_against_q("tau",
+# fig, ax = d.plot_time_against_q("inz_time",
 #                                 qs=[5,6,7,8,9,10],
-#                                 marker=".", 
-#                                 color="r")
+#                                 marker="s", 
+#                                 color="k")
 # # ax.set_ylim(bottom=1,top=1e3)
 # # ax.set_yscale("log")
-# plt.savefig("./results/fig_{}_vs_q.eps".format("CONF"), format="eps")
+# plt.savefig("./results/fig_{}_vs_q.eps".format("INZ"), format="eps")
 # plt.close()
 
 '''
@@ -595,12 +599,6 @@ Output triple products in a .csv file.
 '''
 # df_out=d.output_nTtau_results(qs=[5,6,7,8,9,10])
 # df_out.to_csv("./results/output_nTtau_vs_q.csv")
-
-
-
-
-
-
 
 
 
