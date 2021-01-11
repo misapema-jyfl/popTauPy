@@ -1,8 +1,50 @@
 # -*- coding: utf-8 -*-
 
 
+
+'''
+Parameters for running parse_data.py
+'''
+
+parsing_parameters = {
+    
+    "charge_states":[1,2,3,4,5,6,7,8,9,10,11,12],
+    
+    "1+_control_signals" : ["/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K1+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K2+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K3+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K4+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K5+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K6+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K7+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K8+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K9+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K10+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K11+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/1+_K12+.csv"],
+    
+    "n+_signals" : ["/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K1+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K2+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K3+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K4+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K5+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K6+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K7+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K8+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K9+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K10+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K11+.csv",
+"/home/miha/Work/research/ppp/code/popTauPy/data/raw_data_2020-06-29_w_noise/K12+.csv"],
+    
+    "save_to_path" : "/home/miha/Work/research/ppp/code/popTauPy/data/parsed_data_2020-06-29_w_noise",
+    
+    "elemental_symbol" : "K"
+    }
+
+
 '''
 Parameters for running the optimisation routine 'opt_abc.py'
+and the routine 'parse_data.py'.
 '''
 # charge_states = list of available charge states (in numerical order)
 # 1+ control signals = list of data files corresponding to the 1+ control signals
