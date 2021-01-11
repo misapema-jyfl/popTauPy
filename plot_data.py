@@ -10,6 +10,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+from parameters import d
+
 # Set font for plots
 font = {'family' : 'normal',
         'weight' : 'normal',
@@ -18,28 +21,8 @@ font = {'family' : 'normal',
 matplotlib.rc('font', **font)
 
 
-'''
-Give the data file file paths. Must be in numerical order!
-'''
-dataFilePaths = [
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K1+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K2+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K3+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K4+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K5+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K6+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K7+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K8+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K9+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K10+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K11+.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K12+.csv"
-]
-
-'''
-Give the charge states corresponding to data files. Must be in numerical order!
-'''
-cStates = [1,2,3,4,5,6,7,8,9,10,11,12]
+dataFilePaths = d["parsed_data_files"]
+cStates = d["charge_states"]
 
 color_idxs1 = np.linspace(0,1,len(cStates))
 
@@ -99,7 +82,16 @@ for s in ss:
         ax2.set_ylim(bottom=-5, top=70)
         ax2.legend()
         
-
+        
+# Plot the 1+ control signal
+fName = d["1+_control_signals"][0]
+print(fName)
+df = pd.read_csv(fName, names=["t", "i"])
+t,i = df["t"], df["i"]
+t_off = t[ i > 0.5*max(i) ].values[0]
+t = t-t_off
+ax.plot(t*1e3,50*i/max(i),c="b",ls="--",label="1+ command")
+ax.legend()
 fig.savefig("./results/data_upto6+.eps", format="eps")
 fig2.savefig("./results/data_upto12+.eps", format="eps")
 

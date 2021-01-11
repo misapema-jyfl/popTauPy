@@ -3,15 +3,28 @@
 
 '''
 Parameters for running the optimisation routine 'opt_abc.py'
-
-charge_states = list of available charge states (in numerical order)
-parsed_data_files = list of the parsed data files (t=0 set the same, b.g. reduced, in numerical order)
-h = Runge-Kutta algorithm time step (units of s)
-output_file_name = file name under which to save the obtained abc parameters  
 '''
+# charge_states = list of available charge states (in numerical order)
+# 1+ control signals = list of data files corresponding to the 1+ control signals
+# parsed_data_files = list of the parsed data files (t=0 set the same, b.g. reduced, in numerical order)
+# h = Runge-Kutta algorithm time step (units of s)
+# output_file_name = file name under which to save the obtained abc parameters  
 d = {
      
      "charge_states" : [1,2,3,4,5,6,7,8,9,10,11,12],
+     
+     "1+_control_signals" : ["/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K1+.csv",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K2+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K3+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K4+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K5+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K6+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K7+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K8+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K9+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K10+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K11+.txt",
+"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K12+.txt"],
      
      "parsed_data_files": ["/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K1+.csv",
 "/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K2+.csv",
