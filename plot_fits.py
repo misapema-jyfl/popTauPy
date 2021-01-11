@@ -205,10 +205,14 @@ for q in plotting_fits["charge_states"]:
     
     fig, ax = plt.subplots()
     
-    ax.plot(t*1e3,i*1e3)
-    ax.plot(T*1e3,Y*1e3)
+    s = "{ " + str(q) + "+}"
+    
+    ax.plot(t*1e3,i*1e3,c="k", label=r"Measured K$^{}$".format(s))
+    ax.plot(T*1e3,Y*1e3,c="r", ls="--", label=r"Fitted K$^{}$".format(s))
     ax.set_xlabel("Time (ms)")
     ax.set_ylabel("Current (nA)")
+    
+    ax.legend()
     
     outName = plotting_fits["output_file_name"]
     outType = plotting_fits["output_file_type"]
