@@ -10,41 +10,40 @@ parsing_parameters = {
     
     "charge_states":[1,2,3,4,5,6,7,8,9,10,11,12],
     
-    "1+_control_signals" : ["/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K1+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K2+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K3+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K4+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K5+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K6+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K7+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K8+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K9+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K10+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K11+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/1+_K12+.csv"],
+    "1+_control_signals" : ["/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K1+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K2+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K3+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K4+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K5+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K6+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K7+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K8+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K9+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K10+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K11+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/1+_K12+.csv"],
     
-    "n+_signals" : ["/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K1+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K2+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K3+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K4+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K5+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K6+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K7+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K8+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K9+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K10+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K11+.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/footer_removed_data/K12+.csv"],
+    "n+_signals" : ["/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K1+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K2+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K3+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K4+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K5+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K6+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K7+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K8+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K9+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K10+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K11+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/footer_removed_data/K12+.csv"],
     
-    "save_to_path" : "/home/miha/Work/research/ppp-2/pulse_duration/data/2020 11 10 vary pulse duration/5ms/parsed_data",
+    "save_to_path" : "/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data",
     
     "elemental_symbol" : "K"
     }
 
 
 '''
-Parameters for running the optimisation routine 'opt_abc.py'
-and the routine 'parse_data.py'.
+Parameters for running the optimisation routine 'opt_abc.py'.
 '''
 # charge_states = list of available charge states (in numerical order)
 # 1+ control signals = list of data files corresponding to the 1+ control signals
@@ -55,35 +54,37 @@ d = {
      
      "charge_states" : [1,2,3,4,5,6,7,8,9,10,11,12],
      
-     "1+_control_signals" : ["/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K1+.csv",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K2+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K3+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K4+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K5+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K6+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K7+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K8+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K9+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K10+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K11+.txt",
-"/home/miha/Work/research/ppp/data/2020 06 29 Measurements/1+_ctrl/1+_K12+.txt"],
+     "1+_control_signals" : ["/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K1+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K2+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K3+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K4+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K5+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K6+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K7+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K8+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K9+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K10+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K11+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/1+_K12+.csv"],
      
-     "parsed_data_files": ["/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K1+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K2+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K3+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K4+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K5+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K6+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K7+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K8+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K9+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K10+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K11+.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/data/data_2020-06-29_w_noise/K12+.csv"],
+     "parsed_data_files": ["/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K1+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K2+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K3+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K4+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K5+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K6+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K7+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K8+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K9+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K10+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K11+.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/data/2020-11-10_vary_pulse_duration/5ms/parsed_data/K12+.csv"],
      
      "h" : 1000e-6,
      
-     "output_file_name" : "abc_2020-06-29_w_noise_h=1e-3.csv"
+     "output_directory" :  "/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/",
+     
+     "output_file_name" : "abc_pulse=5ms_h=1e-3.csv"
      
      }
 

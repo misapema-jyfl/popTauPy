@@ -1,131 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 15 12:43:01 2020
+Created on Tue Jan 12 12:57:24 2021
 
 @author: miha
 """
 
-import matplotlib
 import pandas as pd
+import numpy as np
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
-import numpy as np
 from scipy import interpolate
 from parameters import d
 
-# Set font for plots
-font = {'family' : 'normal',
-        'weight' : 'normal',
-        'size'   : 12}
-
-matplotlib.rc('font', **font)
-
-
-dataFilePaths = d["parsed_data_files"]
-chargeStates = d["charge_states"]
-
-
-def get_data_dict(chargeStates, dataFilePaths):
-    '''
-    Pack filepaths into a dictionary.
-
-    Parameters
-    ----------
-    chargeStates : list
-        List of charge states corresponding to data file paths.
-    dataFilePaths : list
-        List of data file paths.
-
-    Returns
-    -------
-    dataDictionary : dict
-        Data file paths organized into a dictionary with 
-        the charge states as keys.
-
-    '''
-    #
-    # Pack the data file paths to a dictionary for easy access later.
-    #
-    dataDictionary = {}
-    for chargeState,dataFilePath in zip(chargeStates,dataFilePaths):
-        dataDictionary[chargeState] = dataFilePath
-
-    return dataDictionary
 
 
 
-def get_interp_dict(dataDictionary):
-    '''
-    Read the data files in the data dictionary and interpolate the data 
-    contained within. Then pack the interpolation objects into a 
-    dictionary with the charge states as keys.
-
-    Parameters
-    ----------
-    dataDictionary : dict
-        Dictionary containing the data file paths.
-
-    Returns
-    -------
-    interpDictionary : dict
-        Dictionary containing the interpolate objects
-        corresponding to data files given in dataDict.
-
-    '''
-    #
-    # Interpolate the data files and pack them to a dictionary
-    #
-    interpDictionary = {}
-    for key in dataDictionary:
-        #
-        # Get transient data and interpolate
-        #
-        df = pd.read_csv(dataDictionary[key], names=["time","current"])
-        t = df["time"]
-        i = df["current"]
-        
-        #
-        # Get the interpolate object and pack to dictionary
-        #
-        I = interpolate.interp1d(t,i,kind="cubic")
-        interpDictionary[key] = I
-
-    return interpDictionary
-
-
-    
-def runge_kutta_DE(t,y,q,l,m,n,interpCurrents):
-    '''
-    The function, which defines the DE to be solved by the RK4 method.
-
-    Parameters
-    ----------
-    t : float
-        Time at which the DE is evaluated.
-    y : float
-        y(t).
-    q : int
-        Charge state around which the DE is solved.
-    parameters : Dictionary
-        The parameters l,m,n.
-    interpCurrents : Dictionary
-        The interpolated currents organized into a dictionary. 
-        Keys must be the corresponding charge states (integer)! 
-
-    Returns
-    -------
-    float
-        Right hand side of the DE:
-            d/dt I^q = l*I^(q-1) - b*I^q + c*I^(q+1).
-
-    '''
-    
-    I_lo = interpCurrents[q-1](t)
-    I_hi = interpCurrents[q+1](t)
-    
-    return l*I_lo - m*y + n*I_hi
-    
 
 
 
@@ -188,269 +78,229 @@ def rk4(t0, y0, tf, f,**kwargs):
 
 
 
-def determineNoise(chargeState, dataDictionary):
+def RHS(t,y,a,b,c,I_lo,I_hi):
     '''
-    Determines the noise for the data corresponding to the key chargeState
-    in the dataDictionary. The noise is determined by calculating the 
-    standard deviation of the signal in the region t < 0 s.
-
-    Parameters
-    ----------
-    chargeState : int
-        Charge state corresponding to data of interest.
-    dataDictionary : dict
-        Dictionary of the data file paths.
-
-    Returns
-    -------
-    noise : float
-        Noise level estimation for the signal.
-
+    Right-Hand-Side of the DE, which determines the time-evolution
+    of the ion extraction current.
+    
+    Takes the a,b,c parameters and the interpolate objects
+    for I_lo and I_hi (i.e. measurement data for I^q-1 & I^q+1) 
+    as arguments.
+    
+    Returns the instantaneous value of dy/dt = RHS.
+    
+    Use with rk4 to solve for y(t).
     '''
     
-    q = chargeState
+    return a*I_lo(t) - b*y + c*I_hi(t)
+
+
+
+class Fitter:
     
-    #
-    # Load the data
-    #
-    filename = dataDictionary[q]
-    data=pd.read_csv(filename, names=["time","current"])
-    t = data["time"]*1e3 # convert to ms
-    i = data["current"]
-    
-    #
-    # Determine the area where the noise is calculated
-    #
-    c = t < 0
-    
-    #
-    # Calculate the noise level
-    #
-    noise = np.std(i[c])
-    
-    return noise
-
-
-def determine_interp_limits(chargeState, dataDictionary):
-    '''
-    Determines the interpolation limits for the data files marked by the 
-    data file paths in dataDictionary.
-
-    Parameters
-    ----------
-    chargeState : int
-        Charge state corresponding to data of interest.
-    dataDictionary : dict
-        Dictionary of the data file paths.
-
-
-    Returns
-    -------
-    list
-        List containing the lower and upper interpolation limit for the data.
-        I.e. the largest time interval which is common to all signals.
-
-    '''
-    datas = {}
-    for q in [chargeState-1,chargeState,chargeState+1]:
-        datas[q] = dataDictionary[q]
+    def __init__(self, charge_state):
         
-    #
-    # Find the largest common time instance for all signals
-    # N.B. Fit must begin at t=0 (where also y0 = 0), and therefore t_lo = 0
-    #
-    t_his = []
-    for key in datas:
-        df = pd.read_csv(datas[key],names=["time","current"])
-        time = df["time"]
-        t_hi = time.values[-1]
-        t_his.append(t_hi)
-
-    t_hi = min(t_his)
-    
-    interpLimits = [0, t_hi]
-    
-    return interpLimits
-
-
-
-def do_rk4(a,b,c,chargeState, interpDictionary, dataDictionary):
-    '''
-    Perform the Runge-Kutta integration for the given chargeState signal.
-
-    Parameters
-    ----------
-    a : float
-        Parameter a.
-    b : float
-        Parameter b.
-    c : float
-        Parameter b.
-    chargeState : int
-        Charge state corresponding to data of interest.
-    dataDictionary : dict
-        Dictionary of the data file paths.
-    interpDictionary : dict
-        Dictionary of the interpolate objects.
+        self.charge_state = charge_state
         
-    Returns
-    -------
-    T : array
-        Time array.
-    Y : array
-        Solution array.
-
-    '''
-    
-    #
-    # Get the necessary currents (q-1,q,q+1)
-    #
-    interpCurrents = {}
-    for q in [chargeState-1, chargeState, chargeState+1]:
-        interpCurrents[q] = interpDictionary[q]
-
-
-    #
-    # Determine interpolation limits
-    # 
-    interpLimits = determine_interp_limits(chargeState, dataDictionary)
-    
-    #
-    # Get the initial values
-    #
-    t0=interpLimits[0]
-    tf=interpLimits[-1]
-    y0=0
-    
-    #
-    # Do the RK4 integration
-    #
-    T,Y = rk4(t0=t0,y0=y0,tf=tf,f=runge_kutta_DE,q=chargeState,l=a,m=b,n=c,interpCurrents=interpCurrents)
-    
-    return T,Y
-
-
-
-
-
-def fitting_function(t, a, b, c):
-    '''
-    Function to fit to the data. Defined as the solution to the differential
-    equation of runge_kutta_DE.
-
-    Parameters
-    ----------
-    t : float
-        Moment in time.
-    a : float
-        Parameter a.
-    b : float
-        Parameter b.
-    c : float
-        Parameter c.
-
-    Returns
-    -------
-    y : float
-        Value of the fitting function at time t.
-
-    '''
-    global q, interpDict, dataDict
-            
-    T,Y = do_rk4(a,b,c,q,interpDict,dataDict)
-    
-    Y = interp1d(T, Y, kind="cubic",fill_value="extrapolate")
+        #
+        # Get paths to necessary files and charge state information.
+        #
+        self.dataFilePaths = d["parsed_data_files"]
+        self.chargeStates = d["charge_states"]
         
-    y = Y(t)
+        #
+        # Make a dataframe for holding data file paths
+        #
+        self.df = pd.DataFrame()
+        self.df["cState"] = self.chargeStates
+        self.df["fPath"] = self.dataFilePaths
+        
+        #
+        # Make an interpolate dataframe out of three consecutive 
+        # charge state currents around q
+        #
+        self.df_interp = self.make_interpolate_dataframe()
+        
+        
+    def get_data(self, charge_state):
+        '''
+        Get measurement data corresponding to desired charge state.
+        '''
+        
+        # charge_state = self.charge_state
+        
+        c = self.df["cState"] == charge_state
+        data = pd.read_csv(self.df[c]["fPath"].values[0])
+        
+        ndf = pd.DataFrame(data) # Temporary dataframe for reading data to lists.
+        ndf.columns = ["t", "i"]
+        
+        t,i = ndf["t"],ndf["i"]
+        
+        return t,i
+
+
+    def get_interp_data(self, charge_state):
+        '''
+        Interpolate data corresponding to given charge state,
+        and return an interpolate object for the data.
+        '''
+        
+        # charge_state = self.charge_state
+        
+        t,i = self.get_data(charge_state)
+        
+        I = interpolate.interp1d(t,i,kind="cubic")
+        
+        return I
     
-    return y
+    
+    def make_interpolate_dataframe(self):
+        '''
+        Make a dataframe out of the interpolate objects neighboring 
+        a given charge state.
+        '''
+        
+        charge_state = self.charge_state
+        
+        df_interp = pd.DataFrame()
+        interps = []
+        for q in [charge_state-1, charge_state, charge_state+1]:
+            I = self.get_interp_data(q)
+            interps.append(I)
+        df_interp["cState"] = [charge_state-1, charge_state, charge_state+1]
+        df_interp["interp"] = interps
+        
+        return df_interp
+
+
+    def determine_interpolation_limits(self):
+        '''
+        Determines the interpolation limits for three consecutive transients,
+        with t_i set to 0 s, always.
+        '''    
+        
+        charge_state = self.charge_state
+        
+        t_lo, i_lo = self.get_data(charge_state-1)
+        t_mid, i_mid = self.get_data(charge_state)
+        t_hi, i_hi = self.get_data(charge_state+1)
+        
+        t_i = 0
+        t_f = min( max(t_lo), max(t_hi), max(t_mid) )
+    
+        return t_i, t_f
+
+
+    def fitting_function(self,t,a,b,c):
+        
+        charge_state = self.charge_state
+        
+        #
+        # Fetch the interpolate objects from the dataframe
+        #
+        I_lo = self.df_interp[ self.df_interp["cState"]==charge_state-1 ]["interp"].values[0]
+        # I_mid = self.df_interp[ self.df_interp["cState"]==charge_state ]["interp"].values[0]
+        I_hi = self.df_interp[ self.df_interp["cState"]==charge_state+1 ]["interp"].values[0]
+                
+        t0, tf = self.determine_interpolation_limits()
+        
+        T,Y = rk4(t0=t0,y0=0,tf=tf,f=RHS,a=a,b=b,c=c,I_lo=I_lo,I_hi=I_hi)
+        
+        y = interp1d(T,Y,kind="cubic", fill_value="extrapolate")
+        
+        # diff = np.sum(I_mid(t)-y(t))
+        # print(diff)
+        # print(".")
+        
+        return y(t)
+
+    
+
+    def determine_noise(self):
+        '''
+        Determine the noise present in the measurement. 
+        Calculated as the standard deviation of the signal
+        in the region t<0, i.e. before onset of the 1+ injection pulse.
+        '''
+        t,i = self.get_data(self.charge_state)
+        
+        noise = np.std( i[t<0] )
+        
+        return noise
 
 
 
+    def do_fit(self):
+        
+        #
+        # Get the interpolation limits
+        #
+        t_i, t_f = self.determine_interpolation_limits()
+
+        #
+        # Get the data to fit 
+        #
+        t,i = self.get_data(self.charge_state)
+        xdata, ydata = t[(t>t_i)&(t<t_f)], i[(t>t_i)&(t<t_f)]
+        
+        #
+        # Determine the noise
+        #
+        noise = self.determine_noise()
+        noise = np.ones(len(xdata))*noise
+
+        lo_bnds = [0,0,0]
+        hi_bnds = [np.inf,np.inf,np.inf]
+        bnds = (lo_bnds, hi_bnds)
+        p0 = [1000,1000,100]
+        popt,pcov = curve_fit(f=self.fitting_function,
+                              xdata=xdata,
+                              ydata=ydata,
+                              p0=p0,
+                              sigma=noise,
+                              absolute_sigma=True,
+                              method="trf",
+                              bounds=bnds)  
+        
+        #
+        # Calculate the chi2
+        #
+        chi2 = np.sum( np.square( (ydata - self.fitting_function(xdata, *popt))/noise ) )
+        
+        #
+        # Calculate the (reduced) chi2
+        #
+        chi2_reduced = chi2 / (len(ydata)-3)
 
 
-#
-# Run the optimization for desired charge states, and save results to file.
-#
+        return popt, pcov, chi2_reduced
 
-dataDict = get_data_dict(chargeStates, dataFilePaths)
-interpDict = get_interp_dict(dataDict)
+
+
 
 df_res = pd.DataFrame()
 
-for q in chargeStates[1:-1]:
+for charge_state in d["charge_states"][1:-1]:
     
-    print(q)
+    print("Working on charge_state: " + str(charge_state) + "+...")
     
-    #
-    # Get the interpolation limits
-    #
-    interpLimits = determine_interp_limits(q, dataDict)
-    lo, hi = interpLimits[0], interpLimits[1]
+    F = Fitter(charge_state=charge_state)
     
-    #
-    # Get the data to fit within limits
-    #
-    df = pd.read_csv(dataDict[q], names=["time", "current"])
-    c = ( lo < df["time"])&(df["time"] < hi)
+    popt, pcov, chi2_reduced = F.do_fit()
     
-    df = df[c]
+    # print(chi2_reduced)
 
-    # Limit fitting range
-    hi = df["time"].values[-1] * 1.0
-    c = df["time"] < hi    
-    
-    xdata = df["time"][c].values
-    ydata = df["current"][c].values
-
-
-    
-    #
-    # Get the noise to determine the uncertainty
-    #
-    noise = determineNoise(q,dataDict)
-    noise = np.ones(len(xdata))*noise
-    
-    #
-    # Do the fitting
-    #
-    lo_bnds = [0,0,0]
-    hi_bnds = [np.inf,np.inf,np.inf]
-    bnds = (lo_bnds, hi_bnds)
-    popt,pcov = curve_fit(fitting_function, xdata, ydata, p0=[1000,1000,100],
-                          sigma=noise, absolute_sigma=True,
-                          method="trf", bounds=bnds)
-    
-    #
-    # Calculate the chi2
-    #
-    chi2 = np.sum( np.square( (ydata - fitting_function(xdata, *popt))/noise ) )
-    
-    #
-    # Calculate the (reduced) chi2
-    #
-    chi2_reduced = chi2 / (len(ydata)-3)
-    
     #
     # Unpack the result
     #
     [a, b, c] = popt
     [da, db, dc] = np.sqrt(np.diag(pcov))
     
-    df_res[q]=[a,b,c,da,db,dc,chi2_reduced]
-
-
-
+    df_res[charge_state]=[a,b,c,da,db,dc,chi2_reduced]
+    
 df_res.index=["a", "b", "c", "da", "db", "dc", "chi2"]
 
 print(df_res)
 
-df_res.to_csv("./results/" + d["output_file_name"])
-
-
-
-
-
-
-
-
+df_res.to_csv(d["output_directory"] + d["output_file_name"])

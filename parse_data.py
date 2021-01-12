@@ -9,6 +9,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+
 from parameters import parsing_parameters as pp
 
 
@@ -79,8 +80,8 @@ for charge_state in cStates:
     onePlusOutName = pp["save_to_path"] + "/1+_" + pp["elemental_symbol"] + str(charge_state) + "+.csv"
     nPlusOutName = pp["save_to_path"] + "/" + pp["elemental_symbol"] + str(charge_state) + "+.csv"
     
-    df_1 = pd.DataFrame([t_1,i_1])
-    df_n = pd.DataFrame([t_n,i_n])
+    df_1 = pd.DataFrame([t_1,i_1]).transpose()
+    df_n = pd.DataFrame([t_n,i_n]).transpose()
     
     df_1.to_csv(onePlusOutName, index=None)
     df_n.to_csv(nPlusOutName, index=None)
