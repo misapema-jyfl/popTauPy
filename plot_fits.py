@@ -28,7 +28,7 @@ matplotlib.rc('font', **font)
 
 
 # Dataframe for holding abc parameters
-df_abc = pd.read_csv(p["abc_file_path"],index_col=0)
+df_abc = pd.read_csv(plotting_fits["abc_file_path"],index_col=0)
 colNames = [ int(name) for name in df_abc.columns.values ] # Convert columns to int
 df_abc.columns = colNames
 
@@ -210,16 +210,15 @@ for q in plotting_fits["charge_states"]:
     ax.plot(t*1e3,i*1e3,c="k", label=r"Measured K$^{}$".format(s))
     ax.plot(T*1e3,Y*1e3,c="r", ls="--", label=r"Fitted K$^{}$".format(s))
     ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Current (nA)")
+    ax.set_ylabel("Current (enA)")
     
     ax.legend()
     
-    outName = plotting_fits["output_file_name"]
-    outType = plotting_fits["output_file_type"]
+    outName = "fig_fit_h=" + str(plotting_fits["h"]) + "_q=" + str(q) + "+.eps" 
     
     fig.tight_layout()
     
-    fig.savefig("./results/" + outName + "_q=" + str(q) + "+" + outType)
+    fig.savefig(plotting_fits["output_directory"] + outName)
 
 print("Finished!")
 
