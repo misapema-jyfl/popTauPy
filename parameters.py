@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+import numpy as np
 
 '''
 Parameters for running parse_data.py
@@ -131,21 +131,133 @@ plotting_fits = {
     }
 
 
+
+
+
+
 # solution_set_files = list of files containing the solution sets obtained from opt_neTe.py
 # charge_states = list of charge states corresponding to above files
+# Te_lo = lower limit for Te to accept in plots (eV)
+# Te_hi = upper -"-
+# ne_lo = lower limit for ne to accept in plots (1/cm3)
+# ne_hi = upper -"-
+# F = upper limit of the penalty function value.
 plotting_results = {
-    "solution_set_files" : ["/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
-"/home/miha/Work/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
+    
+    
+"solution_set_files" :
+[
+"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=4.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=5.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=6.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=7.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=8.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=9.csv",
+"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=10.csv"
 ],
     
-"charge_states" : [5,6,7,8,9,10]
-    }
+"charge_states" : [4,5,6,7,8,9,10],
 
 
+#
+# General plotting parameters
+#
+"Te_lo" : 0, # To accept all data points, set lower limit = 0, and upper = np.inf
+"Te_hi" : np.inf,
+"ne_lo" : 0,
+"ne_hi" : np.inf,
+"F" : 1e-4,
+"conf" : 0.341,
+
+#
+# Plot number of solutions against F
+#
+"plotting_vs_F" : 
+{
+"plot_num_of_solutions_vs_F" : False, # Set True / False
+"list_of_Fs" : [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6],
+"y_lo" : 0,
+"y_hi" : None,
+},
+
+#
+# For plotting characteristic times vs F
+#
+"plotting_time_vs_F" : 
+{
+ "plot_or_not" : True, # Set True / False
+ "list_of_Fs"  : [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6],
+ "plot_tau" : False,
+ "plot_inz" : False,
+ "plot_cx"  : False,
+ "tau_marker" : ".",
+ "tau_color"  : "r",
+ "inz_marker" : "s",
+ "inz_color"  : "k",
+ "cx_marker"  : "^",
+ "cx_color"   : "b"
+},
+
+#
+# For plotting characteristic times vs charge state
+#
+"plotting_time_vs_q" : 
+{
+ "plot_or_not" : True, # Set True / False
+ "plot_tau" : False,
+ "plot_inz" : False,
+ "plot_cx"  : False,
+ "tau_yscale" : "linear",
+ "tau_marker" : ".",
+ "tau_color"  : "r",
+ "inz_yscale" : "linear",
+ "inz_marker" : "s",
+ "inz_color"  : "k",
+ "cx_yscale"  : "linear",
+ "cx_marker"  : "^",
+ "cx_color"   : "b"
+},
+
+
+#
+# For plotting energy content vs charge state
+#
+"plotting_Ee_vs_q" :
+{
+ "plot_or_not" : True, # Set True / False
+ "marker" : "s",
+ "color" : "k",
+ "y_hi" : 1e17,
+ "y_lo" : 1e14
+},
+
+
+#
+# For plotting triple products vs charge state
+#
+"plotting_triple_vs_q" :
+{
+ "plot_or_not" : True, # Set True / False
+ "marker" : "s",
+ "color" : "m",
+ "y_hi" : None,
+ "y_lo" : None
+},
+
+#
+# Select whether or not you wish to output data as .csv
+#
+"output_tau_vs_q" : False,
+"output_inz_vs_q" : False,
+"output_cx_vs_q" : False,
+"output_Ee_vs_q" : False,
+"output_triple_vs_q" : True,
+
+
+
+"output_directory" : "/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/"
+
+}
 
 
 
