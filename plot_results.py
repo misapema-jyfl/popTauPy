@@ -22,8 +22,6 @@ font = {'family' : 'normal',
 matplotlib.rc('font', **font)
 
 
-
-
 fNames = plotting_results["solution_set_files"]
 cStates= plotting_results["charge_states"]
 
