@@ -98,7 +98,7 @@ Parameters for running the optimisation routine 'opt_neTe.py'
 '''
 
 p = {
-     "abc_file_path" 		: "./solution_abc_2020-06-29_w_noise_h=10e-6.csv", 	# Relative path to the file containing the abc parameters
+     "abc_file_path" 		: "./solution_abc_2020-06-29_w_noise_h=10e-6.csv", 	# Path to the file containing the abc parameters
      "voronov_file_path" 	: "./voronov_k.csv", 					# Relative path to the voronov coefficient file
      "cStates" 		: [5], 						# List of charge states on which to perform optimisation
      "ne_lo" 			: 11, 							# log10 of the lower limit of electron density (1/cm3)

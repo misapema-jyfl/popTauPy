@@ -13,6 +13,11 @@ from matplotlib import cm
 from scipy.ndimage.filters import gaussian_filter
 import matplotlib
 
+from parameters import plotting_results as pr
+from parameters import p
+
+
+
 # Set font for plots
 font = {'family' : 'normal',
         'weight' : 'normal',
@@ -22,32 +27,31 @@ matplotlib.rc('font', **font)
 
 
 
-fNames = [
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
-"/home/miha/uni/research/ppp/code/popTauPy/results/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
-]
-
-
-cStates=[5,6,7,8,9,10]
 
 
 
 class Data:
     
-    # Data limits 
-    F_hi = 1e-4
-    ne_lo = 0
-    ne_hi = +np.inf
-    Te_lo = 0
-    Te_hi = +np.inf    
-    
-    def __init__(self, fNames, cStates):
-            
-        self.dataFiles = pd.DataFrame({"q": cStates, "f": fNames})
+   
+    def __init__(self):
+        
+        self.fNames = pr["solution_set_files"]
+        self.cStates= pr["charge_states"]  
+        self.outDir = pr["output_directory"]
+        
+        # Set plotting limits
+        self.Te_lo = pr["Te_lo"]
+        self.Te_hi = pr["Te_hi"]
+        self.ne_lo = pr["ne_lo"]
+        self.ne_hi = pr["ne_hi"]
+        self.F_hi = pr["F"]
+        self.conf = pr["conf"]
+        
+        # 
+        # Get solution set files into a dataframe,
+        # organized according to the charge state.
+        #
+        self.dataFiles = pd.DataFrame({"q": self.cStates, "f": self.fNames})
 
     
 
@@ -89,7 +93,8 @@ class Data:
         x = df["T"]
         y = df["n"]
         
-        rng = [[10,10e3],[1e11,2.61e12]]
+        # rng = [[10,10e3],[1e11,2.61e12]]
+        rng = [ [p["Te_lo"],p["Te_hi"]], [10**p["ne_lo"],10**p["ne_hi"]]]        # TODO! Note how awful this is.
         
         heatmap, xedges, yedges = np.histogram2d(x, y, 
                                                  bins=1000, 
@@ -114,21 +119,20 @@ class Data:
         
         ax.set_yscale("log")
         ax.set_xscale("log")
-        ax.set_xlim(left=10,right=10e3)
-        ax.set_ylim(bottom=1e11,top=2.61e12)
+        ax.set_xlim(left=p["Te_lo"],right=p["Te_hi"])                             # TODO! This is similarly awful.
+        ax.set_ylim(bottom=10**p["ne_lo"],top=10**p["ne_hi"])
         ax.set_xlabel(r"$T_e$ (eV)")
         ax.set_ylabel(r"$n_e$ (cm$^{-3}$)")
-        fig.tight_layout()
-        
-        plt.savefig("./results/solution_set_q={}+.eps".format(str(q)),format="eps")
-        plt.close()
         
         
-d = Data(fNames, cStates)
-# cStates=[5]
-for q in cStates:
+        
+d = Data()
+for q in d.cStates:
     fig, ax = plt.subplots()
     d.plot_heatmap_solution_set(q,fig,ax)    
+    fig.tight_layout()
+    plt.savefig( d.outDir + "solution_set_q={}+.eps".format(str(q)),format="eps")
+    plt.close()
     
     
     
