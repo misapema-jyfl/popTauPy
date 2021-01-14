@@ -1,4 +1,64 @@
 # -*- coding: utf-8 -*-
+'''
+
+Settings file for running the optimisation code popTauPy.
+
+N.B. When designating an output directory, include the '/' at the end 
+of the address! E.g. "./results/" (NOT "./results") 
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 import numpy as np
 
@@ -120,7 +180,8 @@ p = {
      "MC_unc_lo" 		: -.6, 						# Lower limit of Voronov uncertainty 
      "MC_unc_hi" 		: .6, 							# Upper limit of Voronov uncertainty
      "N" 			: 100, 						# Number of elements in the ne-vector
-     "number_of_MC_iters" 	: 10 							# Number of Monte Carlo iterations to perform
+     "number_of_MC_iters" 	: 10, 							# Number of Monte Carlo iterations to perform
+     "output_directory" : "/home/miha/Work/research/ppp/code/popTauPy/results/" # Directory to save resultant solution sets.
      }
 
 

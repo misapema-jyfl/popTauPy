@@ -16,11 +16,6 @@ import concurrent.futures
 import os
 
 
-# If the results folder doesn't exist, create it:
-if not os.path.exists("./results"):
-    os.mkdir("./results")
-
-
 # Import parameters from parameters.py
 from parameters import p
 
@@ -362,7 +357,7 @@ def main():
         
         # Save resultant dictionary to file
         df_result = pd.DataFrame(result)
-        df_result.to_csv("./results/unc_lo={:.0f}%_unc_hi={:.0f}%_MC_iters={}_N={}_q={}.csv".format(MC_unc_lo*100,
+        df_result.to_csv( p["output_directory"] + "unc_lo={:.0f}%_unc_hi={:.0f}%_MC_iters={}_N={}_q={}.csv".format(MC_unc_lo*100,
                                                                                         MC_unc_hi*100,
                                                                                         number_of_MC_iters,
                                                                                         N,
