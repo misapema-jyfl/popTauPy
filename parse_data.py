@@ -36,8 +36,8 @@ def get_data_from_file(fileName):
     return t, i
     
 
-if not os.path.isdir(pp["save_to_path"]+"/figures/"):
-    os.mkdir(pp["save_to_path"]+"/figures/")
+if not os.path.isdir(pp["save_to_path"]+"figures/"):
+    os.mkdir(pp["save_to_path"]+"figures/")
     
     
 # Parse all files
@@ -77,8 +77,8 @@ for charge_state in cStates:
     i_1 = max(i_n)*i_1/max(i_1)
     
     # Output parsed files
-    onePlusOutName = pp["save_to_path"] + "/1+_" + pp["elemental_symbol"] + str(charge_state) + "+.csv"
-    nPlusOutName = pp["save_to_path"] + "/" + pp["elemental_symbol"] + str(charge_state) + "+.csv"
+    onePlusOutName = pp["save_to_path"] + "1+_" + pp["elemental_symbol"] + str(charge_state) + "+.csv"
+    nPlusOutName = pp["save_to_path"] + pp["elemental_symbol"] + str(charge_state) + "+.csv"
     
     df_1 = pd.DataFrame([t_1,i_1]).transpose()
     df_n = pd.DataFrame([t_n,i_n]).transpose()
@@ -91,4 +91,4 @@ for charge_state in cStates:
     ax.plot(t_n, i_n)
     
     
-    fig.savefig(pp["save_to_path"] + "/figures/" + pp["elemental_symbol"] + str(charge_state) + "+.png")
+    fig.savefig(pp["save_to_path"] + "figures/" + pp["elemental_symbol"] + str(charge_state) + "+.png")
