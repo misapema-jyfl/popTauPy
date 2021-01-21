@@ -286,7 +286,7 @@ class Plotter:
             
             df = self.get_df(q)
             df = self.set_limits(df)
-            
+            df = self.set_F_upper(df)
             
             if key == "inz_time":
                 data=np.array(df["inz_rate"])
