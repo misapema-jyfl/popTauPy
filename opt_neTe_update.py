@@ -480,6 +480,7 @@ def run_algorithm(charge_state):
     df_out["bias_l"] = used_biases_l
     df_out["bias"] = used_biases
     df_out["bias_h"] = used_biases_h
+    df_out["F"] = F
     
     
     
