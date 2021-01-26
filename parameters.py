@@ -193,9 +193,9 @@ Parameters for running the optimisation routine 'opt_neTe.py'
 '''
 
 p = {
-     "abc_file_path" 		: "/home/miha/Work/miscellaneous/test_popTauPy/results/abc_pulse=5ms_h=1e-3s.csv", 	# Path to the file containing the abc parameters
+     "abc_file_path" 		: "/home/miha/Work/research/ppp/code/popTauPy/solution_abc_2020-06-29_w_noise_h=10e-6.csv", 	# Path to the file containing the abc parameters
      "voronov_file_path" 	: "./voronov_k.csv", 					# Relative path to the voronov coefficient file
-     "cStates" 		: [5], 						# List of charge states on which to perform optimisation
+     "cStates" 		: [5,6,7,8,9,10], 						# List of charge states on which to perform optimisation
      "ne_lo" 			: 11, 							# log10 of the lower limit of electron density (1/cm3)
      "ne_hi" 			: 12.41664051, 					# log10 of the upper limit of electron density (1/cm3)
      "Te_lo" 			: 10, 							# Lower limit of Te (eV)
@@ -204,7 +204,7 @@ p = {
      "MC_unc_hi" 		: .6, 							# Upper limit of Voronov uncertainty
      "N" 			: 1000, 						# Number of elements in the ne-vector
      "number_of_MC_iters" 	: 10, 							# Number of Monte Carlo iterations to perform
-     "output_directory" : "/home/miha/Work/miscellaneous/test_popTauPy/results/" # Directory to save resultant solution sets.
+     "output_directory" : "/home/miha/Work/miscellaneous/test/" # Directory to save resultant solution sets.
      }
 
 
