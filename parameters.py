@@ -15,62 +15,24 @@ Settings file for running the optimisation code popTauPy.
 
 
 
-
-
-
-
-
 IMPORTANT INFORMATION BELOW!
+
+
+
+
 
 
 N.B. When designating an output directory, include the '/' at the end 
 of the address! E.g. "./results/" (NOT "./results") 
 
 
+
+
+
+
 IMPORTANT INFORMATION ABOVE!
 
 '''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -131,6 +93,17 @@ parsing_parameters = {
     }
 
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 '''
 Parameters for running the optimisation routine 'opt_abc.py'.
 '''
@@ -186,6 +159,14 @@ d = {
 
 
 
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 '''
@@ -203,9 +184,14 @@ p = {
      "MC_unc_lo" 		: -.6, 						# Lower limit of Voronov uncertainty 
      "MC_unc_hi" 		: .6, 							# Upper limit of Voronov uncertainty
      "N" 			: 1000, 						# Number of elements in the ne-vector
-     "number_of_MC_iters" 	: 10, 							# Number of Monte Carlo iterations to perform
+     "number_of_MC_iters" 	: 1000, 							# Number of Monte Carlo iterations to perform
      "output_directory" : "/home/miha/Work/miscellaneous/test/" # Directory to save resultant solution sets.
      }
+
+
+
+
+
 
 
 
