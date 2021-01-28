@@ -46,6 +46,7 @@ class Data:
         self.ne_hi = pr["ne_hi"]
         self.F_hi = pr["F"]
         self.conf = pr["conf"]
+        self.bias_max = pr["bias_max"]
         
         # 
         # Get solution set files into a dataframe,
@@ -61,6 +62,14 @@ class Data:
         df = df[df["F"]<self.F_hi]
         df = df[(df["n"]<self.ne_hi)&(df["n"]>self.ne_lo)]
         df = df[(df["T"]<self.Te_hi)&(df["T"]>self.Te_lo)]
+        
+        # Constrain the uncertainty limits
+        b_l = df["bias_l"] - 1
+        b = df["bias"] - 1 
+        b_h = df["bias_h"] - 1
+        
+        uncertainty_condition = np.sqrt( b_l**2 + b**2 + b_h**2 ) < self.bias_max * np.sqrt(3)
+        df = df[uncertainty_condition]
         
         return df
     
@@ -115,7 +124,7 @@ class Data:
         cb = fig.colorbar(im)
         
         # Scatter plot the data points
-        ax.scatter(x,y,s=.05,c="w")
+        # ax.scatter(x,y,s=.05,c="w")
         
         ax.set_yscale("log")
         ax.set_xscale("log")
@@ -131,7 +140,7 @@ for q in d.cStates:
     fig, ax = plt.subplots()
     d.plot_heatmap_solution_set(q,fig,ax)    
     fig.tight_layout()
-    plt.savefig( d.outDir + "solution_set_q={}+.eps".format(str(q)),format="eps")
+    plt.savefig( d.outDir + "solution_set_q={}+_bMax={}%.png".format(str(q),str(int(100*d.bias_max))), format="png", dpi=300)
     plt.close()
     
     

@@ -229,13 +229,13 @@ plotting_results = {
     
 "solution_set_files" :
 [
-"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=4.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=5.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=6.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=7.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=8.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=9.csv",
-"/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/unc_lo=-60%_unc_hi=60%_MC_iters=100_N=1000_q=10.csv"
+"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=4.csv",
+"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
+"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
+"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
+"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
+"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
+"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
 ],
     
 "charge_states" : [4,5,6,7,8,9,10],
@@ -248,8 +248,9 @@ plotting_results = {
 "Te_hi" : np.inf,
 "ne_lo" : 0,
 "ne_hi" : np.inf,
-"F" : 1e-4,
+"F" : 1e-7,
 "conf" : 0.341,
+"bias_max" : 0.6, # Maximum length of a component of the bias vector
 
 #
 # Plot number of solutions against F
@@ -258,16 +259,29 @@ plotting_results = {
 {
 "plot_num_of_solutions_vs_F" : False, # Set True / False
 "list_of_Fs" : [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6],
-"y_lo" : 0,
+"y_lo" : 1,
 "y_hi" : None,
 },
+
+
+#
+# Plot number of solutions against bias_max
+#
+"plotting_vs_bias_max":
+{
+"plot_num_of_solutions_vs_bias_max" : False, # Set True/False
+"list_of_bias_max" : [0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
+"y_lo" : 1,
+"y_hi" : None,
+},
+
 
 #
 # For plotting characteristic times vs F
 #
 "plotting_time_vs_F" : 
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "list_of_Fs"  : [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6],
  "plot_tau" : False,
  "plot_inz" : False,
@@ -280,12 +294,32 @@ plotting_results = {
  "cx_color"   : "b"
 },
 
+
+#
+# For plotting characteristic times vs bias max
+#
+"plotting_time_vs_bMax" : 
+{
+ "plot_or_not" : True, # Set True / False
+ "list_of_Bs"  : [0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
+ "plot_tau" : True,
+ "plot_inz" : True,
+ "plot_cx"  : True,
+ "tau_marker" : ".",
+ "tau_color"  : "r",
+ "inz_marker" : "s",
+ "inz_color"  : "k",
+ "cx_marker"  : "^",
+ "cx_color"   : "b"
+},
+
+
 #
 # For plotting characteristic times vs charge state
 #
 "plotting_time_vs_q" : 
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "plot_tau" : False,
  "plot_inz" : False,
  "plot_cx"  : False,
@@ -306,11 +340,11 @@ plotting_results = {
 #
 "plotting_Ee_vs_q" :
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "marker" : "s",
  "color" : "k",
- "y_hi" : 1e17,
- "y_lo" : 1e14
+ "y_hi" : None,
+ "y_lo" : None
 },
 
 
@@ -319,7 +353,7 @@ plotting_results = {
 #
 "plotting_triple_vs_q" :
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "marker" : "s",
  "color" : "m",
  "y_hi" : None,
@@ -333,11 +367,11 @@ plotting_results = {
 "output_inz_vs_q" : False,
 "output_cx_vs_q" : False,
 "output_Ee_vs_q" : False,
-"output_triple_vs_q" : True,
+"output_triple_vs_q" : False,
 
 
 
-"output_directory" : "/home/miha/Work/research/ppp-2/pulse_duration/results/5ms/"
+"output_directory" : "/home/miha/Work/miscellaneous/test/biastest/"
 
 }
 

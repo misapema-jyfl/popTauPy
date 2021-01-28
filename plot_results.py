@@ -41,6 +41,7 @@ class Plotter:
         self.ne_hi = pr["ne_hi"]
         self.F_hi = pr["F"]
         self.conf = pr["conf"]
+        self.bias_max = pr["bias_max"]
         
         # 
         # Get solution set files into a dataframe,
@@ -208,6 +209,42 @@ class Plotter:
     
 
 
+    def plot_number_of_solutions_vs_bMax(self, Bs, q):
+        '''
+        Plot the number of solutions as a function of the 
+        maximum uncertainty bias of the Voronov coefficients.
+        '''
+        
+        nSols=[]
+        fig, ax = plt.subplots()
+        for bias in Bs:
+            
+            df = self.get_df(q)
+            df = self.set_limits(df)
+            df = self.set_F_upper(df)
+            
+            # Constrain the uncertainty limits
+            b_l = df["bias_l"] - 1
+            b = df["bias"] - 1 
+            b_h = df["bias_h"] - 1
+            
+            uncertainty_condition = np.sqrt( b_l**2 + b**2 + b_h**2 ) < bias * np.sqrt(3)
+
+            df = df[uncertainty_condition]
+            
+            nSols.append(len(df))
+        
+        ax.scatter(Bs, nSols, marker="o", s=48, color="k")
+        ax.set_xscale("linear")
+        ax.set_yscale("log")
+        ax.set_xlabel("Maximum uncertainty bias")
+        ax.set_ylabel("Number of solutions")
+        ax.set_xticks(Bs)
+        
+        return fig, ax
+
+
+
 
     def plot_times_against_F(self, Fs, q, key, marker, color):
         '''
@@ -271,6 +308,85 @@ class Plotter:
         ax.set_ylim(bottom=0)
         
         return fig, ax
+    
+    
+    
+    
+    
+    
+    def plot_times_against_bMax(self, Bs, q, key, marker, color):
+        '''
+        Plot the plasma characteristic time against the
+        maximum Voronov uncertainty bias.
+        '''
+        
+        lo_errs=[]
+        hi_errs=[]
+        medians=[]
+        
+        fig, ax = plt.subplots()
+        
+        for bias in Bs:
+            
+            
+            df = self.get_df(q)
+            df = self.set_limits(df)
+            df = self.set_F_upper(df)
+            
+            # Constrain the uncertainty limits
+            b_l = df["bias_l"] - 1
+            b = df["bias"] - 1 
+            b_h = df["bias_h"] - 1
+            uncertainty_condition = np.sqrt( b_l**2 + b**2 + b_h**2 ) < bias * np.sqrt(3)
+            df = df[uncertainty_condition]
+            
+            #
+            # Select the characteristic time to plot
+            #
+            if key == "inz_time":
+                data=np.array(df["inz_rate"])
+                data = data**(-1)
+                data = 1e3*data
+            elif key == "cx_time":
+                data=np.array(df["cx_rate"])
+                data = data**(-1)
+                data = 1e3*data
+            elif key == "tau":
+                data=np.array(df["tau"])*1e3
+            else:
+                print("Erroneous key!")
+                break
+            
+            #
+            # Calculate the error bars and median values
+            #
+            lo,median,hi = self.find_confidence_interval(data,self.conf)
+            
+            lo_err = median-lo
+            hi_err = hi-median
+            
+            lo_errs.append(lo_err)
+            hi_errs.append(hi_err)
+            medians.append(median)
+            
+        ax.errorbar(x=np.array(Bs),y=medians,yerr=[lo_errs,hi_errs],
+                    fmt="",
+                    ls="",
+                    lw=2,
+                    capsize=8,
+                    marker=marker,
+                    markersize=8,
+                    color=color)
+        ax.set_xscale("linear")
+        ax.set_xlabel("Maximum uncertainty bias")
+        ax.set_xticks(Bs)
+        ax.set_ylim(bottom=0)
+        
+        return fig, ax
+    
+    
+    
+    
 
 
     def plot_time_against_q(self, key, qs, marker, color):
@@ -575,6 +691,33 @@ if pf["plot_num_of_solutions_vs_F"] == True:
 
 
 
+
+#
+# Plot the number of solutions vs maximum uncertainty bias
+#
+pb = pr["plotting_vs_bias_max"]
+if pb["plot_num_of_solutions_vs_bias_max"] == True:
+    P = Plotter()
+    for charge_state in pr["charge_states"]:
+        
+        fig, ax = P.plot_number_of_solutions_vs_bMax(Bs=pb["list_of_bias_max"], q=charge_state)
+        
+        errFlag = 0
+        if pb["y_lo"] <= 0:
+            print("Can't set non-positive bottom limit on log-scale.")    
+            errFlag = 1
+            ax.set_ylim(bottom = 1, top = pb["y_hi"])
+        else:
+            ax.set_ylim(bottom = pb["y_lo"], top = pb["y_hi"])
+            
+        fig.tight_layout()
+        fig.savefig(P.outDir + "fig_number_of_solutions_vs_bMax_q={}.eps".format(charge_state), format="eps")
+        
+    if errFlag == 1:
+        print("Check y_lo in plotting_vs_bias_max in parameters.py!")
+
+
+
 #
 # Plot the characteristic time vs upper limit of penalty function value F
 #
@@ -593,8 +736,9 @@ if pcf["plot_or_not"] == True:
                                              )
             ax.set_ylabel("Confinement time (ms)")
             fig.tight_layout()
-            fig.savefig(P.outDir + "fig_CONF_n_of_sols_vs_F_q={}.eps".format(charge_state), format="eps")
-
+            fig.savefig(P.outDir + "fig_CONF_vs_F_q={}.eps".format(charge_state), format="eps")
+            plt.close(fig)
+            
         # Plot ionization times vs F
         if pcf["plot_inz"] == True:
             fig, ax = P.plot_times_against_F(Fs = pcf["list_of_Fs"],
@@ -605,7 +749,8 @@ if pcf["plot_or_not"] == True:
                                              )
             ax.set_ylabel("Ionisation time (ms)")
             fig.tight_layout()
-            fig.savefig(P.outDir + "fig_INZ_n_of_sols_vs_F_q={}.eps".format(charge_state), format="eps")
+            fig.savefig(P.outDir + "fig_INZ_vs_F_q={}.eps".format(charge_state), format="eps")
+            plt.close(fig)
             
         # Plot charge exchange times vs F
         if pcf["plot_cx"] == True:
@@ -617,7 +762,60 @@ if pcf["plot_or_not"] == True:
                                              )
             ax.set_ylabel("Charge exchange time (ms)")
             fig.tight_layout()
-            fig.savefig(P.outDir + "fig_CX_n_of_sols_vs_F_q={}.eps".format(charge_state), format="eps")
+            fig.savefig(P.outDir + "fig_CX_F_q={}.eps".format(charge_state), format="eps")
+            plt.close(fig)
+
+
+
+
+
+#
+# Plot the characteristic time vs maximum Voronov uncertainty bias
+#
+pcf = pr["plotting_time_vs_bMax"]
+if pcf["plot_or_not"] == True:
+    P = Plotter()
+    for charge_state in pr["charge_states"]:
+        
+        # Plot confinement times vs bMax
+        if pcf["plot_tau"] == True:
+            fig, ax = P.plot_times_against_bMax(Bs = pcf["list_of_Bs"],
+                                             q = charge_state,
+                                             key = "tau",
+                                             marker = pcf["tau_marker"],
+                                             color = pcf["tau_color"]
+                                             )
+            ax.set_ylabel("Confinement time (ms)")
+            fig.tight_layout()
+            fig.savefig(P.outDir + "fig_CONF_vs_bMax_q={}.png".format(charge_state), format="png", dpi=300)
+            plt.close(fig)
+            
+        # Plot ionization times vs bMax
+        if pcf["plot_inz"] == True:
+            fig, ax = P.plot_times_against_bMax(Bs = pcf["list_of_Bs"],
+                                             q = charge_state,
+                                             key = "inz_time",
+                                             marker = pcf["inz_marker"],
+                                             color = pcf["inz_color"]
+                                             )
+            ax.set_ylabel("Ionisation time (ms)")
+            fig.tight_layout()
+            fig.savefig(P.outDir + "fig_INZ_vs_bMax_q={}.png".format(charge_state), format="png", dpi=300)
+            plt.close(fig)
+            
+        # Plot charge exchange times vs bMax
+        if pcf["plot_cx"] == True:
+            fig, ax = P.plot_times_against_bMax(Bs = pcf["list_of_Bs"],
+                                             q = charge_state,
+                                             key = "cx_time",
+                                             marker = pcf["cx_marker"],
+                                             color = pcf["cx_color"]
+                                             )
+            ax.set_ylabel("Charge exchange time (ms)")
+            fig.tight_layout()
+            fig.savefig(P.outDir + "fig_CX_vs_bMax_q={}.png".format(charge_state), format="png", dpi=300)
+            plt.close(fig)
+
 
 
 
