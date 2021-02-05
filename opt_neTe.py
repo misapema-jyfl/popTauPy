@@ -233,9 +233,10 @@ class Optimizer:
             inz_rate = self.biases[self.q]*self.voronov_rate(self.q, Te)*n
             cx_rate = self.calculate_cx_rate(self.q, Te, n)
             eC = n*Te
+            tau_h = self.calculate_confinement_time(self.q + 1, Te, n)
             
             # Make sure that none of the values is unphysical
-            if not tau < 0 or inz_rate < 0 or cx_rate < 0 or eC < 0:
+            if not tau < 0 or inz_rate < 0 or cx_rate < 0 or eC < 0 or tau_h < 0:
             
                 res["success"] = True
                 res["tau"] = tau
