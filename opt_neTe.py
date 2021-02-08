@@ -236,7 +236,7 @@ class Optimizer:
             tau_h = self.calculate_confinement_time(self.q + 1, Te, n)
             
             # Make sure that none of the values is unphysical
-            if not tau < 0 or inz_rate < 0 or cx_rate < 0 or eC < 0 or tau_h < 0:
+            if tau > 0 and inz_rate > 0 and cx_rate > 0 and eC > 0 and tau_h > 0:
             
                 res["success"] = True
                 res["tau"] = tau
