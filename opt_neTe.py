@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from parameters import p
 from scipy.optimize import NonlinearConstraint
+import numdifftools as nd
 
 class Optimizer:
     
@@ -173,17 +174,21 @@ class Optimizer:
         
         q = self.q
         
-        # Set the constraints.
-        if q != max(self.cStates):
-            cons = (NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
+        cons = (NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
                     NonlinearConstraint(lambda Te: self.calculate_confinement_time(q+1, Te, n), 0, np.inf),
                     NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf))
+        
+        # Set the constraints.
+        # if q != max(self.cStates):
+        #     cons = (NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
+        #             NonlinearConstraint(lambda Te: self.calculate_confinement_time(q+1, Te, n), 0, np.inf),
+        #             NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf))
                     
-        else:
-            cons = (
-            NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
-            NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf)
-            )
+        # else:
+        #     cons = (
+        #     NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
+        #     NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf)
+        #     )
     
         return cons
     
@@ -203,6 +208,7 @@ class Optimizer:
         
         
         bnds = [(self.Te_lo, self.Te_hi)] # Bounded in Te
+        cons = self.make_constraints(n)
         
         # want_cons = False
         # # Get constraints
@@ -217,7 +223,9 @@ class Optimizer:
                  x0=initialGuessForTe,
                  args=(n, self.q),
                  method="SLSQP",
-                 bounds=bnds
+                 bounds=bnds,
+                 constraints=cons,
+                 jac=nd.Jacobian(self.F)
                  ) 
         
         # jac=nd.Jacobian(self.F) Using jac makes the method 6-times slower!
