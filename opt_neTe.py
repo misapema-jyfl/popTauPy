@@ -177,18 +177,6 @@ class Optimizer:
         cons = (NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
                     NonlinearConstraint(lambda Te: self.calculate_confinement_time(q+1, Te, n), 0, np.inf),
                     NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf))
-        
-        # Set the constraints.
-        # if q != max(self.cStates):
-        #     cons = (NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
-        #             NonlinearConstraint(lambda Te: self.calculate_confinement_time(q+1, Te, n), 0, np.inf),
-        #             NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf))
-                    
-        # else:
-        #     cons = (
-        #     NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
-        #     NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf)
-        #     )
     
         return cons
     
@@ -208,14 +196,6 @@ class Optimizer:
         
         
         bnds = [(self.Te_lo, self.Te_hi)] # Bounded in Te
-        cons = self.make_constraints(n)
-        
-        # want_cons = False
-        # # Get constraints
-        # if want_cons == True:
-        #     cons = self.make_constraints(n)
-        # else:
-        #     cons = ()
         
         
         # Minimize F
@@ -223,13 +203,9 @@ class Optimizer:
                  x0=initialGuessForTe,
                  args=(n, self.q),
                  method="SLSQP",
-                 bounds=bnds,
-                 constraints=cons,
-                 jac=nd.Jacobian(self.F)
+                 bounds=bnds
                  ) 
-        
-        # jac=nd.Jacobian(self.F) Using jac makes the method 6-times slower!
-        
+                
         # Check whether minimization was successful
         if result.success == True:
             
@@ -412,21 +388,6 @@ def run_algorithm(charge_state):
     
     # Track number of iterations
     i=0
-    
-    # Plot the Voronov biases chosen for this optimization run
-    # fig = plt.figure()
-    # ax = fig.add_subplot(111, projection="3d")
-    # ax.scatter(b[0],b[1],b[2])
-    # ax.set_xlabel("q-1 bias")
-    # ax.set_ylabel("q bias")
-    # ax.set_zlabel("q+1 bias")
-    # ax.set_xlim(1+o.MC_unc_lo, 1+o.MC_unc_hi)
-    # ax.set_ylim(1+o.MC_unc_lo, 1+o.MC_unc_hi)
-    # ax.set_zlim(1+o.MC_unc_lo, 1+o.MC_unc_hi)
-    # fig.savefig( p["output_directory"] + "biases_q={}.png".format(o.q), dpi=300)
-    # plt.close(fig)
-    # Running this on puck.t.jyu.fi causes an error. # TODO!
-    
     
     # Find the solution set with each given set of Voronov biases
     # and pack the solution set to the output dataframe
