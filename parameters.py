@@ -49,13 +49,19 @@ import numpy as np
 
 '''
 Parameters for running parse_data.py
+
+charge_states : Charge states for which transient data is available.
+1+_control_signals : The 1+ control signals corresponding to n+ transients.
+n+_signals : The extracted n+ transients.
+save_to_path : Directory under which to save the parsed data files.
+elemental_symbol : E.g. 'K' for potassium. Used for naming convention.
 '''
 
 parsing_parameters = {
     
-    "charge_states":[1,2,3,4,5,6,7,8,9,10,11,12],
-    
-    "1+_control_signals" : 
+"charge_states":[1,2,3,4,5,6,7,8,9,10,11,12],
+
+"1+_control_signals" : 
 [
 "/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K1+.csv",
 "/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K2+.csv",
@@ -71,7 +77,7 @@ parsing_parameters = {
 "/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K12+.csv"
 ],
     
-    "n+_signals" : 
+"n+_signals" : 
 [
 "/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K1+.csv",
 "/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K2+.csv",
@@ -87,10 +93,10 @@ parsing_parameters = {
 "/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K12+.csv"
 ],
     
-    "save_to_path" : "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/",
-    
-    "elemental_symbol" : "K"
-    }
+"save_to_path" : "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/",
+
+"elemental_symbol" : "K"
+}
 
 
     
@@ -106,17 +112,21 @@ parsing_parameters = {
     
 '''
 Parameters for running the optimisation routine 'opt_abc.py'.
+
+charge_states : list of available charge states (in numerical order)
+1+_control_signals : list of data files corresponding to the 1+ control signals
+parsed_data_files : list of the parsed data files (t=0 set the same, b.g. reduced, in numerical order)
+h : Runge-Kutta algorithm time step (units of s)
+output_directory : Directory under which to save the obtained abc parameters.
+output_file_name : File name under which to save the obtained abc parameters. 
+
 '''
-# charge_states = list of available charge states (in numerical order)
-# 1+ control signals = list of data files corresponding to the 1+ control signals
-# parsed_data_files = list of the parsed data files (t=0 set the same, b.g. reduced, in numerical order)
-# h = Runge-Kutta algorithm time step (units of s)
-# output_file_name = file name under which to save the obtained abc parameters  
+ 
 d = {
      
-     "charge_states" : [1,2,3,4,5,6,7,8,9,10,11,12],
-     
-     "1+_control_signals" : 
+"charge_states" : [1,2,3,4,5,6,7,8,9,10,11,12],
+
+"1+_control_signals" : 
 [
 "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K1+.csv",
 "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K2+.csv",
@@ -132,7 +142,7 @@ d = {
 "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K12+.csv"
 ],
      
-     "parsed_data_files": 
+"parsed_data_files": 
 [
 "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K1+.csv",
 "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K2+.csv",
@@ -148,13 +158,13 @@ d = {
 "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K12+.csv"
 ],
      
-     "h" : 1000e-6,
+"h" : 1000e-6,
+
+"output_directory" :  "/home/miha/Work/miscellaneous/test_popTauPy/results/",
+
+"output_file_name" : "abc_pulse=5ms_h=1e-3s.csv"
      
-     "output_directory" :  "/home/miha/Work/miscellaneous/test_popTauPy/results/",
-     
-     "output_file_name" : "abc_pulse=5ms_h=1e-3s.csv"
-     
-     }
+}
 
 
 
