@@ -63,37 +63,37 @@ parsing_parameters = {
 
 "1+_control_signals" : 
 [
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K1+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K2+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K3+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K4+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K5+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K6+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K7+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K8+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K9+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K10+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K11+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/1+_K12+.csv"
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K1+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K2+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K3+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K4+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K5+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K6+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K7+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K8+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K9+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K10+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K11+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K12+.csv"
 ],
     
 "n+_signals" : 
 [
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K1+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K2+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K3+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K4+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K5+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K6+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K7+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K8+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K9+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K10+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K11+.csv",
-"/home/miha/Work/research/ppp/data/raw_data_2020-06-29_w_noise/K12+.csv"
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K1+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K2+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K3+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K4+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K5+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K6+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K7+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K8+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K9+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K10+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K11+.csv",
+"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K12+.csv"
 ],
     
-"save_to_path" : "/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/",
+"save_to_path" : "/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/parsed_data/",
 
 "elemental_symbol" : "K"
 }
@@ -121,48 +121,48 @@ output_directory : Directory under which to save the obtained abc parameters.
 output_file_name : File name under which to save the obtained abc parameters. 
 
 '''
- 
+
+# You may use the clever generator below to generate the list of 
+# 1+ control signals and n+ extraction signals (parsed!).
+# Simply specify the directory where the data files are located,
+# in the variable 'fileLocDir', and the charge states in list 'cStates',
+# and place the variable containing the list into the 
+# dictionary. The loop assumes that the files are named using 
+# the logic "1+_KX+.csv" for the 1+ control signal corresponding 
+# to transient of Kx+, and "KX+.csv" for the transient of Kx+.
+# You may also specify the list of files manually, if you wish.
+fileLocDir = "/n/work01/misapema/data/gas/81e-9/"
+cStates = [1,2,3,4,5,6,7,8,9,10,11,12]
+
+# Make the list of control signals
+ctrl_files = []
+for q in cStates:
+    s = ("1+_K",str(q),"+.csv")
+    s = "".join(s)
+    f = fileLocDir + s
+    ctrl_files.append(f)
+
+# Make the list of N+ signals
+n_files = []
+for q in cStates:
+    s = ("K",str(q),"+.csv")
+    s = "".join(s)
+    f = fileLocDir + s
+    n_files.append(f)
+    
 d = {
      
-"charge_states" : [1,2,3,4,5,6,7,8,9,10,11,12],
+"charge_states" : cStates,
 
-"1+_control_signals" : 
-[
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K1+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K2+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K3+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K4+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K5+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K6+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K7+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K8+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K9+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K10+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K11+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/1+_K12+.csv"
-],
+"1+_control_signals" : ctrl_files,
      
-"parsed_data_files": 
-[
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K1+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K2+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K3+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K4+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K5+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K6+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K7+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K8+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K9+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K10+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K11+.csv",
-"/home/miha/Work/research/ppp/data/parsed_data_2020-06-29_w_noise/K12+.csv"
-],
+"parsed_data_files": n_files,
      
-"h" : 1000e-6,
+"h" : 10e-6,
 
-"output_directory" :  "/home/miha/Work/miscellaneous/test_popTauPy/results/",
+"output_directory" :  "/n/work01/misapema/results/gas/81e-9/",
 
-"output_file_name" : "abc_pulse=5ms_h=1e-3s.csv"
+"output_file_name" : "abc_pulse=81e-9_h10e-6s.csv"
      
 }
 
@@ -183,10 +183,25 @@ d = {
 Parameters for running the optimisation routine 'opt_neTe.py'
 '''
 
+# By default, the path to the abc file is the one specified 
+# in dictionary 'd' for the output file name. 
+# You may change this manually, if you wish to optimize 
+# using another set of abc parameters.
+abcLoc = d["output_directory"] + d["output_file_name"]
+
+# By default, the available charge states are 
+# determined based on the charge states given in 
+# dictionary 'd'. You may also wish to specify a different list.
+availableStates = d["charge_states"][1:-1]
+
+# By default, the output directory is the one specified 
+# in the dictionary 'd', i.e. same as for the abc file.
+outDir = d["output_directory"]
+
 p = {
-     "abc_file_path" 		: "/home/miha/Work/research/ppp/code/popTauPy/solution_abc_2020-06-29_w_noise_h=10e-6.csv", 	# Path to the file containing the abc parameters
-     "voronov_file_path" 	: "./voronov_k.csv", 					# Relative path to the voronov coefficient file
-     "cStates" 		: [5,6,7,8,9,10], 						# List of charge states on which to perform optimisation
+     "abc_file_path" 		: abcLoc, 	# Path to the file containing the abc parameters
+     "voronov_file_path" 	: "/n/work01/misapema/popTauPy-v1.1.1/voronov_k.csv", 					# Relative path to the voronov coefficient file
+     "cStates" 		: availableStates, 						# List of charge states on which to perform optimisation
      "ne_lo" 			: 11, 							# log10 of the lower limit of electron density (1/cm3)
      "ne_hi" 			: 12.41664051, 					# log10 of the upper limit of electron density (1/cm3)
      "Te_lo" 			: 10, 							# Lower limit of Te (eV)
@@ -195,9 +210,8 @@ p = {
      "MC_unc_hi" 		: .6, 							# Upper limit of Voronov uncertainty
      "N" 			: 1000, 						# Number of elements in the ne-vector
      "number_of_MC_iters" 	: 1000, 							# Number of Monte Carlo iterations to perform
-     "output_directory" : "/home/miha/Work/miscellaneous/test/" # Directory to save resultant solution sets.
+     "output_directory" : outDir # Directory to save resultant solution sets.
      }
-
 
 
 
@@ -216,10 +230,10 @@ Parameters for plotting.
 # charge_states = list of charge states for which to perform fitting
 # h = RK4 time step to use in fitting
 plotting_fits = {
-    "abc_file_path" : "/home/miha/Work/research/ppp/code/popTauPy/solution_abc_2020-06-29_w_noise_h=10e-6.csv",
-    "charge_states" : [4,5,6,7,8,9,10,11],
+    "abc_file_path" : "/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/150W/abc_pulse=150W_h10e-6s.csv",
+    "charge_states" : [5,6,7,8,9,10,11],
     "h" : 10e-6,
-    "output_directory" : "/home/miha/Work/research/ppp/code/popTauPy/results/"
+    "output_directory" : "/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/150W/"
     }
 
 
@@ -239,16 +253,14 @@ plotting_results = {
     
 "solution_set_files" :
 [
-"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=4.csv",
-"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=5.csv",
-"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
-"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
-"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
-"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
-"/home/miha/Work/research/ppp-2/analysis/config_comparison/data/DS2_2020-11-10/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
+"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
+"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
+"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
+"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
+"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
 ],
     
-"charge_states" : [4,5,6,7,8,9,10],
+"charge_states" : [6,7,8,9,10],
 
 
 #
@@ -267,8 +279,8 @@ plotting_results = {
 #
 "plotting_vs_F" : 
 {
-"plot_num_of_solutions_vs_F" : False, # Set True / False
-"list_of_Fs" : [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6],
+"plot_num_of_solutions_vs_F" : True, # Set True / False
+"list_of_Fs" : [1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9],
 "y_lo" : 1,
 "y_hi" : None,
 },
@@ -310,7 +322,7 @@ plotting_results = {
 #
 "plotting_time_vs_bMax" : 
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "list_of_Bs"  : [0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
  "plot_tau" : True,
  "plot_inz" : True,
@@ -329,10 +341,10 @@ plotting_results = {
 #
 "plotting_time_vs_q" : 
 {
- "plot_or_not" : False, # Set True / False
- "plot_tau" : False,
- "plot_inz" : False,
- "plot_cx"  : False,
+ "plot_or_not" : True, # Set True / False
+ "plot_tau" : True,
+ "plot_inz" : True,
+ "plot_cx"  : True,
  "tau_yscale" : "linear",
  "tau_marker" : ".",
  "tau_color"  : "r",
@@ -350,7 +362,7 @@ plotting_results = {
 #
 "plotting_Ee_vs_q" :
 {
- "plot_or_not" : False, # Set True / False
+ "plot_or_not" : True, # Set True / False
  "marker" : "s",
  "color" : "k",
  "y_hi" : None,
@@ -363,7 +375,7 @@ plotting_results = {
 #
 "plotting_triple_vs_q" :
 {
- "plot_or_not" : False, # Set True / False
+ "plot_or_not" : True, # Set True / False
  "marker" : "s",
  "color" : "m",
  "y_hi" : None,
@@ -373,15 +385,15 @@ plotting_results = {
 #
 # Select whether or not you wish to output data as .csv
 #
-"output_tau_vs_q" : False,
-"output_inz_vs_q" : False,
-"output_cx_vs_q" : False,
-"output_Ee_vs_q" : False,
-"output_triple_vs_q" : False,
+"output_tau_vs_q" : True,
+"output_inz_vs_q" : True,
+"output_cx_vs_q" : True,
+"output_Ee_vs_q" : True,
+"output_triple_vs_q" : True,
 
 
 
-"output_directory" : "/home/miha/Work/miscellaneous/test/biastest/"
+"output_directory" : "/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/"
 
 }
 
