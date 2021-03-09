@@ -12,7 +12,16 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 from scipy import interpolate
 from parameters import d
+import matplotlib.pyplot as plt
+import matplotlib
 
+
+# Set font for plots
+font = {'family' : 'normal',
+        'weight' : 'normal',
+        'size'   : 15}
+
+matplotlib.rc('font', **font)
 
 
 
@@ -192,7 +201,8 @@ class Fitter:
         return t_i, t_f
 
 
-    def fitting_function(self,t,a,b,c):
+
+    def fit_rk4(self, a, b, c):
         
         charge_state = self.charge_state
         
@@ -200,7 +210,6 @@ class Fitter:
         # Fetch the interpolate objects from the dataframe
         #
         I_lo = self.df_interp[ self.df_interp["cState"]==charge_state-1 ]["interp"].values[0]
-        # I_mid = self.df_interp[ self.df_interp["cState"]==charge_state ]["interp"].values[0]
         I_hi = self.df_interp[ self.df_interp["cState"]==charge_state+1 ]["interp"].values[0]
                 
         t0, tf = self.determine_interpolation_limits()
@@ -209,9 +218,12 @@ class Fitter:
         
         y = interp1d(T,Y,kind="cubic", fill_value="extrapolate")
         
-        # diff = np.sum(I_mid(t)-y(t))
-        # print(diff)
-        # print(".")
+        return y
+
+
+    def fitting_function(self,t,a,b,c):
+        
+        y = self.fit_rk4(a,b,c)
         
         return y(t)
 
@@ -289,7 +301,28 @@ for charge_state in d["charge_states"][1:-1]:
     
     popt, pcov, chi2_reduced = F.do_fit()
     
-    # print(chi2_reduced)
+    #
+    # Plot the final fit
+    #
+    t,i = F.get_data(charge_state)
+    t_i, t_f = F.determine_interpolation_limits()
+    T = np.linspace(t_i, t_f, num=len(t))
+    y = F.fit_rk4(a=popt[0], b=popt[1], c=popt[2])
+    
+    fig, ax = plt.subplots()
+    
+    # s = "{ " + str(charge_state) + "+}"
+    
+    ax.plot(t*1e3,i*1e3,c="k", label="Measured")
+    ax.plot(T*1e3,y(T)*1e3,c="r", ls="--", label="Fitted")
+    ax.set_xlabel("Time (ms)")
+    ax.set_ylabel("Current (enA)")
+    ax.legend()
+    outName = "fig_fit_h{:.0e}_q{}".format(d["h"], str(charge_state))     
+    fig.tight_layout()    
+    fig.savefig(d["output_directory"] + outName + "+.eps", format="eps")
+    fig.savefig(d["output_directory"] + outName + "+.png", format="png", dpi=300)
+    plt.close(fig)
 
     #
     # Unpack the result

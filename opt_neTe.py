@@ -10,7 +10,7 @@ import time
 import numpy as np
 import concurrent.futures
 import pandas as pd
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from parameters import p
 from scipy.optimize import NonlinearConstraint
@@ -25,22 +25,37 @@ class Optimizer:
         
         # Retrieve parameters for runtime
         self.abc_file_path = p["abc_file_path"]
-        self.voronov_file_path = p["voronov_file_path"]
+        self.method = p["method"]
+        self.species = p["species"]
         self.cStates = p["cStates"]
-        self.ne_lo = p["ne_lo"]
-        self.ne_hi = p["ne_hi"]
-        self.Te_lo = p["Te_lo"]
-        self.Te_hi = p["Te_hi"]
-        self.MC_unc_lo = p["MC_unc_lo"]
-        self.MC_unc_hi = p["MC_unc_hi"]
+        self.ne_lo = np.log10(p["ne_lo"])
+        self.ne_hi = np.log10(p["ne_hi"])
+        self.Ee_lo = p["Ee_lo"]
+        self.Ee_hi = p["Ee_hi"]
         self.N = p["N"]
         self.number_of_MC_iters = p["number_of_MC_iters"]
-
-        # Set initial Voronov biases
+        
+        
+        # Retrieve the elemental data parameters corresponding to 
+        # the chosen method for evaluating the rate coefficient.
+        # Retrieve the function by which to evaluate the rate coefficient.
+        if self.method=="voronov":
+            s = (p["elemental_data_dir"],self.method,"_",self.species,".csv")
+            filePath = "".join(s)
+            self.df_eldata = pd.read_csv(filePath, index_col="state")
+            self.rc = self.evaluate_rc()
+            
+            
+        # Set initial uncertainty biases
         self.biases = {}
         self.biases[q-1] = 1
         self.biases[q] = 1
         self.biases[q+1] = 1
+        
+        # Retrieve the uncertainty bounds from the data file.
+        self.MC_unc_lo = self.df_eldata["UNC"][q-1]/100
+        self.MC_unc = self.df_eldata["UNC"][q]/100
+        self.MC_unc_hi = self.df_eldata["UNC"][q+1]/100
         
         
         # Get the abc file into a dataframe and convert column names 
@@ -49,12 +64,29 @@ class Optimizer:
         self.df_abc.columns = [int(name) for name in list(self.df_abc.columns)]
 
 
-        # Get the voronov coefficient file into a dataframe.
-        self.df_voronov = pd.read_csv(self.voronov_file_path, index_col="state")
+        
+    
+    def evaluate_rc(self):
+        '''
+        Evaluate the rate coefficient using the chosen method.
+        The method is specified in the 'parameters.py'
+        
+        Returns
+        -------
+        rc : callable
+            Chosen function for rate coefficient evaluation.
+            N.B. The callable must be a function of the 
+            ion charge state and the average energy of the distribution!
+        '''
+        
+        if self.method=="voronov":
+            rc = self.voronov_rate
+            
+        return rc
 
 
 
-    def voronov_rate(self, chargeState, electronTemperature):
+    def voronov_rate(self, chargeState, averageEnergy):
         '''
         Calculate the q -> q+1 electron-impact ionization rate coefficient
         according to the semi-empirical formula by Voronov.
@@ -65,8 +97,8 @@ class Optimizer:
         ----------
         chargeState : int
             Charge state of ion in question.
-        electronTemperature : float
-            Electron temperature for the electron population responsible 
+        averageEnergy : float
+            Average electron energy for the electron population responsible 
             for ionization.
     
         Returns
@@ -78,14 +110,14 @@ class Optimizer:
     
         # Rename for brevity
         q = chargeState
-        Te = electronTemperature
+        Te = averageEnergy*(2/3) # convert <Ee> to Te
         
         # Retrieve formula parameters for charge state q         
-        dE = self.df_voronov["dE"][q].astype(np.float)
-        K = self.df_voronov["K"][q].astype(np.float)
-        A = self.df_voronov["A"][q].astype(np.float)
-        X = self.df_voronov["X"][q].astype(np.float)
-        P = self.df_voronov["P"][q].astype(np.float)
+        dE = self.df_eldata["dE"][q].astype(np.float)
+        K = self.df_eldata["K"][q].astype(np.float)
+        A = self.df_eldata["A"][q].astype(np.float)
+        X = self.df_eldata["X"][q].astype(np.float)
+        P = self.df_eldata["P"][q].astype(np.float)
     
         # Calculate the rate coefficient
         U = dE / Te
@@ -95,13 +127,13 @@ class Optimizer:
         return rateCoefficient
 
 
-    def calculate_confinement_time(self, q, Te, ne):
+    def calculate_confinement_time(self, q, Ee, ne):
         '''
         Calculate the confinement time according to 
         Eq. () in the manuscript.
         
         q = charge state
-        Te = electron temperature (eV)
+        Ee = Average electron energy (eV)
         ne = electron density (1/cm3)
         '''
         
@@ -111,8 +143,8 @@ class Optimizer:
         c_l = self.df_abc[q-1]["c"]
         
         # Calculate the rate coefficients
-        sv_l = self.voronov_rate(q-1, Te)*self.biases[q-1]
-        sv = self.voronov_rate(q, Te)*self.biases[q]
+        sv_l = self.rc(q-1, Ee)*self.biases[q-1]
+        sv = self.rc(q, Ee)*self.biases[q]
         
         # Calculate (postdiction for) the confinement time
         tau = (b - ne*sv - (a*c_l/(ne*sv_l)))**(-1)
@@ -120,19 +152,19 @@ class Optimizer:
         return tau
 
 
-    def calculate_cx_rate(self, q, Te, ne):
+    def calculate_cx_rate(self, q, Ee, ne):
         '''
         Calculate the charge exchange rate.
         
         q = charge state
-        Te = electron temperature (eV)
+        Ee = Average electron energy (eV)
         ne = electron density (1/cm3)
         '''
         b = self.df_abc[q]["b"]
     
-        tau = self.calculate_confinement_time(q, Te, ne)
+        tau = self.calculate_confinement_time(q, Ee, ne)
         
-        inz_rate = self.biases[q]*self.voronov_rate(q, Te)*ne
+        inz_rate = self.biases[q]*self.rc(q, Ee)*ne
         
         cx_rate = b - inz_rate - 1/tau
         
@@ -141,11 +173,11 @@ class Optimizer:
 
 
 
-    def F(self, Te, ne, q):
+    def F(self, Ee, ne, q):
         '''
         Penalty function to minimize.
         
-        Te = electron temperature (eV)
+        Ee = Average electron energy (eV)
         ne = electron density (1/cm3)
         q = charge state
         '''
@@ -153,11 +185,11 @@ class Optimizer:
         a_h = self.df_abc[q+1]["a"]    
         
         # Calculate the (biased) rate coefficient
-        sv = self.voronov_rate(q, Te)*self.biases[q] 
+        sv = self.rc(q, Ee)*self.biases[q] 
         
         tau_ratio = (q/(q+1))*(a_h/(ne*sv))
-        tau = self.calculate_confinement_time(q, Te, ne)
-        tau_h = self.calculate_confinement_time(q+1, Te, ne)
+        tau = self.calculate_confinement_time(q, Ee, ne)
+        tau_h = self.calculate_confinement_time(q+1, Ee, ne)
         
         F = 100*np.abs(tau_ratio - tau/tau_h)/tau_ratio
             
@@ -167,40 +199,40 @@ class Optimizer:
 
     
         
-    def make_constraints(self, n):
-        '''
-        Create constraints for the minimize_F algorithm
-        '''
+    # def make_constraints(self, n):
+    #     '''
+    #     Create constraints for the minimize_F algorithm
+    #     '''
         
-        q = self.q
+    #     q = self.q
         
-        cons = (NonlinearConstraint(lambda Te: self.calculate_confinement_time(q, Te, n), 0, np.inf),
-                    NonlinearConstraint(lambda Te: self.calculate_confinement_time(q+1, Te, n), 0, np.inf),
-                    NonlinearConstraint(lambda Te: self.calculate_cx_rate(q, Te, n), 0, np.inf))
+    #     cons = (NonlinearConstraint(lambda Ee: self.calculate_confinement_time(q, Ee, n), 0, np.inf),
+    #                 NonlinearConstraint(lambda Ee: self.calculate_confinement_time(q+1, Ee, n), 0, np.inf),
+    #                 NonlinearConstraint(lambda Ee: self.calculate_cx_rate(q, Ee, n), 0, np.inf))
     
-        return cons
+    #     return cons
     
     
     
     def minimize_F(self, n):
         '''
-        Minimize the penalty function as a function of Te 
+        Minimize the penalty function as a function of <Ee> 
         at every given ne value.
         '''        
         
         # Make the return dictionary
         res = {}
         
-        # Make the initial guess for Te
-        initialGuessForTe = np.random.uniform(low=self.Te_lo, high=self.Te_hi)
+        # Make the initial guess for <Ee>
+        initialGuessForEe = np.random.uniform(low=self.Ee_lo, high=self.Ee_hi)
         
         
-        bnds = [(self.Te_lo, self.Te_hi)] # Bounded in Te
+        bnds = [(self.Ee_lo, self.Ee_hi)] # Bounded in <Ee>
         
         
         # Minimize F
         result = minimize(fun=self.F,
-                 x0=initialGuessForTe,
+                 x0=initialGuessForEe,
                  args=(n, self.q),
                  method="SLSQP",
                  bounds=bnds
@@ -209,15 +241,15 @@ class Optimizer:
         # Check whether minimization was successful
         if result.success == True:
             
-            Te = result.x[0]
+            Ee = result.x[0]
             
             # Calculate values of F, cx, inz, tau
-            Fval = self.F(Te, n, self.q)
-            tau = self.calculate_confinement_time(self.q, Te, n)
-            inz_rate = self.biases[self.q]*self.voronov_rate(self.q, Te)*n
-            cx_rate = self.calculate_cx_rate(self.q, Te, n)
-            eC = n*Te
-            tau_h = self.calculate_confinement_time(self.q + 1, Te, n)
+            Fval = self.F(Ee, n, self.q)
+            tau = self.calculate_confinement_time(self.q, Ee, n)
+            inz_rate = self.biases[self.q]*self.rc(self.q, Ee)*n
+            cx_rate = self.calculate_cx_rate(self.q, Ee, n)
+            eC = n*Ee
+            tau_h = self.calculate_confinement_time(self.q + 1, Ee, n)
             
             # Make sure that none of the values is unphysical
             if tau > 0 and inz_rate > 0 and cx_rate > 0 and eC > 0 and tau_h > 0:
@@ -229,7 +261,7 @@ class Optimizer:
                 res["eC"] = eC
                 res["F"] = Fval
                 res["ne"] = n
-                res["Te"] = Te
+                res["Ee"] = Ee
                 
                 return res
             else:
@@ -292,7 +324,7 @@ class Optimizer:
         
         # Create lists to hold the results
         optimized_nes = []
-        optimized_Tes = []
+        optimized_Ees = []
         optimized_Fs = []
         optimized_taus = []
         optimized_inz_rates = []
@@ -314,7 +346,7 @@ class Optimizer:
                         
                         # Get the values at (n, T)
                         n = result["ne"]
-                        Te = result["Te"]
+                        Ee = result["Ee"]
                         Fval = result["F"]
                         tau = result["tau"]
                         inz_rate = result["inz_rate"]
@@ -323,7 +355,7 @@ class Optimizer:
                         
                         # Append values to results
                         optimized_nes.append(n)
-                        optimized_Tes.append(Te)
+                        optimized_Ees.append(Ee)
                         optimized_Fs.append(Fval)            
                         optimized_taus.append(tau)
                         optimized_inz_rates.append(inz_rate)
@@ -334,7 +366,7 @@ class Optimizer:
         # Pack results to dictionary
         results = {}
         results["ne"] = optimized_nes
-        results["Te"] = optimized_Tes
+        results["Ee"] = optimized_Ees
         results["F"] = optimized_Fs
         results["tau"] = optimized_taus
         results["inz_rate"] = optimized_inz_rates
@@ -354,13 +386,15 @@ def make_voronov_biases(optimizeObject):
         '''
         opt = optimizeObject
         
-        lo = opt.MC_unc_lo
-        hi = opt.MC_unc_hi
+        l = opt.MC_unc_lo
+        m = opt.MC_unc
+        h = opt.MC_unc_hi
+        
         Num = opt.number_of_MC_iters
         
-        biases_l = np.random.uniform(low=lo, high=hi, size=Num) + 1
-        biases= np.random.uniform(low=lo, high=hi, size=Num) + 1 
-        biases_h = np.random.uniform(low=lo, high=hi, size=Num) + 1
+        biases_l = np.random.uniform(low=-l, high=l, size=Num) + 1
+        biases = np.random.uniform(low=-m, high=m, size=Num) + 1 
+        biases_h = np.random.uniform(low=-h, high=h, size=Num) + 1
         
         return [biases_l, biases, biases_h]
 
@@ -393,7 +427,7 @@ def run_algorithm(charge_state):
     # Find the solution set with each given set of Voronov biases
     # and pack the solution set to the output dataframe
     ne = []
-    Te = []
+    Ee = []
     tau = []
     inz_rate = []
     cx_rate = []
@@ -420,7 +454,7 @@ def run_algorithm(charge_state):
         
         # Append the output lists
         [ne.append(el) for el in result["ne"]]
-        [Te.append(el) for el in result["Te"]]
+        [Ee.append(el) for el in result["Ee"]]
         [tau.append(el) for el in result["tau"]]
         [inz_rate.append(el) for el in result["inz_rate"]]
         [cx_rate.append(el) for el in result["cx_rate"]]
@@ -444,7 +478,7 @@ def run_algorithm(charge_state):
     # Create the output dataframe
     df_out = pd.DataFrame()
     df_out["n"] = ne
-    df_out["T"] = Te
+    df_out["E"] = Ee
     df_out["tau"] = tau
     df_out["inz_rate"] = inz_rate
     df_out["cx_rate"] = cx_rate
@@ -457,9 +491,7 @@ def run_algorithm(charge_state):
     
     
     # Save results to file
-    name = "unc_lo={:.0f}%_unc_hi={:.0f}%_MC_iters={}_N={}_q={}.csv".format(
-        o.MC_unc_lo*100,
-        o.MC_unc_hi*100,
+    name = "solset_MC_iters-{}_N-{}_q-{}.csv".format(
         o.number_of_MC_iters,
         o.N,
         o.q)

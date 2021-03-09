@@ -134,8 +134,8 @@ output_file_name : File name under which to save the obtained abc parameters.
 # to transient of Kx+, and "KX+.csv" for the transient of Kx+.
 # You may also specify the list of files manually, if you wish.
 
-fileLocDir = "/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/81e-9/parsed_data/"
-cStates = [1,2,3,4,5,6,7,8,9,10,11,12]
+fileLocDir = "/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/124e-9/parsed_data/"
+cStates = [3,4,5,6,7,8,9,10,11,12]
 
 # Make the list of control signals
 ctrl_files = []
@@ -160,9 +160,9 @@ d = {
 "charge_states" : cStates,
 "1+_control_signals" : ctrl_files,
 "parsed_data_files": n_files,
-"h" : 10e-6,
-"output_directory" :  "/home/miha/Work/miscellaneous/test/",
-"output_file_name" : "abc_pulse=81e-9_h10e-6s.csv"
+"h" : 1000e-6,
+"output_directory" :  "/home/miha/Work/miscellaneous/test/testopt2/",
+"output_file_name" : "solution_abc_124e-9mbar_h1e-3.csv"
 }
 
 
@@ -198,17 +198,17 @@ availableStates = d["charge_states"][2:-2]
 outDir = d["output_directory"]
 
 p = {
+     "elemental_data_dir"   : "./elemental_data/", # This need be specified only if running the code from a different directory.
      "abc_file_path" 		: abcLoc, 	# Path to the file containing the abc parameters
-     "voronov_file_path" 	: "./elemental_data/voronov_k.csv", 					# Relative path to the voronov coefficient file
-     "cStates" 		: availableStates, 						# List of charge states on which to perform optimisation
-     "ne_lo" 			: 11, 							# log10 of the lower limit of electron density (1/cm3)
-     "ne_hi" 			: 12.41664051, 					# log10 of the upper limit of electron density (1/cm3)
-     "Te_lo" 			: 10, 							# Lower limit of Te (eV)
-     "Te_hi" 			: 10e3, 						# Upper limit of Te (eV)
-     "MC_unc_lo" 		: -.6, 						# Lower limit of Voronov uncertainty 
-     "MC_unc_hi" 		: .6, 							# Upper limit of Voronov uncertainty
-     "N" 			: 10, 						# Number of elements in the ne-vector
-     "number_of_MC_iters" 	: 10, 							# Number of Monte Carlo iterations to perform
+     "method" : "voronov", # Method by which to evaluate the rate coefficients.
+     "species": "k", # Species of ion whose transients are studied (lower case).
+     "cStates" 		: availableStates, # List of charge states on which to perform optimisation
+     "ne_lo" 			: 1e11, # lower limit of electron density (1/cm3)
+     "ne_hi" 			: 2.61e12, # upper limit of electron density (1/cm3)
+     "Ee_lo" 			: 10, # Lower limit of <Ee> (eV)
+     "Ee_hi" 			: 10e3, # Upper limit of <Ee> (eV)
+     "N" 			: 10, # Number of elements in the ne-vector
+     "number_of_MC_iters" : 10, # Number of Monte Carlo iterations to perform
      "output_directory" : outDir # Directory to save resultant solution sets.
      }
 
@@ -246,60 +246,55 @@ plotting_fits = {
 
 # solution_set_files = list of files containing the solution sets obtained from opt_neTe.py
 # charge_states = list of charge states corresponding to above files
-# Te_lo = lower limit for Te to accept in plots (eV)
-# Te_hi = upper -"-
+# Ee_lo = lower limit for <Ee> to accept in plots (eV)
+# Ee_hi = upper -"-
 # ne_lo = lower limit for ne to accept in plots (1/cm3)
 # ne_hi = upper -"-
 # F = upper limit of the penalty function value.
 plotting_results = {
-    
-    
-"solution_set_files" :
-[
-"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=6.csv",
-"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=7.csv",
-"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=8.csv",
-"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=9.csv",
-"/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/unc_lo=-60%_unc_hi=60%_MC_iters=1000_N=1000_q=10.csv"
-],
-    
-"charge_states" : [6,7,8,9,10],
+
+
+"charge_states" : [5,6,7,8,9,10],
 
 
 #
 # General plotting parameters.
 #
-"Te_lo" : 0, # To accept all data points, set lower limit = 0, and upper = np.inf
-"Te_hi" : np.inf,
+"Ee_lo" : 0, # To accept all data points, set lower limit = 0, and upper = np.inf
+"Ee_hi" : np.inf,
 "ne_lo" : 0,
 "ne_hi" : np.inf,
 "F" : 1e-7, # Maximum penalty function value to use in plotting results.
 "conf" : 0.341, # Confidence band to determine result uncertainties.
-"bias_max" : 0.6, # Maximum length of a component of the bias vector.
 "output_directory" : outDir, 
+
+
+
+"plot_solution_sets" : True,
+    
+"solution_set_files" :
+[
+"/home/miha/Work/miscellaneous/test/testopt/solset_MC_iters-10_N-10_q-5.csv",
+"/home/miha/Work/miscellaneous/test/testopt/solset_MC_iters-10_N-10_q-6.csv",
+"/home/miha/Work/miscellaneous/test/testopt/solset_MC_iters-10_N-10_q-7.csv",
+"/home/miha/Work/miscellaneous/test/testopt/solset_MC_iters-10_N-10_q-8.csv",
+"/home/miha/Work/miscellaneous/test/testopt/solset_MC_iters-10_N-10_q-9.csv",
+"/home/miha/Work/miscellaneous/test/testopt/solset_MC_iters-10_N-10_q-10.csv"
+],
+    
+
 
 #
 # Plot number of solutions against F
 #
 "plotting_vs_F" : 
 {
-"plot_num_of_solutions_vs_F" : True, # Set True / False
+"plot_num_of_solutions_vs_F" : False, # Set True / False
 "list_of_Fs" : [1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9],
 "y_lo" : 1,
 "y_hi" : None,
 },
 
-
-#
-# Plot number of solutions against bias_max
-#
-"plotting_vs_bias_max":
-{
-"plot_num_of_solutions_vs_bias_max" : False, # Set True/False
-"list_of_bias_max" : [0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
-"y_lo" : 1,
-"y_hi" : None,
-},
 
 
 #
@@ -322,30 +317,11 @@ plotting_results = {
 
 
 #
-# For plotting characteristic times vs bias max
-#
-"plotting_time_vs_bMax" : 
-{
- "plot_or_not" : False, # Set True / False
- "list_of_Bs"  : [0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
- "plot_tau" : True,
- "plot_inz" : True,
- "plot_cx"  : True,
- "tau_marker" : ".",
- "tau_color"  : "r",
- "inz_marker" : "s",
- "inz_color"  : "k",
- "cx_marker"  : "^",
- "cx_color"   : "b"
-},
-
-
-#
 # For plotting characteristic times vs charge state
 #
 "plotting_time_vs_q" : 
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "plot_tau" : True,
  "plot_inz" : True,
  "plot_cx"  : True,
@@ -366,7 +342,7 @@ plotting_results = {
 #
 "plotting_Ee_vs_q" :
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "marker" : "s",
  "color" : "k",
  "y_hi" : None,
@@ -379,7 +355,7 @@ plotting_results = {
 #
 "plotting_triple_vs_q" :
 {
- "plot_or_not" : True, # Set True / False
+ "plot_or_not" : False, # Set True / False
  "marker" : "s",
  "color" : "m",
  "y_hi" : None,
@@ -389,11 +365,11 @@ plotting_results = {
 #
 # Select whether or not you wish to output data as .csv
 #
-"output_tau_vs_q" : True,
-"output_inz_vs_q" : True,
-"output_cx_vs_q" : True,
-"output_Ee_vs_q" : True,
-"output_triple_vs_q" : True,
+"output_tau_vs_q" : False,
+"output_inz_vs_q" : False,
+"output_cx_vs_q" : False,
+"output_Ee_vs_q" : False,
+"output_triple_vs_q" : False,
 
 
 }
