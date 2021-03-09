@@ -4,8 +4,14 @@ A numerical code for determining plasma characteristic values from
 short pulse mode 1+ injection induced extraction current transients
 in a CB-ECRIS.
 
-## Changes since v1.1.0
+## Changes since v1.1.1
 
-### opt_neTe.py
+* Updated parameters.py
+** Simplified specification of data file locations.
+** Added default locations for some parameters.
 
-* Added constraint ![tauh](https://latex.codecogs.com/gif.latex?%5Ctau%5E%7Bq&plus;1%7D%20%3E%200) which was erroneously missing.
+* Updated opt_neTe.py
+** Commented out import of numdifftools as unnecessary.
+** Added 'if __name__ == "__main__":' condition
+in the context of multiprocessing to fix compatibility issue with Windows
+operating systems.
