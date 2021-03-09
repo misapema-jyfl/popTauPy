@@ -127,11 +127,14 @@ output_file_name : File name under which to save the obtained abc parameters.
 # Simply specify the directory where the data files are located,
 # in the variable 'fileLocDir', and the charge states in list 'cStates',
 # and place the variable containing the list into the 
-# dictionary. The loop assumes that the files are named using 
+# dictionary (it is already there by default). 
+# 
+# The loop assumes that the files are named using 
 # the logic "1+_KX+.csv" for the 1+ control signal corresponding 
 # to transient of Kx+, and "KX+.csv" for the transient of Kx+.
 # You may also specify the list of files manually, if you wish.
-fileLocDir = "/n/work01/misapema/data/gas/81e-9/"
+
+fileLocDir = "/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/81e-9/parsed_data/"
 cStates = [1,2,3,4,5,6,7,8,9,10,11,12]
 
 # Make the list of control signals
@@ -149,21 +152,17 @@ for q in cStates:
     s = "".join(s)
     f = fileLocDir + s
     n_files.append(f)
+ 
+
+
     
 d = {
-     
 "charge_states" : cStates,
-
 "1+_control_signals" : ctrl_files,
-     
 "parsed_data_files": n_files,
-     
 "h" : 10e-6,
-
-"output_directory" :  "/n/work01/misapema/results/gas/81e-9/",
-
+"output_directory" :  "/home/miha/Work/miscellaneous/test/",
 "output_file_name" : "abc_pulse=81e-9_h10e-6s.csv"
-     
 }
 
 
@@ -192,7 +191,7 @@ abcLoc = d["output_directory"] + d["output_file_name"]
 # By default, the available charge states are 
 # determined based on the charge states given in 
 # dictionary 'd'. You may also wish to specify a different list.
-availableStates = d["charge_states"][1:-1]
+availableStates = d["charge_states"][2:-2]
 
 # By default, the output directory is the one specified 
 # in the dictionary 'd', i.e. same as for the abc file.
@@ -200,7 +199,7 @@ outDir = d["output_directory"]
 
 p = {
      "abc_file_path" 		: abcLoc, 	# Path to the file containing the abc parameters
-     "voronov_file_path" 	: "/n/work01/misapema/popTauPy-v1.1.1/voronov_k.csv", 					# Relative path to the voronov coefficient file
+     "voronov_file_path" 	: "./elemental_data/voronov_k.csv", 					# Relative path to the voronov coefficient file
      "cStates" 		: availableStates, 						# List of charge states on which to perform optimisation
      "ne_lo" 			: 11, 							# log10 of the lower limit of electron density (1/cm3)
      "ne_hi" 			: 12.41664051, 					# log10 of the upper limit of electron density (1/cm3)
@@ -208,8 +207,8 @@ p = {
      "Te_hi" 			: 10e3, 						# Upper limit of Te (eV)
      "MC_unc_lo" 		: -.6, 						# Lower limit of Voronov uncertainty 
      "MC_unc_hi" 		: .6, 							# Upper limit of Voronov uncertainty
-     "N" 			: 1000, 						# Number of elements in the ne-vector
-     "number_of_MC_iters" 	: 1000, 							# Number of Monte Carlo iterations to perform
+     "N" 			: 10, 						# Number of elements in the ne-vector
+     "number_of_MC_iters" 	: 10, 							# Number of Monte Carlo iterations to perform
      "output_directory" : outDir # Directory to save resultant solution sets.
      }
 
@@ -229,11 +228,15 @@ Parameters for plotting.
 # RK4 fits
 # charge_states = list of charge states for which to perform fitting
 # h = RK4 time step to use in fitting
+
+# By default, the values corresponding to those specified in the
+# previous dictionaries (d and p) will be used.
+# Feel free to designate them manually, if you need to.
 plotting_fits = {
-    "abc_file_path" : "/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/150W/abc_pulse=150W_h10e-6s.csv",
-    "charge_states" : [5,6,7,8,9,10,11],
-    "h" : 10e-6,
-    "output_directory" : "/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/150W/"
+    "abc_file_path" : abcLoc,
+    "charge_states" : d["charge_states"][1:-1],
+    "h" : d["h"],
+    "output_directory" : outDir
     }
 
 
@@ -264,15 +267,16 @@ plotting_results = {
 
 
 #
-# General plotting parameters
+# General plotting parameters.
 #
 "Te_lo" : 0, # To accept all data points, set lower limit = 0, and upper = np.inf
 "Te_hi" : np.inf,
 "ne_lo" : 0,
 "ne_hi" : np.inf,
-"F" : 1e-7,
-"conf" : 0.341,
-"bias_max" : 0.6, # Maximum length of a component of the bias vector
+"F" : 1e-7, # Maximum penalty function value to use in plotting results.
+"conf" : 0.341, # Confidence band to determine result uncertainties.
+"bias_max" : 0.6, # Maximum length of a component of the bias vector.
+"output_directory" : outDir, 
 
 #
 # Plot number of solutions against F
@@ -391,9 +395,6 @@ plotting_results = {
 "output_Ee_vs_q" : True,
 "output_triple_vs_q" : True,
 
-
-
-"output_directory" : "/home/miha/Work/research/ppp-2/analysis/uW_sweep/results/250W/"
 
 }
 

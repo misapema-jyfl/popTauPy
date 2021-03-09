@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from parameters import p
 from scipy.optimize import NonlinearConstraint
-import numdifftools as nd
+# import numdifftools as nd
 
 class Optimizer:
     
@@ -300,34 +300,35 @@ class Optimizer:
         optimized_energy_contents = []
         
         # Use multiprocessing
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            
-            # Create the ne array
-            n = self.create_ne_array()
-            
-            # Run minimisation at each n
-            for result in executor.map(self.minimize_F, n):
+        if __name__ == "__main__":
+            with concurrent.futures.ProcessPoolExecutor() as executor:
                 
-                # Check that there exists a solution
-                if result["success"] == True:
+                # Create the ne array
+                n = self.create_ne_array()
+                
+                # Run minimisation at each n
+                for result in executor.map(self.minimize_F, n):
                     
-                    # Get the values at (n, T)
-                    n = result["ne"]
-                    Te = result["Te"]
-                    Fval = result["F"]
-                    tau = result["tau"]
-                    inz_rate = result["inz_rate"]
-                    cx_rate = result["cx_rate"]
-                    eC = result["eC"]
-                    
-                    # Append values to results
-                    optimized_nes.append(n)
-                    optimized_Tes.append(Te)
-                    optimized_Fs.append(Fval)            
-                    optimized_taus.append(tau)
-                    optimized_inz_rates.append(inz_rate)
-                    optimized_cx_rates.append(cx_rate)
-                    optimized_energy_contents.append(eC)
+                    # Check that there exists a solution
+                    if result["success"] == True:
+                        
+                        # Get the values at (n, T)
+                        n = result["ne"]
+                        Te = result["Te"]
+                        Fval = result["F"]
+                        tau = result["tau"]
+                        inz_rate = result["inz_rate"]
+                        cx_rate = result["cx_rate"]
+                        eC = result["eC"]
+                        
+                        # Append values to results
+                        optimized_nes.append(n)
+                        optimized_Tes.append(Te)
+                        optimized_Fs.append(Fval)            
+                        optimized_taus.append(tau)
+                        optimized_inz_rates.append(inz_rate)
+                        optimized_cx_rates.append(cx_rate)
+                        optimized_energy_contents.append(eC)
         
         
         # Pack results to dictionary

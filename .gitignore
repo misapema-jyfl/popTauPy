@@ -4,5 +4,5 @@ data/
 *.job
 errorout
 out
-parameters.py
+# parameters.py
 test.py
