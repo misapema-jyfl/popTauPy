@@ -13,7 +13,7 @@ import pandas as pd
 # import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from parameters import p
-from scipy.optimize import NonlinearConstraint
+# from scipy.optimize import NonlinearConstraint
 # import numdifftools as nd
 
 class Optimizer:
@@ -82,7 +82,40 @@ class Optimizer:
         if self.method=="voronov":
             rc = self.voronov_rate
             
+        if self.method=="interpolated_MB":
+            
+            # Load the three necessary interpolation functions
+            # into a dataframe object.
+            # This is necessary for the actual rate coefficient function.
+            self.df_interpFuns = pd.DataFrame()
+            self.df_interpFuns[self.cState-1] = [self.load_interp_fun(self.cState-1)]
+            self.df_interpFuns[self.cState] = [self.load_interp_fun(self.cState)]
+            self.df_interpFuns[self.cState+1] = [self.load_interp_fun(self.cState+1)]
+            
+            rc = self.interpolated_MB
+            
         return rc
+
+    def load_interp_fun(self, chargeState, interpType):
+        '''
+        Returns the interpolation function of type interpType
+        (if exists) for the ion of the given charge state.
+        '''
+        s = (self.elemental_data_dir,"interp",interpType,"_",self.species,"_",
+             str(chargeState),"+.npy")
+        filename = "".join(s)
+        interpFun = np.load(filename,allow_pickle=True).item()
+        
+        return interpFun
+
+    def interpolated_MB(self, chargeState, averageEnergy):
+        
+        # Pick the correct interpolation function from the dataframe
+        # and then calculate the rate coefficient at given <E>.
+        f = self.df_interpFuns[chargeState].values[0]
+        rateCoefficient = f(averageEnergy) 
+        
+        return rateCoefficient
 
 
 
