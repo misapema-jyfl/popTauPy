@@ -47,6 +47,28 @@ IMPORTANT INFORMATION ABOVE!
 
 import numpy as np
 
+
+
+
+# General parameters for running the code. 
+# You won't have to adjust these, unless
+# you are running the code using e.g.
+# batch jobs from another directory.
+general_parameters = {
+
+"working_directory" : ".",
+"elemental_data_directory" : "./elemental_data/"
+
+}
+
+
+
+
+
+
+
+
+
 '''
 Parameters for running parse_data.py
 

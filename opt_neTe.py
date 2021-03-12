@@ -10,15 +10,24 @@ import time
 import numpy as np
 import concurrent.futures
 import pandas as pd
-# import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from parameters import p
-# from scipy.optimize import NonlinearConstraint
-# import numdifftools as nd
+from parameters import general_parameters as gp
+
+
+
 
 class Optimizer:
     
     def __init__(self, q):
+        
+        
+        # Set the directory structure
+        # making sure that the given paths point to directories
+        # i.e. there is a "/" at the end of the string.
+        self.workDir = gp["working_directory"] if gp["working_directory"][-1]=="/" else gp["working_directory"] + "/"
+        self.elementalDir = gp["elemental_data_directory"] if gp["elemental_data_directory"][-1] == "/" else gp["elemental_data_directory"] + "/"
+        
         
         # Set current charge state 
         self.q = q
@@ -40,11 +49,15 @@ class Optimizer:
         # the chosen method for evaluating the rate coefficient.
         # Retrieve the function by which to evaluate the rate coefficient.
         if self.method=="voronov":
-            s = (p["elemental_data_dir"],self.method,"_",self.species,".csv")
+            s = (self.elementalDir,self.method,"_",self.species,".csv")
             filePath = "".join(s)
             self.df_eldata = pd.read_csv(filePath, index_col="state")
             self.rc = self.evaluate_rc()
-            
+        
+        if self.method=="interpMB":
+            s = (self.elementalDir,self.method,"_",self.species,".csv")
+            filePath = "".join(s)
+            self.df_eldata = pd.read_csv(filePath, index_col="state")
             
         # Set initial uncertainty biases
         self.biases = {}
@@ -101,7 +114,7 @@ class Optimizer:
         Returns the interpolation function of type interpType
         (if exists) for the ion of the given charge state.
         '''
-        s = (self.elemental_data_dir,"interp",interpType,"_",self.species,"_",
+        s = (self.elementalDir,"interp",interpType,"_",self.species,"_",
              str(chargeState),"+.npy")
         filename = "".join(s)
         interpFun = np.load(filename,allow_pickle=True).item()
@@ -228,9 +241,6 @@ class Optimizer:
             
         return F
 
-
-
-    
         
     # def make_constraints(self, n):
     #     '''
@@ -412,7 +422,7 @@ class Optimizer:
 
 
 
-def make_voronov_biases(optimizeObject):
+def make_biases(optimizeObject):
         '''
         Create a list of biases on the Voronov formula coefficients
         using a random, uniform selection for the biases.
@@ -452,7 +462,7 @@ def run_algorithm(charge_state):
     o = Optimizer(q)
     
     # Create the list of Voronov biases to use
-    b = make_voronov_biases(optimizeObject=o)
+    b = make_biases(optimizeObject=o)
     
     # Track number of iterations
     i=0
