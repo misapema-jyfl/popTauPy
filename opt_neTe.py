@@ -52,12 +52,14 @@ class Optimizer:
             s = (self.elementalDir,self.method,"_",self.species,".csv")
             filePath = "".join(s)
             self.df_eldata = pd.read_csv(filePath, index_col="state")
-            self.rc = self.evaluate_rc()
         
         if self.method=="interpMB":
             s = (self.elementalDir,self.method,"_",self.species,".csv")
             filePath = "".join(s)
             self.df_eldata = pd.read_csv(filePath, index_col="state")
+        
+        # Set the function by which to evaluate the rate coefficients.
+        self.rc = self.evaluate_rc()
             
         # Set initial uncertainty biases
         self.biases = {}
@@ -95,38 +97,40 @@ class Optimizer:
         if self.method=="voronov":
             rc = self.voronov_rate
             
-        if self.method=="interpolated_MB":
+        if self.method=="interpMB":
             
             # Load the three necessary interpolation functions
             # into a dataframe object.
             # This is necessary for the actual rate coefficient function.
             self.df_interpFuns = pd.DataFrame()
-            self.df_interpFuns[self.cState-1] = [self.load_interp_fun(self.cState-1)]
-            self.df_interpFuns[self.cState] = [self.load_interp_fun(self.cState)]
-            self.df_interpFuns[self.cState+1] = [self.load_interp_fun(self.cState+1)]
+            self.df_interpFuns[self.q-1] = [self.load_interp_fun(self.q-1, self.method)]
+            self.df_interpFuns[self.q] = [self.load_interp_fun(self.q, self.method)]
+            self.df_interpFuns[self.q+1] = [self.load_interp_fun(self.q+1, self.method)]
             
             rc = self.interpolated_MB
             
         return rc
+
 
     def load_interp_fun(self, chargeState, interpType):
         '''
         Returns the interpolation function of type interpType
         (if exists) for the ion of the given charge state.
         '''
-        s = (self.elementalDir,"interp",interpType,"_",self.species,"_",
+        s = (self.elementalDir,interpType,"_",self.species,"_",
              str(chargeState),"+.npy")
         filename = "".join(s)
         interpFun = np.load(filename,allow_pickle=True).item()
         
         return interpFun
 
+
     def interpolated_MB(self, chargeState, averageEnergy):
         
         # Pick the correct interpolation function from the dataframe
         # and then calculate the rate coefficient at given <E>.
         f = self.df_interpFuns[chargeState].values[0]
-        rateCoefficient = f(averageEnergy) 
+        rateCoefficient = f(averageEnergy)*1e6 # Convert m3 -> cm3 
         
         return rateCoefficient
 

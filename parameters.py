@@ -56,7 +56,7 @@ import numpy as np
 # batch jobs from another directory.
 general_parameters = {
 
-"working_directory" : ".",
+"working_directory" : "./",
 "elemental_data_directory" : "./elemental_data/"
 
 }
@@ -157,7 +157,7 @@ output_file_name : File name under which to save the obtained abc parameters.
 # You may also specify the list of files manually, if you wish.
 
 fileLocDir = "/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/124e-9/parsed_data/"
-cStates = [3,4,5,6,7,8,9,10,11,12]
+cStates = [4,5,6,7,8,9,10,11,12]
 
 # Make the list of control signals
 ctrl_files = []
@@ -182,9 +182,9 @@ d = {
 "charge_states" : cStates,
 "1+_control_signals" : ctrl_files,
 "parsed_data_files": n_files,
-"h" : 1000e-6,
-"output_directory" :  "/home/miha/Work/miscellaneous/test/testopt2/",
-"output_file_name" : "solution_abc_124e-9mbar_h1e-3.csv"
+"h" : 10e-6,
+"output_directory" :  "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/",
+"output_file_name" : "solution_abc_2020-06-29_w_noise_h=10e-6.csv"
 }
 
 
@@ -213,16 +213,21 @@ abcLoc = d["output_directory"] + d["output_file_name"]
 # By default, the available charge states are 
 # determined based on the charge states given in 
 # dictionary 'd'. You may also wish to specify a different list.
-availableStates = d["charge_states"][2:-2]
+availableStates = d["charge_states"][1:-2]
 
 # By default, the output directory is the one specified 
 # in the dictionary 'd', i.e. same as for the abc file.
 outDir = d["output_directory"]
 
+
+# Available methods:
+# 'voronov'
+# 'interpMB'
+
 p = {
-     "elemental_data_dir"   : "./elemental_data/", # This need be specified only if running the code from a different directory.
+     # "elemental_data_dir"   : "./elemental_data/", # This need be specified only if running the code from a different directory.
      "abc_file_path" 		: abcLoc, 	# Path to the file containing the abc parameters
-     "method" : "voronov", # Method by which to evaluate the rate coefficients.
+     "method" : "interpMB", # Method by which to evaluate the rate coefficients.
      "species": "k", # Species of ion whose transients are studied (lower case).
      "cStates" 		: availableStates, # List of charge states on which to perform optimisation
      "ne_lo" 			: 1e11, # lower limit of electron density (1/cm3)
