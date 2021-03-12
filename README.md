@@ -5,6 +5,11 @@ short pulse mode 1+ injection induced extraction current transients
 in a CB-ECRIS.
 
 ## Major changes since v1.1.1
+* Added possibility to use interpolation functions 
+to evaluate the rate coefficients. Currently,
+only the Maxwell-Boltzmann distribution is available.
+This interpolation function can be chosen by specifying 
+"method" = "interpMB" in the parameters.py file.
 
 * Solutions from 'opt_neTe.py' are now output in terms of 
 average electron energy. This makes the plotting routines of 
@@ -33,16 +38,18 @@ in the file "./elemental_data/voronov_k.csv"
 
 ## Minor changes
 
-### Updated parameters.py
+### parameters.py
 * Simplified specification of data file locations.
 * Added default locations for some parameters.
 * Added key "elemental_data_dir" to dictionary 'p'
 * Added key "method" to dictionary 'p'
 * Added key "species" to dictionary 'p'
 * Removed keys "MC_unc_lo" and "MC_unc_hi" from dictionary 'p'
+* Added general_parameters dictionary for specifying the working directory
+and the path to the directory containing the elemental data, 
+i.e. parameters for the voronov formula and interpolation functions.
 
-
-### Updated opt_neTe.py
+### opt_neTe.py
 * Commented out import of numdifftools as unnecessary.
 * Added 'if __name__ == "__main__":' condition
 in the context of multiprocessing to fix compatibility issue with Windows
