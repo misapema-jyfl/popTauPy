@@ -81,41 +81,17 @@ elemental_symbol : E.g. 'K' for potassium. Used for naming convention.
 
 parsing_parameters = {
     
-"charge_states":[1,2,3,4,5,6,7,8,9,10,11,12],
+"charge_states": [],
 
-"1+_control_signals" : 
-[
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K1+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K2+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K3+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K4+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K5+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K6+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K7+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K8+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K9+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K10+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K11+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/1+_K12+.csv"
+"1+_control_signals" : [
+
 ],
     
-"n+_signals" : 
-[
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K1+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K2+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K3+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K4+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K5+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K6+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K7+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K8+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K9+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K10+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K11+.csv",
-"/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/footer_removed_data/K12+.csv"
+"n+_signals" : [
+
 ],
     
-"save_to_path" : "/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/141e-9/parsed_data/",
+"save_to_path" : "../",
 
 "elemental_symbol" : "K"
 }
@@ -156,7 +132,7 @@ output_file_name : File name under which to save the obtained abc parameters.
 # to transient of Kx+, and "KX+.csv" for the transient of Kx+.
 # You may also specify the list of files manually, if you wish.
 
-fileLocDir = "/home/miha/Work/research/ppp-2/experimental_data/gas_dosing/data/124e-9/parsed_data/"
+fileLocDir = "/home/miha/Work/research/ppp-2/experimental_data/2020-11_gas_dosing/data/141e-9/parsed_data/"
 cStates = [4,5,6,7,8,9,10,11,12]
 
 # Make the list of control signals
@@ -182,7 +158,7 @@ d = {
 "charge_states" : cStates,
 "1+_control_signals" : ctrl_files,
 "parsed_data_files": n_files,
-"h" : 10e-6,
+"h" : 1000e-6,
 "output_directory" :  "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/",
 "output_file_name" : "solution_abc_2020-06-29_w_noise_h=10e-6.csv"
 }
