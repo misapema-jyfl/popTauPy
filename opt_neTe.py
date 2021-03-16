@@ -6,44 +6,46 @@ Created on Mon Jan 25 10:58:53 2021
 @author: miha
 """
 
-import time
+# import time
 import numpy as np
 import concurrent.futures
 import pandas as pd
 from scipy.optimize import minimize
-from parameters import p
-from parameters import general_parameters as gp
+# from parameters import p
+# from parameters import general_parameters as gp
 
 
 
 
 class Optimizer:
     
-    def __init__(self, q):
+    def __init__(self, q, params):
         
+        g = params["general"]
+        d = params["data"]
+        o = params["optimizer"]
         
         # Set the directory structure
         # making sure that the given paths point to directories
         # i.e. there is a "/" at the end of the string.
-        self.workDir = gp["working_directory"] if gp["working_directory"][-1]=="/" else gp["working_directory"] + "/"
-        self.elementalDir = gp["elemental_data_directory"] if gp["elemental_data_directory"][-1] == "/" else gp["elemental_data_directory"] + "/"
+        self.workDir = g["working_directory"] if g["working_directory"][-1]=="/" else g["working_directory"] + "/"
+        self.elementalDir = g["elemental_data_directory"] if g["elemental_data_directory"][-1] == "/" else g["elemental_data_directory"] + "/"
         
         
         # Set current charge state 
         self.q = q
         
         # Retrieve parameters for runtime
-        self.abc_file_path = p["abc_file_path"]
-        self.method = p["method"]
-        self.species = p["species"]
-        self.cStates = p["cStates"]
-        self.ne_lo = np.log10(p["ne_lo"])
-        self.ne_hi = np.log10(p["ne_hi"])
-        self.Ee_lo = p["Ee_lo"]
-        self.Ee_hi = p["Ee_hi"]
-        self.N = p["N"]
-        self.number_of_MC_iters = p["number_of_MC_iters"]
-        
+        self.abc_file_path = g["save_to_path"] + d["abc_file_name"]
+        self.method = o["rate_coefficient_method"]
+        self.species = d["species"].lower()
+        self.cStates = d["available_charge_states"][1:-1]
+        self.ne_lo = np.log10(o["ne_lo"])
+        self.ne_hi = np.log10(o["ne_hi"])
+        self.Ee_lo = o["Ee_lo"]
+        self.Ee_hi = o["Ee_hi"]
+        self.N = o["number_of_ne"]
+        self.number_of_MC_iters = o["number_of_MC"]
         
         # Retrieve the elemental data parameters corresponding to 
         # the chosen method for evaluating the rate coefficient.
@@ -377,37 +379,37 @@ class Optimizer:
         optimized_inz_rates = []
         optimized_cx_rates = []
         optimized_energy_contents = []
-        
-        # Use multiprocessing
-        if __name__ == "__main__":
-            with concurrent.futures.ProcessPoolExecutor() as executor:
+
+        # # Use multiprocessing
+        # if __name__ == "__main__":
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            
+            # Create the ne array
+            n = self.create_ne_array()
+            
+            # Run minimisation at each n
+            for result in executor.map(self.minimize_F, n):
                 
-                # Create the ne array
-                n = self.create_ne_array()
-                
-                # Run minimisation at each n
-                for result in executor.map(self.minimize_F, n):
+                # Check that there exists a solution
+                if result["success"] == True:
                     
-                    # Check that there exists a solution
-                    if result["success"] == True:
-                        
-                        # Get the values at (n, T)
-                        n = result["ne"]
-                        Ee = result["Ee"]
-                        Fval = result["F"]
-                        tau = result["tau"]
-                        inz_rate = result["inz_rate"]
-                        cx_rate = result["cx_rate"]
-                        eC = result["eC"]
-                        
-                        # Append values to results
-                        optimized_nes.append(n)
-                        optimized_Ees.append(Ee)
-                        optimized_Fs.append(Fval)            
-                        optimized_taus.append(tau)
-                        optimized_inz_rates.append(inz_rate)
-                        optimized_cx_rates.append(cx_rate)
-                        optimized_energy_contents.append(eC)
+                    # Get the values at (n, T)
+                    n = result["ne"]
+                    Ee = result["Ee"]
+                    Fval = result["F"]
+                    tau = result["tau"]
+                    inz_rate = result["inz_rate"]
+                    cx_rate = result["cx_rate"]
+                    eC = result["eC"]
+                    
+                    # Append values to results
+                    optimized_nes.append(n)
+                    optimized_Ees.append(Ee)
+                    optimized_Fs.append(Fval)            
+                    optimized_taus.append(tau)
+                    optimized_inz_rates.append(inz_rate)
+                    optimized_cx_rates.append(cx_rate)
+                    optimized_energy_contents.append(eC)
         
         
         # Pack results to dictionary
@@ -451,105 +453,105 @@ def make_biases(optimizeObject):
 
 
 
-def run_algorithm(charge_state):
-    '''
-    Run the optimisation routine on a chosen charge state,
-    using the runtime parameters designated in 
-    the settings file 'parameters.py'
-    '''
+# def run_algorithm(charge_state):
+#     '''
+#     Run the optimisation routine on a chosen charge state,
+#     using the runtime parameters designated in 
+#     the settings file 'parameters.py'
+#     '''
     
-    print("Starting run for charge state {}...\n\n".format(str(charge_state)))
+#     print("Starting run for charge state {}...\n\n".format(str(charge_state)))
     
-    q = charge_state # Rename for brevity
+#     q = charge_state # Rename for brevity
     
-    # Instantiate the optimizer object for charge state q
-    o = Optimizer(q)
+#     # Instantiate the optimizer object for charge state q
+#     o = Optimizer(q)
     
-    # Create the list of Voronov biases to use
-    b = make_biases(optimizeObject=o)
+#     # Create the list of Voronov biases to use
+#     b = make_biases(optimizeObject=o)
     
-    # Track number of iterations
-    i=0
+#     # Track number of iterations
+#     i=0
     
-    # Find the solution set with each given set of Voronov biases
-    # and pack the solution set to the output dataframe
-    ne = []
-    Ee = []
-    tau = []
-    inz_rate = []
-    cx_rate = []
-    eC = []
-    F = []
-    used_biases_l = []
-    used_biases = []
-    used_biases_h = []
+#     # Find the solution set with each given set of Voronov biases
+#     # and pack the solution set to the output dataframe
+#     ne = []
+#     Ee = []
+#     tau = []
+#     inz_rate = []
+#     cx_rate = []
+#     eC = []
+#     F = []
+#     used_biases_l = []
+#     used_biases = []
+#     used_biases_h = []
     
-    absoluteStart = time.perf_counter() # For tracking elapsed time
-    for _ in range(o.number_of_MC_iters):
+#     absoluteStart = time.perf_counter() # For tracking elapsed time
+#     for _ in range(o.number_of_MC_iters):
         
-        # Set the Voronov biases for this iteration    
-        o.biases[q-1] = b[0][i]
-        o.biases[q] = b[1][i]
-        o.biases[q+1] = b[2][i]
+#         # Set the Voronov biases for this iteration    
+#         o.biases[q-1] = b[0][i]
+#         o.biases[q] = b[1][i]
+#         o.biases[q+1] = b[2][i]
         
-        # Find solution set using above biases
-        start = time.perf_counter()
-        result = o.find_solution_set()
-        finish = time.perf_counter()
+#         # Find solution set using above biases
+#         start = time.perf_counter()
+#         result = o.find_solution_set()
+#         finish = time.perf_counter()
         
-        i += 1
+#         i += 1
         
-        # Append the output lists
-        [ne.append(el) for el in result["ne"]]
-        [Ee.append(el) for el in result["Ee"]]
-        [tau.append(el) for el in result["tau"]]
-        [inz_rate.append(el) for el in result["inz_rate"]]
-        [cx_rate.append(el) for el in result["cx_rate"]]
-        [F.append(el) for el in result["F"]]
-        [eC.append(el) for el in result["eC"]]
-        [used_biases_l.append(o.biases[q-1]) for _ in range(len(result["F"]))]
-        [used_biases.append(o.biases[q]) for _ in range(len(result["F"]))]
-        [used_biases_h.append(o.biases[q+1]) for _ in range(len(result["F"]))]
+#         # Append the output lists
+#         [ne.append(el) for el in result["ne"]]
+#         [Ee.append(el) for el in result["Ee"]]
+#         [tau.append(el) for el in result["tau"]]
+#         [inz_rate.append(el) for el in result["inz_rate"]]
+#         [cx_rate.append(el) for el in result["cx_rate"]]
+#         [F.append(el) for el in result["F"]]
+#         [eC.append(el) for el in result["eC"]]
+#         [used_biases_l.append(o.biases[q-1]) for _ in range(len(result["F"]))]
+#         [used_biases.append(o.biases[q]) for _ in range(len(result["F"]))]
+#         [used_biases_h.append(o.biases[q+1]) for _ in range(len(result["F"]))]
         
-        # Print runtime status...
-        numSol = len(ne)
-        totSol = i*o.N
-        print("Finished iteration {} in {} s (total: {} s) | Cumulative accuracy: {} %"
-              .format(i,
-                      round(finish-start,1),
-                      round(finish-absoluteStart,1),
-                      round(100*numSol/totSol,1))
-              )
+#         # Print runtime status...
+#         numSol = len(ne)
+#         totSol = i*o.N
+#         print("Finished iteration {} in {} s (total: {} s) | Cumulative accuracy: {} %"
+#               .format(i,
+#                       round(finish-start,1),
+#                       round(finish-absoluteStart,1),
+#                       round(100*numSol/totSol,1))
+#               )
         
     
-    # Create the output dataframe
-    df_out = pd.DataFrame()
-    df_out["n"] = ne
-    df_out["E"] = Ee
-    df_out["tau"] = tau
-    df_out["inz_rate"] = inz_rate
-    df_out["cx_rate"] = cx_rate
-    df_out["eC"] = eC
-    df_out["bias_l"] = used_biases_l
-    df_out["bias"] = used_biases
-    df_out["bias_h"] = used_biases_h
-    df_out["F"] = F
+#     # Create the output dataframe
+#     df_out = pd.DataFrame()
+#     df_out["n"] = ne
+#     df_out["E"] = Ee
+#     df_out["tau"] = tau
+#     df_out["inz_rate"] = inz_rate
+#     df_out["cx_rate"] = cx_rate
+#     df_out["eC"] = eC
+#     df_out["bias_l"] = used_biases_l
+#     df_out["bias"] = used_biases
+#     df_out["bias_h"] = used_biases_h
+#     df_out["F"] = F
     
     
     
-    # Save results to file
-    name = "solset_MC_iters-{}_N-{}_q-{}.csv".format(
-        o.number_of_MC_iters,
-        o.N,
-        o.q)
-    outputPath = p["output_directory"] + name
-    df_out.to_csv( outputPath )
+#     # Save results to file
+#     name = "solset_MC_iters-{}_N-{}_q-{}.csv".format(
+#         o.number_of_MC_iters,
+#         o.N,
+#         o.q)
+#     outputPath = p["output_directory"] + name
+#     df_out.to_csv( outputPath )
     
-    print("Run completed!\n\n")
+#     print("Run completed!\n\n")
   
 
 
-# Execute the routine
-cStates = p["cStates"]
-for q in cStates:
-    run_algorithm(q)
+# # Execute the routine
+# cStates = p["cStates"]
+# for q in cStates:
+#     run_algorithm(q)

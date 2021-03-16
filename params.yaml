@@ -1,0 +1,22 @@
+general:
+ working_directory: "./"
+ elemental_data_directory: "./elemental_data/"
+ save_to_path: "../test/results/" # Path to which you wish to save your results
+ do_abc: False
+ do_neTe: True
+ 
+data:
+ parsed_data_path: "/home/miha/Work/research/ppp-2/experimental_data/2020-11_gas_dosing/data/141e-9/parsed_data/" # Path to the directory containing the data files
+ available_charge_states: [1,2,3,4,5,6,7,8,9,10,11,12] # Charge states for which transient data is available
+ species: "K"
+ abc_file_name: "abc_h1e-3.csv" # Name of the abc file (to save / to load)
+ 
+optimizer:
+ rk_time_step: 1.0e-3 # Time step for the RK4 method (s) N.B. in scientific notation, use e.g. 1.0e-3 NOT 1e-3. Else error.
+ rate_coefficient_method: "interpMB" # Available methods: ['voronov', 'interpMB']
+ ne_lo: 1.0e+11 # (1/cm3) N.B. Must use e.g. 1.0e+11, NOT 1e11, or 1.0e11. Else error.
+ ne_hi: 2.61e+12
+ Ee_lo: 10.0 # (eV)
+ Ee_hi: 10.0e+3
+ number_of_ne: 100
+ number_of_MC: 10

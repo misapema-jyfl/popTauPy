@@ -11,7 +11,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 from scipy import interpolate
-from parameters import d
+# from parameters import d
 import matplotlib.pyplot as plt
 import matplotlib
 
@@ -28,7 +28,7 @@ matplotlib.rc('font', **font)
 
 
 
-def rk4(t0, y0, tf, f,**kwargs):
+def rk4(t0, y0, tf, f, h, **kwargs):
     '''
     Fourth order Runge-Kutta integrator for the arbitrary function
     f=f(t,y,**kwargs), where kwargs are the variables necessary to
@@ -45,6 +45,8 @@ def rk4(t0, y0, tf, f,**kwargs):
         Final time.
     f : function
         Function which defines the DE to solve.
+    h : float
+        Time step of the method (s).
     **kwargs : dict
         Keyword arguments to completely define the right-hand-side of
         the DE.
@@ -58,7 +60,7 @@ def rk4(t0, y0, tf, f,**kwargs):
 
     '''
     
-    h = d["h"] # Time step (units of s) for the RK4 integrator. 
+    # h = d["h"] # Time step (units of s) for the RK4 integrator. 
     Y = []
     T = []
     yn = y0
@@ -107,15 +109,38 @@ def RHS(t,y,a,b,c,I_lo,I_hi):
 
 class Fitter:
     
-    def __init__(self, charge_state):
+    def __init__(self, charge_state, params):
         
+        d = params["data"]
+        o = params["optimizer"]
+        
+        cStates = d["available_charge_states"]
+        fileLocDir = d["parsed_data_path"]
+        species = d["species"].upper()
+        
+        self.h = o["rk_time_step"]
+
         self.charge_state = charge_state
         
-        #
         # Get paths to necessary files and charge state information.
-        #
-        self.dataFilePaths = d["parsed_data_files"]
-        self.chargeStates = d["charge_states"]
+        
+        # Make the list of control signals
+        # ctrl_files = []
+        # for q in cStates:
+        #     s = ("1+_{}".format(species),str(q),"+.csv")
+        #     s = "".join(s)
+        #     f = fileLocDir + s
+        #     ctrl_files.append(f)
+        
+        # Make the list of N+ signals
+        n_files = []
+        for q in cStates:
+            s = (species, str(q),"+.csv")
+            s = "".join(s)
+            f = fileLocDir + s
+            n_files.append(f)
+        self.dataFilePaths = n_files
+        self.chargeStates = d["available_charge_states"]
         
         #
         # Make a dataframe for holding data file paths
@@ -214,7 +239,7 @@ class Fitter:
                 
         t0, tf = self.determine_interpolation_limits()
         
-        T,Y = rk4(t0=t0,y0=0,tf=tf,f=RHS,a=a,b=b,c=c,I_lo=I_lo,I_hi=I_hi)
+        T,Y = rk4(t0=t0,y0=0,tf=tf,f=RHS,h=self.h,a=a,b=b,c=c,I_lo=I_lo,I_hi=I_hi)
         
         y = interp1d(T,Y,kind="cubic", fill_value="extrapolate")
         
@@ -291,49 +316,49 @@ class Fitter:
 
 
 
-df_res = pd.DataFrame()
+# df_res = pd.DataFrame()
 
-for charge_state in d["charge_states"][1:-1]:
+# for charge_state in d["charge_states"][1:-1]:
     
-    print("Working on charge_state: " + str(charge_state) + "+...")
+#     print("Working on charge_state: " + str(charge_state) + "+...")
     
-    F = Fitter(charge_state=charge_state)
+#     F = Fitter(charge_state=charge_state)
     
-    popt, pcov, chi2_reduced = F.do_fit()
+#     popt, pcov, chi2_reduced = F.do_fit()
     
-    #
-    # Plot the final fit
-    #
-    t,i = F.get_data(charge_state)
-    t_i, t_f = F.determine_interpolation_limits()
-    T = np.linspace(t_i, t_f, num=len(t))
-    y = F.fit_rk4(a=popt[0], b=popt[1], c=popt[2])
+#     #
+#     # Plot the final fit
+#     #
+#     t,i = F.get_data(charge_state)
+#     t_i, t_f = F.determine_interpolation_limits()
+#     T = np.linspace(t_i, t_f, num=len(t))
+#     y = F.fit_rk4(a=popt[0], b=popt[1], c=popt[2])
     
-    fig, ax = plt.subplots()
+#     fig, ax = plt.subplots()
     
-    # s = "{ " + str(charge_state) + "+}"
+#     # s = "{ " + str(charge_state) + "+}"
     
-    ax.plot(t*1e3,i*1e3,c="k", label="Measured")
-    ax.plot(T*1e3,y(T)*1e3,c="r", ls="--", label="Fitted")
-    ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Current (enA)")
-    ax.legend()
-    outName = "fig_fit_h{:.0e}_q{}".format(d["h"], str(charge_state))     
-    fig.tight_layout()    
-    fig.savefig(d["output_directory"] + outName + "+.eps", format="eps")
-    fig.savefig(d["output_directory"] + outName + "+.png", format="png", dpi=300)
-    plt.close(fig)
+#     ax.plot(t*1e3,i*1e3,c="k", label="Measured")
+#     ax.plot(T*1e3,y(T)*1e3,c="r", ls="--", label="Fitted")
+#     ax.set_xlabel("Time (ms)")
+#     ax.set_ylabel("Current (enA)")
+#     ax.legend()
+#     outName = "fig_fit_h{:.0e}_q{}".format(d["h"], str(charge_state))     
+#     fig.tight_layout()    
+#     fig.savefig(d["output_directory"] + outName + "+.eps", format="eps")
+#     fig.savefig(d["output_directory"] + outName + "+.png", format="png", dpi=300)
+#     plt.close(fig)
 
-    #
-    # Unpack the result
-    #
-    [a, b, c] = popt
-    [da, db, dc] = np.sqrt(np.diag(pcov))
+#     #
+#     # Unpack the result
+#     #
+#     [a, b, c] = popt
+#     [da, db, dc] = np.sqrt(np.diag(pcov))
     
-    df_res[charge_state]=[a,b,c,da,db,dc,chi2_reduced]
+#     df_res[charge_state]=[a,b,c,da,db,dc,chi2_reduced]
     
-df_res.index=["a", "b", "c", "da", "db", "dc", "chi2"]
+# df_res.index=["a", "b", "c", "da", "db", "dc", "chi2"]
 
-print(df_res)
+# print(df_res)
 
-df_res.to_csv(d["output_directory"] + d["output_file_name"])
+# df_res.to_csv(d["output_directory"] + d["output_file_name"])
