@@ -4,7 +4,15 @@ A numerical code for determining plasma characteristic values from
 short pulse mode 1+ injection induced extraction current transients
 in a CB-ECRIS.
 
-## Major changes since v1.1.1
+## Major changes since v1.1.0
+* The code is now run from the terminal by calling the 
+masterScript.py with the parameters (.yaml) file 
+given as its argument. E.g:
+>>> python3 masterScript.py params.yaml
+
+* Changed parameters input from parameters.py to a .yaml file.
+As an example, see the file 'params.yaml'.
+
 * Added possibility to use interpolation functions 
 to evaluate the rate coefficients. Currently,
 only the Maxwell-Boltzmann distribution is available.
@@ -38,21 +46,7 @@ in the file "./elemental_data/voronov_k.csv"
 
 ## Minor changes
 
-### parameters.py
-* Simplified specification of data file locations.
-* Added default locations for some parameters.
-* Added key "elemental_data_dir" to dictionary 'p'
-* Added key "method" to dictionary 'p'
-* Added key "species" to dictionary 'p'
-* Removed keys "MC_unc_lo" and "MC_unc_hi" from dictionary 'p'
-* Added general_parameters dictionary for specifying the working directory
-and the path to the directory containing the elemental data, 
-i.e. parameters for the voronov formula and interpolation functions.
-
 ### opt_neTe.py
 * Commented out import of numdifftools as unnecessary.
-* Added 'if __name__ == "__main__":' condition
-in the context of multiprocessing to fix compatibility issue with Windows
-operating systems.
 * voronov_rate is now called as a function of the average energy of
 the MB distribution, instead of the temperature.
