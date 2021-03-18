@@ -19,7 +19,7 @@ set its execution option to false in the parameters file.
 import time
 import sys
 import yaml
-from parse_data_2 import Parser
+from parse_data import Parser
 from opt_abc import Fitter
 from opt_neTe import Optimizer
 from opt_neTe import make_biases

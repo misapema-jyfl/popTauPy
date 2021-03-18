@@ -8,7 +8,7 @@ general:
  
 parsing:
  raw_data_path: "/home/miha/Work/datasets/JA_2021-02-24_pulse_width/2021 02 24 vary pulse duration/2021 02 24 N+ pulse responses/"
- parsed_data_path: "../test/parsed/"
+ parsed_data_path: "/home/miha/Work/research/ppp-4_config_comparison/data/config_comparison_2/JA_2021-02-24_pulse_width/5ms/"
  species: "K"
  available_charge_states: [3,4,5,6,7,8,9,10,11,12]
  header: 0 # If no header, set 0. If data has a header, set its length (e.g. 1)
