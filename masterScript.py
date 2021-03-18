@@ -19,6 +19,7 @@ set its execution option to false in the parameters file.
 import time
 import sys
 import yaml
+from parse_data_2 import Parser
 from opt_abc import Fitter
 from opt_neTe import Optimizer
 from opt_neTe import make_biases
@@ -26,6 +27,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+from paramtest import ParamTest
 
 font = {"family":"normal",
         "weight":"normal",
@@ -191,7 +193,17 @@ def do_neTe():
         run_algorithm(q)
         
 
-if g["do_abc"]:
-    do_abc()
-if g["do_neTe"]:
-    do_neTe()
+
+# Test given parameters file for errors.
+pt = ParamTest(params)
+errors, warnings = pt.do_tests()
+
+# If no errors, run the script.
+if errors == 0:
+    if g["do_parse"]:
+        P = Parser(params)
+        P.do_parse()
+    if g["do_abc"]:
+        do_abc()
+    if g["do_neTe"]:
+        do_neTe()

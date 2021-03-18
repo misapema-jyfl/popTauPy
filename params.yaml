@@ -2,9 +2,33 @@ general:
  working_directory: "./"
  elemental_data_directory: "./elemental_data/"
  save_to_path: "../test/results/" # Path to which you wish to save your results
+ do_parse: True
  do_abc: False
- do_neTe: True
+ do_neTe: False
  
+parsing:
+ raw_data_path: "/home/miha/Work/datasets/JA_2021-02-24_pulse_width/2021 02 24 vary pulse duration/2021 02 24 N+ pulse responses/"
+ parsed_data_path: "../test/parsed/"
+ species: "K"
+ available_charge_states: [3,4,5,6,7,8,9,10,11,12]
+ header: 0 # If no header, set 0. If data has a header, set its length (e.g. 1)
+ footer: 12 # If no footer, set 0. If data has a footer, set its length (e.g. 12)
+ separator: "\t" # Separator for the raw data
+ one_plus_naming_convention: "2021 02 24 - {} pulse 1+.txt"
+ n_plus_naming_convention: "2021 02 24 - {} courant N+.txt"
+ names: [
+    "16 58 00",
+    "16 35 19",
+    "16 24 53",
+    "16 04 31",
+    "15 54 34",
+    "15 35 39",
+    "14 31 55",
+    "14 52 36",
+    "15 02 26",
+    "15 23 34"
+    ]
+
 data:
  parsed_data_path: "/home/miha/Work/research/ppp-2/experimental_data/2020-11_gas_dosing/data/141e-9/parsed_data/" # Path to the directory containing the data files
  available_charge_states: [1,2,3,4,5,6,7,8,9,10,11,12] # Charge states for which transient data is available
