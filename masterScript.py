@@ -23,6 +23,8 @@ from parse_data import Parser
 from opt_abc import Fitter
 from opt_neTe import Optimizer
 from opt_neTe import make_biases
+from plot_results import SolSetPlotter
+from plot_results import Plotter
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -201,9 +203,25 @@ errors, warnings = pt.do_tests()
 # If no errors, run the script.
 if errors == 0:
     if g["do_parse"]:
+        print("\nParsing data...")
         P = Parser(params)
         P.do_parse()
     if g["do_abc"]:
+        print("\nDoing a,b,c fitting...")
         do_abc()
     if g["do_neTe"]:
+        print("\nDetermining solution set for given a,b,c values...")
         do_neTe()
+    if g["do_plots"]:
+        
+        print("\nPlotting results...")
+        
+        if params["plotting"]["plot_solution_sets"]["do_plot"]:
+            SSP = SolSetPlotter(params)
+            SSP.do_solution_set_plots()
+        
+        P = Plotter(params)
+        P.do_result_plots()
+        
+    
+print("\nProcess finished!\n")

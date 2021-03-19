@@ -1,33 +1,23 @@
 general:
  working_directory: "./"
  elemental_data_directory: "./elemental_data/"
- save_to_path: "../test/results/" # Path to which you wish to save your results
- do_parse: True
+ save_to_path: "/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/" # Path to which you wish to save your results
+ do_parse: False
  do_abc: False
  do_neTe: False
+ do_plots: True
  
 parsing:
- raw_data_path: "/home/miha/Work/datasets/JA_2021-02-24_pulse_width/2021 02 24 vary pulse duration/2021 02 24 N+ pulse responses/"
- parsed_data_path: "/home/miha/Work/research/ppp-4_config_comparison/data/config_comparison_2/JA_2021-02-24_pulse_width/5ms/"
+ raw_data_path: "/home/miha/Work/datasets/JA_2020-06-29/"
+ parsed_data_path: "/home/miha/Work/research/ppp-4_config_comparison/data/config_comparison_2/JA_2020-06-29/"
  species: "K"
- available_charge_states: [3,4,5,6,7,8,9,10,11,12]
+ available_charge_states: [1,2,3,4,5,6,7,8,9,10,11,12]
  header: 0 # If no header, set 0. If data has a header, set its length (e.g. 1)
- footer: 12 # If no footer, set 0. If data has a footer, set its length (e.g. 12)
- separator: "\t" # Separator for the raw data
- one_plus_naming_convention: "2021 02 24 - {} pulse 1+.txt"
- n_plus_naming_convention: "2021 02 24 - {} courant N+.txt"
- names: [
-    "16 58 00",
-    "16 35 19",
-    "16 24 53",
-    "16 04 31",
-    "15 54 34",
-    "15 35 39",
-    "14 31 55",
-    "14 52 36",
-    "15 02 26",
-    "15 23 34"
-    ]
+ footer: 0 # If no footer, set 0. If data has a footer, set its length (e.g. 12)
+ separator: "," # Separator for the raw data
+ one_plus_naming_convention: "1+_K{}+.csv"
+ n_plus_naming_convention: "K{}+.csv"
+ names: [1,2,3,4,5,6,7,8,9,10,11,12]
 
 data:
  parsed_data_path: "/home/miha/Work/research/ppp-2/experimental_data/2020-11_gas_dosing/data/141e-9/parsed_data/" # Path to the directory containing the data files
@@ -44,3 +34,78 @@ optimizer:
  Ee_hi: 10.0e+3
  number_of_ne: 100
  number_of_MC: 10
+
+
+plotting:
+    # Set False, if file is specified by
+    # general["save_to_path"] + data["abc_file_name"]
+    # Otherwise, give path to file.
+    # abc_file_path: "/home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_2/data_2021-02-24/5ms/solution_abc_JA_2021-02-24_pw5ms_h10e-6.csv"     
+    # Set False, if files are specified by
+    # general["save_to_path"]
+    # and the number of ne, and number of MC.
+    # Otherwise, give list of files.  
+    solution_set_files: [
+"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-5.csv",
+"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-6.csv",
+"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-7.csv",
+"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-8.csv",
+"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-9.csv",
+"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-10.csv"
+]
+    # Set False, if same as data["available_charge_states"]
+    # Otherwise, give list of charge states for which 
+    # solution sets are available.
+    available_charge_states: [5,6,7,8,9,10]
+  
+    # Set values by which to constrain the choice of data.
+    # If False, the values from optimizer will be used
+    # for Ee and ne. F_hi and confidence must be given.
+    Ee_lo: False
+    Ee_hi: False
+    ne_lo: False
+    ne_hi: False
+    F_hi: 1.0e-7
+    confidence: 0.341
+  
+
+    plot_solution_sets:
+        do_plot: True  
+        sigma: 10
+        x_scale: "log"
+        y_scale: "log"
+        
+    plot_number_of_solutions_vs_F: 
+        do_plot: True
+        list_of_F_values: [1.0e-3, 1.0e-4, 1.0e-5, 1.0e-6, 1.0e-7, 1.0e-8, 1.0e-9]
+        y_lo: 1
+        y_hi: False
+    
+    plot_characteristic_time_vs_charge:
+        do_plot: True
+        output_data: True
+        conf_yscale: "linear"
+        conf_marker: "o"
+        conf_color: "r"
+        inz_yscale: "linear"
+        inz_marker: "s"
+        inz_color: "k"
+        cx_yscale: "linear"
+        cx_marker: "^"
+        cx_color: "b"
+
+    plot_energy_content_vs_charge:
+        do_plot: True
+        output_data: True
+        marker: "s"
+        color: "k"
+        y_hi: False
+        y_lo: False
+        
+    plot_triple_product_vs_charge:
+        do_plot: True
+        output_data: True
+        marker: "s"
+        color: "m"
+        y_hi: False
+        y_lo: False
