@@ -111,8 +111,10 @@ class Fitter:
     
     def __init__(self, charge_state, params):
         
-        d = params["data"]
-        o = params["optimizer"]
+        self.params = params
+        
+        d = self.params["data"]
+        o = self.params["optimizer"]
         
         cStates = d["available_charge_states"]
         fileLocDir = d["parsed_data_path"]
@@ -300,14 +302,10 @@ class Fitter:
                               method="trf",
                               bounds=bnds)  
         
-        #
         # Calculate the chi2
-        #
         chi2 = np.sum( np.square( (ydata - self.fitting_function(xdata, *popt))/noise ) )
         
-        #
         # Calculate the (reduced) chi2
-        #
         chi2_reduced = chi2 / (len(ydata)-3)
 
 
@@ -316,49 +314,3 @@ class Fitter:
 
 
 
-# df_res = pd.DataFrame()
-
-# for charge_state in d["charge_states"][1:-1]:
-    
-#     print("Working on charge_state: " + str(charge_state) + "+...")
-    
-#     F = Fitter(charge_state=charge_state)
-    
-#     popt, pcov, chi2_reduced = F.do_fit()
-    
-#     #
-#     # Plot the final fit
-#     #
-#     t,i = F.get_data(charge_state)
-#     t_i, t_f = F.determine_interpolation_limits()
-#     T = np.linspace(t_i, t_f, num=len(t))
-#     y = F.fit_rk4(a=popt[0], b=popt[1], c=popt[2])
-    
-#     fig, ax = plt.subplots()
-    
-#     # s = "{ " + str(charge_state) + "+}"
-    
-#     ax.plot(t*1e3,i*1e3,c="k", label="Measured")
-#     ax.plot(T*1e3,y(T)*1e3,c="r", ls="--", label="Fitted")
-#     ax.set_xlabel("Time (ms)")
-#     ax.set_ylabel("Current (enA)")
-#     ax.legend()
-#     outName = "fig_fit_h{:.0e}_q{}".format(d["h"], str(charge_state))     
-#     fig.tight_layout()    
-#     fig.savefig(d["output_directory"] + outName + "+.eps", format="eps")
-#     fig.savefig(d["output_directory"] + outName + "+.png", format="png", dpi=300)
-#     plt.close(fig)
-
-#     #
-#     # Unpack the result
-#     #
-#     [a, b, c] = popt
-#     [da, db, dc] = np.sqrt(np.diag(pcov))
-    
-#     df_res[charge_state]=[a,b,c,da,db,dc,chi2_reduced]
-    
-# df_res.index=["a", "b", "c", "da", "db", "dc", "chi2"]
-
-# print(df_res)
-
-# df_res.to_csv(d["output_directory"] + d["output_file_name"])

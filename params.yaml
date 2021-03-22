@@ -1,7 +1,7 @@
 general:
  working_directory: "./"
  elemental_data_directory: "./elemental_data/"
- save_to_path: "/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/" # Path to which you wish to save your results
+ save_to_path: "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/" # Path to which you wish to save your results
  do_parse: False
  do_abc: False
  do_neTe: False
@@ -20,8 +20,8 @@ parsing:
  names: [1,2,3,4,5,6,7,8,9,10,11,12]
 
 data:
- parsed_data_path: "/home/miha/Work/research/ppp-2/experimental_data/2020-11_gas_dosing/data/141e-9/parsed_data/" # Path to the directory containing the data files
- available_charge_states: [1,2,3,4,5,6,7,8,9,10,11,12] # Charge states for which transient data is available
+ parsed_data_path: "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/parsed_data/" # Path to the directory containing the data files
+ available_charge_states: [3,4,5,6,7,8,9,10,11,12] # Charge states for which transient data is available
  species: "K"
  abc_file_name: "abc_h1e-3.csv" # Name of the abc file (to save / to load)
  
@@ -31,7 +31,7 @@ optimizer:
  ne_lo: 1.0e+11 # (1/cm3) N.B. Must use e.g. 1.0e+11, NOT 1e11, or 1.0e11. Else error.
  ne_hi: 2.61e+12
  Ee_lo: 10.0 # (eV)
- Ee_hi: 10.0e+3
+ Ee_hi: 9.99e+3 # TODO!
  number_of_ne: 100
  number_of_MC: 10
 
@@ -45,18 +45,11 @@ plotting:
     # general["save_to_path"]
     # and the number of ne, and number of MC.
     # Otherwise, give list of files.  
-    solution_set_files: [
-"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-5.csv",
-"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-6.csv",
-"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-7.csv",
-"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-8.csv",
-"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-9.csv",
-"/home/miha/Work/research/ppp-2_param_sweeps/analysis/pulse_width_sweep/JA_2021-02-24/results/80ms/solset_MC_iters-1000_N-1000_q-10.csv"
-]
+    solution_set_files: False
     # Set False, if same as data["available_charge_states"]
     # Otherwise, give list of charge states for which 
     # solution sets are available.
-    available_charge_states: [5,6,7,8,9,10]
+    available_charge_states: False
   
     # Set values by which to constrain the choice of data.
     # If False, the values from optimizer will be used
@@ -70,7 +63,7 @@ plotting:
   
 
     plot_solution_sets:
-        do_plot: True  
+        do_plot: True
         sigma: 10
         x_scale: "log"
         y_scale: "log"

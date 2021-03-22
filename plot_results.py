@@ -35,6 +35,7 @@ class SolSetPlotter:
         self.plotting = params["plotting"]
         self.optimizer = params["optimizer"]
         self.data = params["data"]
+        self.g = params["general"]
         self.solSettings = self.plotting["plot_solution_sets"]
         
         # Set the charge states for which data is available
@@ -50,6 +51,7 @@ class SolSetPlotter:
                                    self.optimizer["number_of_ne"],
                                    cState)\
                                for cState in self.cStates]
+            self.fNames = [self.g["save_to_path"] + f for f in self.fNames]
         else:
             self.fNames = self.plotting["solution_set_files"]
         
@@ -178,6 +180,7 @@ class Plotter:
         self.plotting = params["plotting"]
         self.optimizer = params["optimizer"]
         self.data = params["data"]
+        self.g = params["general"]
         self.solSettings = self.plotting["plot_solution_sets"]
         
         # Set the charge states for which data is available
@@ -193,6 +196,7 @@ class Plotter:
                                    self.optimizer["number_of_ne"],
                                    cState)\
                                for cState in self.cStates]
+            self.fNames = [self.g["save_to_path"] + f for f in self.fNames]
         else:
             self.fNames = self.plotting["solution_set_files"]
         

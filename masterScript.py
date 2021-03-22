@@ -58,12 +58,22 @@ def do_abc():
         
         popt, pcov, chi2_reduced = F.do_fit()
         
-        # Plot the final fit
+        
         t,i = F.get_data(charge_state)
         t_i, t_f = F.determine_interpolation_limits()
         T = np.linspace(t_i, t_f, num=len(t))
         y = F.fit_rk4(a=popt[0], b=popt[1], c=popt[2])
         
+        # Save the fit in a DataFrame
+        df = pd.DataFrame()
+        df["t"] = T
+        df["i"] = y(T)
+        
+        # Output the fit data to .csv
+        outputFileName = "out_fit_h{:.0e}_q{}.csv".format(o["rk_time_step"], str(charge_state))
+        df.to_csv(g["save_to_path"] + outputFileName)
+        
+        # Plot the final fit
         fig, ax = plt.subplots()
         
         # s = "{ " + str(charge_state) + "+}"
