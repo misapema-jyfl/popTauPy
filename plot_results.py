@@ -6,23 +6,73 @@ Created on Wed Jan 13 08:44:31 2021
 @author: miha
 """
 
+import seaborn as sns
+# sns.set()
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from scipy.ndimage.filters import gaussian_filter
 import pandas as pd
 import numpy as np
-
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 # from parameters import plotting_results as pr
 # from parameters import p
 
 
 # Set font for plots
-font = {'family' : 'normal',
+font = {'family' : 'sans-serif',
         'weight' : 'normal',
         'size'   : 15}
 
 matplotlib.rc('font', **font)
+
+
+def get_histogram(data, binCount, lo, hi, spacing="log"):
+    '''
+    Takes in an array of data and determines the histogram of the array. 
+    
+    Parameters:
+        data: The data array
+        
+        binCount: The number of bins into which to distribute the data.
+        
+        lo: Lower limit of the data values.
+        
+        hi: Upper limit of the data values.
+        
+        spacing: One of ["linear", "log"]
+    '''
+    if spacing == "linear":
+        bins = np.linspace(lo, hi, binCount)
+    elif spacing == "log":
+        bins = np.logspace(np.log10(lo), np.log10(hi), binCount)
+    
+    # Sort
+    data = np.sort(data)
+
+    histogramData = []
+    for j in range(binCount):
+        
+        if j+1 == len(bins):
+            histogramData.append(0)
+            break
+        
+        rBin = bins[j+1]
+        lBin = bins[j]
+
+        binned = 0
+        
+        # TODO! 
+        # It's unnecessary to iterate over the entire array
+        # each time, since the data is sorted.
+        # Make this smarter!
+        for i,x in enumerate(data):
+            if x <= rBin and x > lBin:
+                binned+=1
+        
+        histogramData.append(binned)
+    
+    return bins, histogramData
 
 
 
@@ -37,10 +87,13 @@ class SolSetPlotter:
         self.data = params["data"]
         self.g = params["general"]
         self.solSettings = self.plotting["plot_solution_sets"]
-        
+        self.parsing = params["parsing"]
         # Set the charge states for which data is available
         if self.plotting["available_charge_states"] == False:
-            self.cStates = self.data["available_charge_states"][2:-2]
+            if self.data["available_charge_states"] == False:
+                self.cStates = self.parsing["available_charge_states"][2:-2]
+            else:
+                self.cStates = self.data["available_charge_states"][2:-2]
         else:
             self.cStates = self.plotting["available_charge_states"]
         
@@ -117,58 +170,133 @@ class SolSetPlotter:
         
     
     
-    def plot_heatmap_solution_set(self, q, fig, ax):
+    def plot_heatmap_solution_set(self, q):
         '''
         Plot a heatmap of solutions for charge state q
         '''
         
         df = self.get_df(q)
+        x=df["E"]
+        y=df["n"]
         
-        x = df["E"]
-        y = df["n"]
+        # Get the histogram data
+        xbins, xHist = get_histogram(x, binCount=500,
+                              lo = self.Ee_lo,
+                              hi = self.Ee_hi,
+                              spacing="linear")
         
-        # rng = [[10,10e3],[1e11,2.61e12]]
-        rng = [ [self.Ee_lo,self.Ee_hi], [self.ne_lo,self.ne_hi]]        # TODO! Note how awful this is.
+        ybins, yHist = get_histogram(y, binCount=500,
+                              lo = self.ne_lo,
+                              hi = self.ne_hi,
+                              spacing="linear")
         
-        heatmap, xedges, yedges = np.histogram2d(x, y, 
-                                                 bins=1000, 
-                                                 range=rng,
-                                                 density=True)
+        # Create figure and subplots
         
+        # =====================================================================
+        #         Plot the heatmap
+        # =====================================================================
+        
+        # Select plotting range
+        rng = [ [self.Ee_lo,self.Ee_hi], [self.ne_lo,self.ne_hi]]
+        
+        # Distribute the solution set into bins
+        heatmap, xedges, yedges = np.histogram2d(x=x, y=y, 
+                                                  bins=1000, 
+                                                  range=rng,
+                                                  density=True)
+        # Apply a gaussian filter
         heatmap = gaussian_filter(heatmap, sigma=self.sigma)
         
         img = heatmap.T
+        
         extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
         
-        im = ax.imshow(img,origin='lower',
-                       cmap=cm.hot,
-                       extent=extent,
-                       aspect="auto",
-                       interpolation="none")
+# =============================================================================
+#         Generate the figure
+# =============================================================================
+        fig = plt.figure()
+
+        # Settings for the subplots to add to the figure
         
-        cb = fig.colorbar(im)
+        # Main heatmap
+        mainx = 0.15
+        mainy = 0.275
+        mainw = 0.7
+        mainh = 0.6
         
-        # Scatter plot the data points
-        # ax.scatter(x,y,s=.05,c="w")
+        # Cumulation plot (x-projection)
+        xmargx = mainx
+        xmargy = mainy + mainh
+        xmargw = mainw
+        xmargh = 0.1
         
-        ax.set_yscale(self.solSettings["y_scale"])
-        ax.set_xscale(self.solSettings["x_scale"])
-        ax.set_xlim(left=self.Ee_lo,right=self.Ee_hi)                             # TODO! This is similarly awful.
-        ax.set_ylim(bottom=self.ne_lo,top=self.ne_hi)
-        ax.set_xlabel(r"$\left\langle E_e\right\rangle$ (eV)")
-        ax.set_ylabel(r"$n_e$ (cm$^{-3}$)")
+        # Cumulation plot (y-projection)
+        ymargx = mainx + mainw
+        ymargy = mainy
+        ymargw = 0.1
+        ymargh = mainh
         
+        # Colorbar
+        cbaxx = mainx
+        cbaxy = mainy - 0.15
+        cbaxw = mainw
+        cbaxh = 0.02
         
+        # Plot the heatmap
+        ax1 = fig.add_axes([mainx, mainy, mainw, mainh])
+        im = plt.imshow(img, origin="lower",
+                  cmap = cm.Blues,
+                  extent = extent,
+                  aspect = "auto",
+                  interpolation = "none")
+
+        # Plot x-projection histogram
+        xmarg = fig.add_axes([xmargx, xmargy, xmargw, xmargh])
+        xmarg.plot(xbins, xHist)
+        xmarg.set(xscale=self.solSettings["x_scale"],
+        xlim=(self.Ee_lo, self.Ee_hi),
+        ylim=(0,max(xHist)))
+        xmarg.spines["right"].set_visible(False)
+        xmarg.spines["top"].set_visible(False)
+        xmarg.spines["bottom"].set_visible(False)
+        
+        # Plot y-projection histogram
+        ymarg = fig.add_axes([ymargx, ymargy, ymargw, ymargh])
+        ymarg.plot(yHist, ybins)
+        ymarg.set(yscale=self.solSettings["y_scale"],
+        ylim=(self.ne_lo, self.ne_hi),
+        xlim=(0,max(yHist)))
+        ymarg.spines["top"].set_visible(False)
+        ymarg.spines["left"].set_visible(False)
+        ymarg.spines["right"].set_visible(False)
+        
+        # Plot the colorbar
+        cbax = fig.add_axes([cbaxx, cbaxy, cbaxw, cbaxh])
+        plt.colorbar(im, cax=cbax, orientation="horizontal")
+        
+        # Set axis settings
+        ax1.set(xlabel=r"$\left\langle E_e\right\rangle$ (eV)",
+        ylabel=r"$n_e$ (cm$^{-3}$)",
+        xscale=self.solSettings["x_scale"],
+        yscale=self.solSettings["y_scale"],
+        xlim=(self.Ee_lo, self.Ee_hi),
+        ylim=(self.ne_lo, self.ne_hi))
+        
+        # Marginal axis labels are unnecessary
+        xmarg.set_xticklabels([])
+        ymarg.set_yticklabels([])
+        
+        # Save figure
+        plt.savefig( self.outDir + "solution_set_q-{}+.eps".format(str(q)), format="eps")
+        plt.savefig( self.outDir + "solution_set_q-{}+.png".format(str(q)), format="png", dpi=300)
+
+        
+      
+    
     def do_solution_set_plots(self):
         # Run the solution set plotting.
         for q in self.cStates:
-            fig, ax = plt.subplots()
-            self.plot_heatmap_solution_set(q,fig,ax)    
-            fig.tight_layout()
-            plt.savefig( self.outDir + "solution_set_q-{}+.eps".format(str(q)), format="eps")
-            plt.savefig( self.outDir + "solution_set_q-{}+.png".format(str(q)), format="png", dpi=300)
-            plt.close()
-
+            self.plot_heatmap_solution_set(q)
 
 
 
@@ -182,10 +310,14 @@ class Plotter:
         self.data = params["data"]
         self.g = params["general"]
         self.solSettings = self.plotting["plot_solution_sets"]
+        parsing = params["parsing"]
         
         # Set the charge states for which data is available
         if self.plotting["available_charge_states"] == False:
-            self.cStates = self.data["available_charge_states"][2:-2]
+            if not self.data["available_charge_states"] == False:
+                self.cStates = self.data["available_charge_states"][2:-2]
+            else:
+                self.cStates = parsing["available_charge_states"][2:-2]
         else:
             self.cStates = self.plotting["available_charge_states"]
         

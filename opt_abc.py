@@ -115,9 +115,18 @@ class Fitter:
         
         d = self.params["data"]
         o = self.params["optimizer"]
+        p = self.params["parsing"]
         
-        cStates = d["available_charge_states"]
-        fileLocDir = d["parsed_data_path"]
+        if not d["available_charge_states"] == False:
+            cStates = d["available_charge_states"]
+        else:
+            cStates = p["available_charge_states"]
+        
+        if not d["parsed_data_path"] == False:
+            fileLocDir = d["parsed_data_path"]
+        else:
+            fileLocDir = p["parsed_data_path"]
+            
         species = d["species"].upper()
         
         self.h = o["rk_time_step"]
@@ -142,7 +151,7 @@ class Fitter:
             f = fileLocDir + s
             n_files.append(f)
         self.dataFilePaths = n_files
-        self.chargeStates = d["available_charge_states"]
+        self.chargeStates = cStates
         
         #
         # Make a dataframe for holding data file paths

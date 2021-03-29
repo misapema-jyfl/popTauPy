@@ -45,12 +45,18 @@ params = yaml.safe_load(open(paramFilePath))
 d = params["data"]
 g = params["general"]
 o = params["optimizer"]
+p = params["parsing"]
+
+if not d["available_charge_states"] == False:
+    cStates = d["available_charge_states"]
+else:
+    cStates = p["available_charge_states"]
 
 
 def do_abc():
     # Perform the abc fitting...
     df_res = pd.DataFrame()
-    for charge_state in d["available_charge_states"][1:-1]:
+    for charge_state in cStates[1:-1]:
         
         print("Working on charge_state: " + str(charge_state) + "+...")
         
@@ -200,8 +206,8 @@ def run_algorithm(charge_state):
 
 def do_neTe():
     # Execute the routine
-    cStates = d["available_charge_states"][2:-2]
-    for q in cStates:
+    charge_states = cStates[2:-2]
+    for q in charge_states:
         run_algorithm(q)
         
 

@@ -58,9 +58,10 @@ class ParamTest:
                 
         # Only check data path if do_abc == True
         if self.params["general"]["do_abc"]:
-            if not os.path.isdir(self.params["data"]["parsed_data_path"]):
-                print("Error: Invalid path to parsed data directory!")
-                errors+=1
+            if not self.params["data"]["parsed_data_path"] == False:
+                if not os.path.isdir(self.params["data"]["parsed_data_path"]):
+                    print("Error: Invalid path to parsed data directory!")
+                    errors+=1
                 
         # # Only check raw data path if do_parse == True
         # if self.params["general"]["do_parse"]:

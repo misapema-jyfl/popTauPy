@@ -24,6 +24,7 @@ class Optimizer:
         g = params["general"]
         d = params["data"]
         o = params["optimizer"]
+        p = params["parsing"]
         
         # Set the directory structure
         # making sure that the given paths point to directories
@@ -39,7 +40,12 @@ class Optimizer:
         self.abc_file_path = g["save_to_path"] + d["abc_file_name"]
         self.method = o["rate_coefficient_method"]
         self.species = d["species"].lower()
-        self.cStates = d["available_charge_states"][1:-1]
+        
+        if not d["available_charge_states"] == False:
+            self.cStates = d["available_charge_states"][1:-1]
+        else:
+            self.cStates = p["available_charge_states"][1:-1]
+            
         self.ne_lo = np.log10(o["ne_lo"])
         self.ne_hi = np.log10(o["ne_hi"])
         self.Ee_lo = o["Ee_lo"]
