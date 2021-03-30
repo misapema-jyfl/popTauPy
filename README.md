@@ -8,7 +8,7 @@ in a CB-ECRIS.
 * The code is now run from the terminal by calling the 
 masterScript.py with the parameters (.yaml) file 
 given as its argument. E.g:
->>> python3 masterScript.py params.yaml
+> python3 masterScript.py params.yaml
 
 * Changed parameters input from parameters.py to a .yaml file.
 As an example, see the file 'params.yaml'.

@@ -2,9 +2,9 @@ general:
  working_directory: "./"
  elemental_data_directory: "./elemental_data/"
  save_to_path: "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/" # Path to which you wish to save your results
- do_parse: False
- do_abc: False
- do_neTe: False
+ do_parse: True
+ do_abc: True
+ do_neTe: True
  do_plots: True
  
 parsing:
