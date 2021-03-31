@@ -179,17 +179,6 @@ class SolSetPlotter:
         x=df["E"]
         y=df["n"]
         
-        # Get the histogram data
-        xbins, xHist = get_histogram(x, binCount=500,
-                              lo = self.Ee_lo,
-                              hi = self.Ee_hi,
-                              spacing="linear")
-        
-        ybins, yHist = get_histogram(y, binCount=500,
-                              lo = self.ne_lo,
-                              hi = self.ne_hi,
-                              spacing="linear")
-        
         # Create figure and subplots
         
         # =====================================================================
@@ -252,23 +241,26 @@ class SolSetPlotter:
 
         # Plot x-projection histogram
         xmarg = fig.add_axes([xmargx, xmargy, xmargw, xmargh])
-        xmarg.plot(xbins, xHist)
+        xmarg.hist(x, 250)
         xmarg.set(xscale=self.solSettings["x_scale"],
-        xlim=(self.Ee_lo, self.Ee_hi),
-        ylim=(0,max(xHist)))
+        xlim=(self.Ee_lo, self.Ee_hi))
+        
+        xmarg.spines["left"].set_visible(False)
         xmarg.spines["right"].set_visible(False)
         xmarg.spines["top"].set_visible(False)
         xmarg.spines["bottom"].set_visible(False)
         
         # Plot y-projection histogram
         ymarg = fig.add_axes([ymargx, ymargy, ymargw, ymargh])
-        ymarg.plot(yHist, ybins)
+        ymarg.hist(y, 250, orientation="horizontal")
         ymarg.set(yscale=self.solSettings["y_scale"],
-        ylim=(self.ne_lo, self.ne_hi),
-        xlim=(0,max(yHist)))
+        ylim=(self.ne_lo, self.ne_hi))
+        
         ymarg.spines["top"].set_visible(False)
+        ymarg.spines["bottom"].set_visible(False)
         ymarg.spines["left"].set_visible(False)
         ymarg.spines["right"].set_visible(False)
+        
         
         # Plot the colorbar
         cbax = fig.add_axes([cbaxx, cbaxy, cbaxw, cbaxh])
@@ -283,8 +275,12 @@ class SolSetPlotter:
         ylim=(self.ne_lo, self.ne_hi))
         
         # Marginal axis labels are unnecessary
+        xmarg.set_yticklabels([])
         xmarg.set_xticklabels([])
+        xmarg.set_yticks([])
         ymarg.set_yticklabels([])
+        ymarg.set_xticklabels([])
+        ymarg.set_xticks([])
         
         # Save figure
         plt.savefig( self.outDir + "solution_set_q-{}+.eps".format(str(q)), format="eps")
