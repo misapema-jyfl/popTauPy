@@ -238,10 +238,29 @@ class SolSetPlotter:
                   extent = extent,
                   aspect = "auto",
                   interpolation = "none")
-
+        
+        # Set bins for the histograms
+        if self.solSettings["x_scale"] == "log":
+            Elo = np.log10(self.Ee_lo)
+            Ehi = np.log10(self.Ee_hi)
+            Ebins = np.logspace(Elo, Ehi, 100)
+        else:
+            Elo = self.Ee_lo
+            Ehi = self.Ee_hi
+            Ebins = np.linspace(Elo, Ehi, 100)
+        
+        if self.solSettings["y_scale"] == "log":
+            nlo = np.log10(self.ne_lo)
+            nhi = np.log10(self.ne_hi)
+            nbins = np.logspace(nlo, nhi, 100)
+        else:
+            nlo = self.ne_lo
+            nhi = self.ne_hi
+            nbins = np.linspace(nlo, nhi, 100)
+        
         # Plot x-projection histogram
         xmarg = fig.add_axes([xmargx, xmargy, xmargw, xmargh])
-        xmarg.hist(x, 250)
+        xmarg.hist(x, bins=Ebins, color="crimson")
         xmarg.set(xscale=self.solSettings["x_scale"],
         xlim=(self.Ee_lo, self.Ee_hi))
         
@@ -252,7 +271,7 @@ class SolSetPlotter:
         
         # Plot y-projection histogram
         ymarg = fig.add_axes([ymargx, ymargy, ymargw, ymargh])
-        ymarg.hist(y, 250, orientation="horizontal")
+        ymarg.hist(y, bins=nbins, orientation="horizontal", color="crimson")
         ymarg.set(yscale=self.solSettings["y_scale"],
         ylim=(self.ne_lo, self.ne_hi))
         

@@ -2,9 +2,9 @@ general:
  working_directory: "./"
  elemental_data_directory: "./elemental_data/"
  save_to_path: "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/" # Path to which you wish to save your results
- do_parse: True
- do_abc: True
- do_neTe: True
+ do_parse: False
+ do_abc: False
+ do_neTe: False
  do_plots: True
  
 parsing:
@@ -58,16 +58,24 @@ plotting:
     # general["save_to_path"]
     # and the number of ne, and number of MC.
     # Otherwise, give list of files.  
-    solution_set_files: False
+    solution_set_files: ["/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-3.csv",
+"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-4.csv",
+"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-5.csv",
+"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-6.csv",
+"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-7.csv",
+"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-8.csv",
+"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-9.csv",
+"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-10.csv"]
     
     # Set False, if same as data["available_charge_states"]
     # Otherwise, give list of charge states for which 
     # solution sets are available.
-    available_charge_states: False
+    available_charge_states: [3,4,5,6,7,8,9,10]
   
     # Set values by which to constrain the choice of data.
     # If False, the values from optimizer will be used
-    # for Ee and ne. F_hi and confidence must be given.
+    # for Ee and ne. 
+    # F_hi and confidence must always be given.
     Ee_lo: False
     Ee_hi: False
     ne_lo: False
@@ -83,14 +91,14 @@ plotting:
         y_scale: "log"
         
     plot_number_of_solutions_vs_F: 
-        do_plot: True
+        do_plot: False
         list_of_F_values: [1.0e-3, 1.0e-4, 1.0e-5, 1.0e-6, 1.0e-7, 1.0e-8, 1.0e-9]
         y_lo: 1
         y_hi: False
     
     plot_characteristic_time_vs_charge:
-        do_plot: True
-        output_data: True
+        do_plot: False
+        output_data: False
         conf_yscale: "linear"
         conf_marker: "o"
         conf_color: "r"
@@ -102,16 +110,16 @@ plotting:
         cx_color: "b"
 
     plot_energy_content_vs_charge:
-        do_plot: True
-        output_data: True
+        do_plot: False
+        output_data: False
         marker: "s"
         color: "k"
         y_hi: False
         y_lo: False
         
     plot_triple_product_vs_charge:
-        do_plot: True
-        output_data: True
+        do_plot: False
+        output_data: False
         marker: "s"
         color: "m"
         y_hi: False
