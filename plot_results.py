@@ -6,17 +6,12 @@ Created on Wed Jan 13 08:44:31 2021
 @author: miha
 """
 
-import seaborn as sns
-# sns.set()
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from scipy.ndimage.filters import gaussian_filter
 import pandas as pd
 import numpy as np
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-# from parameters import plotting_results as pr
-# from parameters import p
 
 
 # Set font for plots
