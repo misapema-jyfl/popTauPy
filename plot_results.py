@@ -234,7 +234,7 @@ class SolSetPlotter:
         # Plot the heatmap
         ax1 = fig.add_axes([mainx, mainy, mainw, mainh])
         im = plt.imshow(img, origin="lower",
-                  cmap = cm.Blues,
+                  cmap = cm.gist_heat,
                   extent = extent,
                   aspect = "auto",
                   interpolation = "none")
