@@ -1,0 +1,56 @@
+List of todos
+=============
+
+The GUI must be able to handle:
+* Specify the working directory -> Elemental data directory
+* Specify save-to-path for the results
+* Select which routines to run:
+  - Do parsing
+  - Do abc fitting
+  - Do neTe optimization
+  - Do plots
+  - (in the future also CB times calculation and plotting)  
+  
+Parsing input
+-------------
+- Use raw data or parsed data?
+- Raw data:
+  - Path to data folder
+  - Parsed data output folder
+  - Designate ion species 
+  - Available charge states
+  - Header size
+  - Footer size
+  - Value separator
+  - File naming convention for 1+ signal and the n+ signal
+    (Python syntax, i.e. "Filename-{filenameVariable}.txt")
+  - File name variables
+
+Parsed data input (if parsing is not done) 
+------------------------------------------
+- If parsing is not done, get path to parsed data directory
+- If parsing is not done, get available charge states
+- If parsing is not done, get ion species
+
+Fitting and optimization input
+-------------------------------
+- abc filename to save abc parameters under
+- RK time step
+- Rate coefficient evaluation method
+- Lower and upper limits for ne and Ee
+- Number of ne steps
+- Number of MC iterations
+
+Plotting input
+--------------
+- Solution set files (if plotting only)
+- Available charge states (if plotting only)
+- Plotting constraints (if any)
+- Select what to plot (and the associated plotting parameters):
+  - Solution sets
+  - Number of solutions vs F
+  - Characteristic times vs q 
+  - Energy content vs q
+  - Triple product vs q
+
+
