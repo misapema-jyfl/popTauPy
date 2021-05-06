@@ -11,3 +11,15 @@ to run the Consecutive Transients Analyzer.
 
 import tkinter as tk
 
+# Insantiate root window
+root = tk.Tk()
+
+## Configure the root window
+root.title("Parameters generator GUI")
+root.geometry("500x500")
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
+
+
+# Execute mainloop
+root.mainloop()
