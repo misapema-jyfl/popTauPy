@@ -133,13 +133,16 @@ class Window:
                           sticky="news",
                           command=self.dummy,
                           state=tk.DISABLED)
+        
+    
+        
 
     def createParsingWindow(self):
         '''Create the parsing dialog window.'''
         parsingWindow = tk.Toplevel(self.root)
         parsingWindow.title("Parsing parameters")
         parsingWindow.minsize(500, 220)
-        
+        self.parsingWindow = parsingWindow
         # Ask for the 1+ naming convention
         self.createLabel("1+ naming convention:",
                          row=0,
@@ -147,7 +150,7 @@ class Window:
                          sticky="nw",
                          weight=(0,0),
                          window=parsingWindow)
-        self.onePlusConvention = self.createTextBox(row=0,
+        self.onePlusConvention, self.onePlusTextBox = self.createTextBox(row=0,
                            column=1,
                            sticky="nwe",
                            weight=(0,1),
@@ -159,7 +162,7 @@ class Window:
                          sticky="nw",
                          weight=(0,0),
                          window=parsingWindow)
-        self.nPlusConvention = self.createTextBox(row=1,
+        self.nPlusConvention, self.nPlusTextBox = self.createTextBox(row=1,
                            column=1,
                            sticky="nwe",
                            weight=(0,1),
@@ -171,7 +174,7 @@ class Window:
                          sticky="nw",
                          weight=(0,0),
                          window=parsingWindow)
-        self.filenameVars = self.createTextBox(row=2,
+        self.filenameVars, self.filenameTextBox = self.createTextBox(row=2,
                            column=1,
                            sticky="nwe",
                            weight=(0,1),
@@ -182,9 +185,75 @@ class Window:
                           sticky="nwe",
                           weight=(0,0),
                           window=parsingWindow,
-                          command=self.dummy,
+                          command=lambda: self.parsingAcceptFilenames(
+                                              self.filenameVars.get()
+                                              ),
                           padx=0,
                           pady=0)
+        self.createButton(buttonText="Clear",
+                          row=1,
+                          column=2,
+                          sticky="nwe",
+                          weight=(0,0),
+                          window=parsingWindow,
+                          command=lambda: self.parsingClearFilenames(),
+                          padx=0,
+                          pady=0)
+        
+    def parsingPrintFilenames(self):
+        '''Prints out the specified filenames for user to check.'''
+        
+        for i, name in enumerate(self.onePlusFilenames):
+            
+            self.createLabel(labelText=name,
+                             row = i+3,
+                             column = 0,
+                             sticky = "wn",
+                             weight = (0,0),
+                             window = self.parsingWindow)
+        
+    def parsingClearFilenames(self):
+        '''Clear input'''
+        
+        self.onePlusFilenames = []
+        self.nPlusFilenames = []
+        self.nPlusTextBox.delete(0,"end")
+        self.onePlusTextBox.delete(0,"end")
+        self.filenameTextBox.delete(0,"end")
+        self.parsingPrintFilenames()
+    
+    def parsingAcceptFilenames(self, textVar):
+        '''Broadcasts the specified filenames to lists,
+        and stores them as the class variables:
+            self.onePlusFilenames and self.nPlusFilenames.'''
+        
+        onePlusFilenames = []
+        nPlusFilenames = []
+        
+        splittedTextVar = textVar.split("\n")
+        
+        c = True
+        i = 0
+        while c:
+            var = splittedTextVar[i]
+            
+            onePlusFilename = self.onePlusConvention.get().format(var)
+            nPlusFilename = self.nPlusConvention.get().format(var)
+            onePlusFilenames.append(onePlusFilename)
+            nPlusFilenames.append(nPlusFilename)
+            
+            i+=1
+            if splittedTextVar[i] == "":
+                c = False
+            # If this starts to look like an infinite loop, terminate.
+            elif i >= 100: # When this hard-coded value becomes obsolete,
+                           # I'll congratulate the Nobel-laureate.
+                c = False
+        self.onePlusFilenames = onePlusFilenames
+        self.nPlusFilenames = nPlusFilenames
+        
+        self.parsingPrintFilenames()
+        
         
     def activateCheck(self, variable, button):
         '''Check the state of the variable,
@@ -410,7 +479,7 @@ class Window:
         
         inputVar.trace_add("write", self.dummy)
         
-        return inputVar
+        return inputVar, textbox
 
     def dummy(self, *_):
         '''Dummy function for tests'''
