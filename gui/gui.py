@@ -324,12 +324,15 @@ class MainWindow:
         u = Utils()
         
         # Specify working directory
-        u.createLabel(labelText="Working directory:",
+        workLabel = u.createLabel(labelText="Working directory:",
                             row=0,
                             column=0,
                             weight=(0,0),
                             sticky="n",
                             window=self.root)
+        CreateToolTip(workLabel, "Directory containing the code files.\
+                      E.g. './misapema/popTauPy-v1.2.3/'\
+                          (without the \'\')")
         self.workingDirInp = u.createTextBox(row=0,
                                                 column=1,
                                                 columnspan=1,
@@ -338,12 +341,13 @@ class MainWindow:
                                                 window=self.root)
         
         # Specify save to path
-        u.createLabel(labelText="Save to path:",
+        saveToLabel = u.createLabel(labelText="Save to path:",
                          row=1,
                          column=0,
                          weight=(0,0),
                          sticky="nwe",
                          window=self.root)
+        CreateToolTip(saveToLabel, "All results will be saved to this directory.")
         self.saveToPathInp = u.createTextBox(row=1,
                                                 column=1,
                                                 columnspan=1,
