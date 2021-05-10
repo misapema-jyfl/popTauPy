@@ -318,6 +318,7 @@ class MainWindow:
         self.root.title("Parameters YAML file generator")
         self.root.minsize(500,220)
         self.createLayout()
+        self.root.parsingParameters = {}
     
     def createLayout(self):
         '''Creates the MainWindow layout'''
@@ -428,7 +429,19 @@ class MainWindow:
                           command=u.dummy,
                           state=tk.DISABLED,
                           window=self.root)
+        self.button = u.createButton(buttonText="Button",
+                                     row=1000,
+                                     column=1,
+                                     weight=(0,1),
+                                     sticky="en",
+                                     command=self.broadCastParameters,
+                                     state=tk.NORMAL,
+                                     window=self.root)
         
+    def broadCastParameters(self, *_):
+        print("Parsing parameters:")
+        print(self.root.parsingParameters)
+            
 class ParsingWindow:
     
     def __init__(self, rootWindow):
@@ -445,9 +458,6 @@ class ParsingWindow:
     def createParsingWindow(self):
         
         u = Utils()
-        
-        # To track the state of the Save button
-        saveIsActive = tk.IntVar(0)
         
         parsingWindow = tk.Toplevel(self.rootWindow)
         parsingWindow.title("Parsing parameters")
@@ -612,7 +622,7 @@ class ParsingWindow:
         self.saveButton = u.createButton(buttonText="Save",
                        row=1000,
                        column=2,
-                       command=u.dummy,
+                       command=self.parsingSaveParameters,
                        sticky="news",
                        weight=(0,0),
                        window=parsingWindow,
@@ -715,15 +725,17 @@ class ParsingWindow:
         
     def parsingSaveParameters(self):
         '''Save the parameters given.
-        TODO! The validity of given parameters need to be checked!'''
+        TODO! The validity of given parameters need to be checked!
+        TODO! Convert header and footer to int!'''
         parsingParams = {}
         parsingParams["onePlusFilenames"]=self.onePlusFilenames
         parsingParams["nPlusFilenames"]=self.nPlusFilenames
-        parsingParams["header"]=self.header
-        parsingParams["footer"]=self.footer
-        parsingParams["separator"]=self.separator
-        parsingParams["pathToRawData"]=self.dataDir
+        parsingParams["header"]=self.header.get()
+        parsingParams["footer"]=self.footer.get()
+        parsingParams["separator"]=self.separator.get()
+        parsingParams["pathToRawData"]=self.dataDir.get()
         self.rootWindow.parsingParameters=parsingParams
+        self.parsingWindow.destroy()
         
 # Instantiate the window and run its mainloop
 window = MainWindow()
