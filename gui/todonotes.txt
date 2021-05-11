@@ -5,10 +5,10 @@ The GUI must be able to handle:
 * Specify the working directory -> Elemental data directory                    
 * Specify save-to-path for the results                                         
 * Select which routines to run:
-  - Do parsing                                                                 
-  - Do abc fitting                                                             
-  - Do neTe optimization                                                       
-  - Do plots                                                                   
+  - Do parsing
+  - Do abc fitting
+  - Do neTe optimization
+  - Do plots
   - (in the future also CB times calculation and plotting)  
   
 Parsing input
@@ -40,6 +40,7 @@ Fitting and optimization input
 - Lower and upper limits for ne and Ee
 - Number of ne steps
 - Number of MC iterations
+- (Fitting range)
 
 Plotting input
 --------------

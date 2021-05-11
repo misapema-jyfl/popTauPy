@@ -317,8 +317,16 @@ class MainWindow:
         self.root = tk.Tk()
         self.root.title("Parameters YAML file generator")
         self.root.minsize(500,220)
+        self.parameters = {"species":"",
+                                  "onePlusFilenames":[],
+                                  "nPlusFilenames":[],
+                                  "cStates":[],
+                                  "header":0,
+                                  "footer":0,
+                                  "separator":",",
+                                  "pathToRawData":""}
         self.createLayout()
-        self.root.parsingParameters = {}
+        
     
     def createLayout(self):
         '''Creates the MainWindow layout'''
@@ -396,7 +404,7 @@ class MainWindow:
                                                                self.plotButton),
                             window=self.root)
         # Create open dialog buttons
-        p = ParsingWindow(self.root)
+        p = ParsingWindow(self)
         self.parseButton = u.createButton(buttonText="Parsing",
                           row=3,
                           column=1,
@@ -405,15 +413,16 @@ class MainWindow:
                           command=p.createParsingWindow,
                           state=tk.DISABLED,
                           window=self.root)
-        self.fitButton = u.createButton(buttonText="abc fitting",
+        a = abcWindow(self)
+        self.fitButton = u.createButton(buttonText="abc fitting", # TODO!
                           row=4,
                           column=1,
                           weight=(0,1),
                           sticky="new",
-                          command=u.dummy,
+                          command=a.createABCWindow,
                           state=tk.DISABLED,
                           window=self.root)
-        self.optButton = u.createButton(buttonText="(ne, Ee)-optimization",
+        self.optButton = u.createButton(buttonText="(ne, Ee)-optimization", # TODO!
                           row=5,
                           column=1,
                           weight=(0,1),
@@ -421,7 +430,7 @@ class MainWindow:
                           command=u.dummy,
                           state=tk.DISABLED,
                           window=self.root)
-        self.plotButton = u.createButton(buttonText="Plotting",
+        self.plotButton = u.createButton(buttonText="Plotting", # TODO!
                           row=6,
                           column=1,
                           weight=(0,1),
@@ -440,7 +449,7 @@ class MainWindow:
         
     def broadCastParameters(self, *_):
         print("Parsing parameters:")
-        print(self.root.parsingParameters)
+        print(self.parameters)
             
 class ParsingWindow:
     
@@ -459,12 +468,12 @@ class ParsingWindow:
         
     
     def createParsingWindow(self):
+        '''Generates the parsing window.'''
+        u = self.u
         
-        u = Utils()
-        
-        parsingWindow = tk.Toplevel(self.rootWindow)
+        parsingWindow = tk.Toplevel(self.rootWindow.root)
         parsingWindow.title("Parsing parameters")
-        parsingWindow.minsize(500, 220)
+        parsingWindow.minsize(500, 360)
         self.parsingWindow=parsingWindow
         
         # Ask for the data storage directory
@@ -630,12 +639,15 @@ class ParsingWindow:
                       window=parsingWindow,
                       sticky="nw",
                       weight=(0,0))
-        CreateToolTip(availableLabel, "") # TODO!
+        CreateToolTip(availableLabel, "Transients for at least 5 charge states are required.\
+                      the transients must correspond to consecutive charge states.\
+                          Charge states must be in numerically ascending order.\
+                              The order must be the same as for the filenames.")
         
         cStateLabel_i = u.createLabel(labelText="i: ", 
                       row=9, 
                       column=0,
-                      sticky="nw",
+                      sticky="ne",
                       weight=(0,0),
                       window=parsingWindow)
         CreateToolTip(cStateLabel_i, "First measured charge state.")
@@ -651,7 +663,7 @@ class ParsingWindow:
         cStateLabel_f = u.createLabel(labelText="f: ", 
                       row=10, 
                       column=0,
-                      sticky="nw",
+                      sticky="ne",
                       weight=(0,0),
                       window=parsingWindow)
         CreateToolTip(cStateLabel_f, "Last measured charge state.")
@@ -679,11 +691,16 @@ class ParsingWindow:
                          window=parsingWindow)
         
         # Create Save button
+        # TODO! Would be nice if this stuck to the lower edge of the window
+        # even after the window expands.
+        # TODO! When the window expands, the filenames may stretch beyond 
+        # the screen. At least theoretically. Not that anyone will ever
+        # be able to capture that many consecutive transients...
         self.saveButton = u.createButton(buttonText="Save",
                        row=1000,
                        column=2,
                        command=self.parsingSaveParameters,
-                       sticky="news",
+                       sticky="ews",
                        weight=(0,0),
                        window=parsingWindow,
                        state=tk.DISABLED)
@@ -789,22 +806,171 @@ class ParsingWindow:
     def parsingSaveParameters(self):
         '''Save the parameters given.
         TODO! The validity of given parameters need to be checked!
-        TODO! Convert header and footer to int!'''
-        parsingParams = {}
-        parsingParams["onePlusFilenames"]=self.onePlusFilenames
-        parsingParams["nPlusFilenames"]=self.nPlusFilenames
-        parsingParams["header"]=self.header.get()
-        parsingParams["footer"]=self.footer.get()
-        parsingParams["separator"]=self.separator.get()
-        parsingParams["pathToRawData"]=self.dataDir.get()
-        parsingParams["species"]=self.species.get()
+        '''
+        params = self.rootWindow.parameters
+        params["onePlusFilenames"]=self.onePlusFilenames
+        params["nPlusFilenames"]=self.nPlusFilenames
+        params["header"]=self.header.get()
+        params["footer"]=self.footer.get()
+        params["separator"]=self.separator.get()
+        params["pathToRawData"]=self.dataDir.get()
+        params["species"]=self.species.get()
         # Create the list of charge states
         cState_i = int(self.cState_i.get())
         cState_f = int(self.cState_f.get())
         listOfStates = [i for i in range(cState_i, cState_f+1)]
-        parsingParams["cStates"]=listOfStates
-        self.rootWindow.parsingParameters=parsingParams
+        params["cStates"]=listOfStates
         self.parsingWindow.destroy()
+
+class abcWindow:
+    
+    def __init__(self, rootWindow):
+        '''Create the parsing dialog window attached to the rootWindow.'''
+        self.u = Utils()
+        self.abcFilename = tk.StringVar()
+        self.rootWindow=rootWindow
+        self.species = tk.StringVar()
+        
+    def createABCWindow(self):
+        '''Create the layout'''
+        abcWindow = tk.Toplevel(self.rootWindow.root)
+        abcWindow.title("fitting parameters")
+        abcWindow.minsize(500, 195)
+        self.abcWindow=abcWindow
+        
+        
+        u = self.u
+        
+        # Ion species
+        speciesLabel = u.createLabel(labelText="Ion species: ",
+                                     row=0,
+                                     column=0,
+                                     sticky="ne",
+                                     weight=(0,0),
+                                     window=abcWindow)
+        self.species, speciesBox = u.createTextBox(row=0,
+                                                   column=1,
+                                                   sticky="nw",
+                                                   weight=(0,0),
+                                                   window=abcWindow,
+                                                   command=u.dummy) # TODO!
+        speciesBox.config(width=5)
+        
+        # If the species was already given, use the given value.
+        c = len(self.rootWindow.parameters["species"]) > 0
+        if c: 
+            speciesBox.config(state=tk.DISABLED)
+            speciesBox.config(textvariable=self.species.set(
+                value=self.rootWindow.parameters["species"])
+                )
+        
+        # Available charge states
+        availableLabel = u.createLabel(labelText="Available charge states",
+                      row=1, 
+                      column=0,
+                      window=abcWindow,
+                      sticky="ne",
+                      weight=(0,1))
+        CreateToolTip(availableLabel, "Transients for at least 5 charge states are required.\
+                      the transients must correspond to consecutive charge states.\
+                          Charge states must be in numerically ascending order.\
+                              The order must be the same as for the filenames.")
+        
+        cStateLabel_i = u.createLabel(labelText="i: ", 
+                      row=2, 
+                      column=0,
+                      sticky="ne",
+                      weight=(0,0),
+                      window=abcWindow)
+        CreateToolTip(cStateLabel_i, "First measured charge state.")
+        
+        self.cState_i, cStateBox_i = u.createTextBox(row=2,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,1),
+                        command=u.dummy, # TODO!
+                        window=abcWindow)
+        cStateBox_i.config(width=5)
+        # If the cState was already given, use the given value.
+        c = len(self.rootWindow.parameters["cStates"]) > 0
+        if c: 
+            cStateBox_i.config(state=tk.DISABLED)
+            cStateBox_i.config(textvariable=self.cState_i.set(
+                value=self.rootWindow.parameters["cStates"][0])
+                )
+        
+        
+        cStateLabel_f = u.createLabel(labelText="f: ", 
+                      row=3, 
+                      column=0,
+                      sticky="ne",
+                      weight=(0,0),
+                      window=abcWindow)
+        CreateToolTip(cStateLabel_f, "Last measured charge state.")
+        
+        self.cState_f, cStateBox_f = u.createTextBox(row=3,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,1),
+                        command=u.dummy, # TODO!
+                        window=abcWindow)
+        cStateBox_f.config(width=5)
+        # If the cState was already given, use the given value.
+        c = len(self.rootWindow.parameters["cStates"]) > 0
+        if c: 
+            cStateBox_f.config(state=tk.DISABLED)
+            cStateBox_f.config(textvariable=self.cState_f.set(
+                value=self.rootWindow.parameters["cStates"][-1])
+                )
+            
+        
+        # Runge-Kutta method stepsize
+        hLabel = u.createLabel(labelText="RK4-method stepsize (s): ",
+                                      row=4,
+                                      column=0,
+                                      sticky="ne",
+                                      weight=(0,0),
+                                      window=abcWindow)
+        CreateToolTip(hLabel, "Specify the stepsize for the RK4 algorithm,\
+                      used for fitting the differential current balance equation\
+                          to the measurement data.")
+        self.h, hBox = u.createTextBox(row=4,
+                                                        column=1,
+                                                        columnspan=1,
+                                                        sticky="nw",
+                                                        weight=(0,1),
+                                                        window=abcWindow,
+                                                        command=u.dummy) # TODO!
+        hBox.config(width=10)
+        
+        # filename for abc.csv
+        filenameLabel = u.createLabel(labelText="abc filename: ",
+                                      row=5,
+                                      column=0,
+                                      sticky="ne",
+                                      weight=(0,0),
+                                      window=abcWindow)
+        CreateToolTip(filenameLabel, "Specify name under which to save abc file.\
+                      No spaces. Ending must be .csv.\
+                          E.g. abc_h1e-3.csv")
+        self.abcFilename, filenameBox = u.createTextBox(row=5,
+                                                        column=1,
+                                                        columnspan=1,
+                                                        sticky="new",
+                                                        weight=(0,1),
+                                                        window=abcWindow,
+                                                        command=u.dummy) # TODO!
+        
+        # Save button
+        saveABC = u.createButton(buttonText="Save", 
+                                 row=1000, 
+                                 column=2, 
+                                 window=abcWindow,
+                                 state=tk.DISABLED,
+                                 sticky="se",
+                                 weight=(0,0),
+                                 command=u.dummy) # TODO!
+        
         
 # Instantiate the window and run its mainloop
 window = MainWindow()
