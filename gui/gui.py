@@ -429,7 +429,7 @@ class MainWindow:
                           command=u.dummy,
                           state=tk.DISABLED,
                           window=self.root)
-        self.button = u.createButton(buttonText="Button",
+        self.button = u.createButton(buttonText="Button", #TODO! Placeholder button.
                                      row=1000,
                                      column=1,
                                      weight=(0,1),
@@ -452,6 +452,9 @@ class ParsingWindow:
         self.footer = tk.StringVar()
         self.separator = tk.StringVar()
         self.parsingFilenameLabels = {"1+":[],"n+":[]}
+        self.species = tk.StringVar()
+        self.cState_i = tk.StringVar()
+        self.cState_f = tk.StringVar()
         self.rootWindow=rootWindow
         
     
@@ -605,19 +608,76 @@ class ParsingWindow:
                         command=self.parsingSaveActive)
         separatorBox.config(width=5)
         
+        # Ion species and charge states
+        speciesLabel = u.createLabel(labelText="Ion species: ", 
+                      row=7, 
+                      column=0,
+                      sticky="nw",
+                      weight=(0,0),
+                      window=parsingWindow)
+        CreateToolTip(speciesLabel, "Name of element, e.g. \'K\'.")
+        self.species, speciesBox = u.createTextBox(row=7,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,0),
+                        command=self.parsingSaveActive,
+                        window=parsingWindow)
+        speciesBox.config(width=5)
+        
+        availableLabel = u.createLabel(labelText="Available charge states",
+                      row=8, 
+                      column=0,
+                      window=parsingWindow,
+                      sticky="nw",
+                      weight=(0,0))
+        CreateToolTip(availableLabel, "") # TODO!
+        
+        cStateLabel_i = u.createLabel(labelText="i: ", 
+                      row=9, 
+                      column=0,
+                      sticky="nw",
+                      weight=(0,0),
+                      window=parsingWindow)
+        CreateToolTip(cStateLabel_i, "First measured charge state.")
+        
+        self.cState_i, cStateBox_i = u.createTextBox(row=9,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,0),
+                        command=self.parsingSaveActive,
+                        window=parsingWindow)
+        cStateBox_i.config(width=5)
+        
+        cStateLabel_f = u.createLabel(labelText="f: ", 
+                      row=10, 
+                      column=0,
+                      sticky="nw",
+                      weight=(0,0),
+                      window=parsingWindow)
+        CreateToolTip(cStateLabel_f, "Last measured charge state.")
+        
+        self.cState_f, cStateBox_f = u.createTextBox(row=10,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,0),
+                        command=self.parsingSaveActive,
+                        window=parsingWindow)
+        cStateBox_f.config(width=5)
+        
         # Create labels for 1+ and n+ filenames
         u.createLabel("1+ filenames:",
-                         row=7,
+                         row=11,
                          column=0,
                          sticky="nwe",
                          weight=(0,0),
                          window=parsingWindow)
         u.createLabel("N+ filenames:",
-                         row=7,
+                         row=11,
                          column=1,
                          sticky="nwe",
                          weight=(0,1),
                          window=parsingWindow)
+        
         # Create Save button
         self.saveButton = u.createButton(buttonText="Save",
                        row=1000,
@@ -638,7 +698,10 @@ class ParsingWindow:
         lenH = len(self.header.get())
         lenF = len(self.footer.get())
         lenSep = len(self.separator.get())
-        if (lenDir*lenOnePlus*lenNPlus*lenH*lenF*lenSep > 0):
+        lenSpecies = len(self.species.get())
+        lenStates = len(self.cState_i.get())*len(self.cState_f.get())
+        if (lenDir*lenOnePlus*lenNPlus\
+            *lenH*lenF*lenSep*lenSpecies*lenStates > 0):
             self.saveButton.config(state=tk.NORMAL)
         else:
             self.saveButton.config(state=tk.DISABLED)
@@ -652,7 +715,7 @@ class ParsingWindow:
         for i, name in enumerate(self.onePlusFilenames):
             
             label = u.createLabel(labelText=name,
-                             row = i+8,
+                             row = i+12,
                              column = 0,
                              sticky = "wne",
                              weight = (0,0),
@@ -663,7 +726,7 @@ class ParsingWindow:
         for i, name in enumerate(self.nPlusFilenames):
             
             label = u.createLabel(labelText=name,
-                             row = i+8,
+                             row = i+12,
                              column = 1,
                              sticky = "wne",
                              weight = (0,1),
@@ -734,6 +797,12 @@ class ParsingWindow:
         parsingParams["footer"]=self.footer.get()
         parsingParams["separator"]=self.separator.get()
         parsingParams["pathToRawData"]=self.dataDir.get()
+        parsingParams["species"]=self.species.get()
+        # Create the list of charge states
+        cState_i = int(self.cState_i.get())
+        cState_f = int(self.cState_f.get())
+        listOfStates = [i for i in range(cState_i, cState_f+1)]
+        parsingParams["cStates"]=listOfStates
         self.rootWindow.parsingParameters=parsingParams
         self.parsingWindow.destroy()
         

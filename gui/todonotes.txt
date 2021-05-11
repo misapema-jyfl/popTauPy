@@ -15,16 +15,16 @@ Parsing input
 -------------
 - Use raw data or parsed data?
 - Raw data:
-  - Path to data folder
-  - Parsed data output folder
-  - Designate ion species 
-  - Available charge states
-  - Header size
-  - Footer size
-  - Value separator
+  - Path to data folder [x]
+  - Parsed data output folder [x]
+  - Designate ion species [x]
+  - Available charge states [x]
+  - Header size [x]
+  - Footer size [x]
+  - Value separator [x]
   - File naming convention for 1+ signal and the n+ signal
-    (Python syntax, i.e. "Filename-{filenameVariable}.txt")
-  - File name variables
+    (Python syntax, i.e. "Filename-{filenameVariable}.txt") [x]
+  - File name variables [x]
 
 Parsed data input (if parsing is not done) 
 ------------------------------------------
