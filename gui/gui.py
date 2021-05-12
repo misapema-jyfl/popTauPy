@@ -473,7 +473,7 @@ class ParsingWindow:
         
         parsingWindow = tk.Toplevel(self.rootWindow.root)
         parsingWindow.title("Parsing parameters")
-        parsingWindow.minsize(500, 360)
+        parsingWindow.minsize(500, 350)
         self.parsingWindow=parsingWindow
         
         # Ask for the data storage directory
