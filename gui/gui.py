@@ -7,8 +7,256 @@ Created on Mon May 10 12:42:59 2021
 """
 
 import tkinter as tk
-from utilities import Utils
+import numpy as np 
 
+class Utils:
+    def __init__(self):
+        self.padx, self.pady = 5, 5
+        return None
+    
+    def activateCheck(self, variable, button):
+        '''Check the state of the variable,
+        and set the state of the button.'''
+        if variable:
+            button.config(state=tk.NORMAL)
+        else:
+            button.config(state=tk.DISABLED)
+        
+    def createCheckBox(self, boxText,
+                       row, 
+                       column, 
+                       weight=(1,1),
+                       sticky="",
+                       command=None,
+                       window=None):
+        '''
+        Creates a check box.
+
+        Parameters
+        ----------
+        boxText : str
+            Label text for the check box.
+        row : int
+            Row to place in.
+        column : int
+            Column to place in.
+        sticky : str, optional
+            Sticky. E.g. "we" The default is "".
+        weight : array, optional
+            Relative weight of the grid cell. Default is (1,1).
+        command : callable, optional
+            Function to call upon check. Default is None.
+        window : window object
+            Window into which to broadcast the check box.
+            
+        Returns
+        -------
+        variable : IntVar()
+            Variable containing the value of the check box. 1 = checked, 
+            0 = not checked.
+
+        '''
+        
+        if window==None:
+            window=self.root
+        
+        window.columnconfigure(index=column, weight=weight[1])
+        window.rowconfigure(index=row, weight=weight[0])
+        
+        variable = tk.IntVar()
+        
+        cbox = tk.Checkbutton(window, 
+                              text=boxText, 
+                              variable=variable,
+                              command=command)
+        
+
+            
+        cbox.grid(row=row, 
+                  column=column,
+                  sticky=sticky,
+                  ipadx=self.padx,
+                  ipady=self.pady)
+        
+        variable.trace_add("write", self.dummy)
+        
+        return variable
+        
+    
+    def createLabel(self, labelText,
+                    row,
+                    column,
+                    sticky="",
+                    weight=(1,1),
+                    window=None):
+        '''
+        Creates a label
+
+        Parameters
+        ----------
+        labelText : str
+            Text to show.
+        row : int
+            Row to place in.
+        column : int
+            Column to place in.
+        sticky : str, optional
+            Sticky. E.g. "we" The default is "".
+        weight : array, optional
+            Relative weight of the grid cell. Default is (1,1).
+        window : window object
+            Window into which to broadcast the Label.
+            
+        Returns
+        -------
+        tk.Label object.
+
+        '''
+        
+        if window==None:
+            window=self.root
+        
+        window.columnconfigure(index=column, weight=weight[1])
+        window.rowconfigure(index=row, weight=weight[0])
+        
+        label = tk.Label(window, 
+                         text=labelText)
+        label.grid(column=column,
+                   row=row,
+                   sticky=sticky,
+                   ipadx=self.padx, 
+                   ipady=self.pady)
+        
+        return label
+    
+    def createButton(self, buttonText,
+                     row,
+                     column,
+                     command,
+                     sticky="",
+                     weight=(1,1),
+                     state=tk.NORMAL,
+                     window=None,
+                     padx=None,
+                     pady=None):
+        '''
+        Creates a button
+
+        Parameters
+        ----------
+        buttonText : str
+            Text to show on button.
+        row : int
+            Row to place in.
+        column : int
+            Column to place in.
+        command : callable
+            Function to call upon button press.
+        sticky : str, optional
+            Sticky. E.g. "we" The default is "".
+        weight : array, optional
+            Relative weight of the grid cell. Default is (1,1).
+        state : tk.NORMAL or tk.DISABLED
+            State of the Button. Default is tk.NORMAL.
+        window : window object
+            Window into which to broadcast the Button.
+
+        Returns
+        -------
+        button : tk.Button object
+            The button object.
+
+        '''
+        
+        if window==None:
+            window=self.root
+        
+        window.columnconfigure(index=column, weight=weight[1])
+        window.rowconfigure(index=row, weight=weight[0])
+        
+        if padx == None:
+            padx = self.padx
+        if pady == None:
+            pady = self.pady
+        
+        button = tk.Button(window,
+                           text=buttonText,
+                           command=command,
+                           state=state)
+        button.grid(column=column, 
+                    row=row,
+                    sticky=sticky,
+                    ipadx=padx, 
+                    ipady=pady)
+        
+        return button
+
+    def createTextBox(self, row,
+                      column,
+                      columnspan=1,
+                      sticky="",
+                      weight=(1,1),
+                      window=None,
+                      command=None):
+        '''
+        Creates a text box whose input can be stored.
+
+        Parameters
+        ----------
+        row : int
+            Row to grid text box into.
+        column : int
+            Column to grid text box into.
+        columnspan : int
+            Number of columns for box to span.
+        sticky : string
+            Where to stick to in the grid cell.
+        weight : array, optional
+            Relative weight of the grid cell. Default is (1,1).
+        window : window object
+            Window into which to broadcast the box.
+        command : callable, optional
+            Set the callback function for the trace of the inputVar.
+            Default callback is Utils.dummy.
+            
+        Returns
+        -------
+        inputVar : Stringvar
+            Text input variable.
+        textBox : tk.Entry object
+            TextBox object.
+
+        '''
+        
+        # if window==None:
+        #     window=self.root
+        
+        if command == None:
+            command = self.dummy
+            
+        window.columnconfigure(index=column, weight=weight[1])
+        window.rowconfigure(index=row, weight=weight[0])
+        
+        inputVar = tk.StringVar()
+        textbox = tk.Entry(window,
+                           textvariable=inputVar)
+        textbox.grid(row=row, 
+                     column=column,
+                     columnspan=columnspan,
+                     sticky=sticky,
+                     ipadx=self.padx, 
+                     ipady=self.pady)
+        
+        
+            
+        inputVar.trace_add("write", command)
+        
+        return inputVar, textbox
+
+    def dummy(self, *_):
+        '''Dummy function for tests'''
+        return 0
+    
 class CreateToolTip(object):
     """
     create a tooltip for a given widget
@@ -84,7 +332,14 @@ class MainWindow:
             "separator":",",
             "pathToRawData":"",
             "abcFilename":"",
-            "rkStepsize":1.0e-3}
+            "rkStepsize":1.0e-3,
+            "ne_lo":0,
+            "ne_hi":0,
+            "Ee_lo":0,
+            "Ee_hi":0,
+            "N_ne":1000,
+            "N_MC":1000,
+            "method":""}
         self.workingDir = tk.StringVar()
         self.saveToPath = tk.StringVar()
         self.createLayout()
@@ -183,12 +438,13 @@ class MainWindow:
                           command=a.createABCWindow,
                           state=tk.DISABLED,
                           window=self.root)
+        o = optimizeWindow(self)
         self.optButton = u.createButton(buttonText="(ne, Ee)-optimization", # TODO!
                           row=5,
                           column=1,
                           weight=(0,1),
                           sticky="new",
-                          command=u.dummy,
+                          command=o.createOptWindow,
                           state=tk.DISABLED,
                           window=self.root)
         self.plotButton = u.createButton(buttonText="Plotting", # TODO!
@@ -777,10 +1033,233 @@ class optimizeWindow:
     def createOptWindow(self):
         '''Create the layout'''
         optWindow = tk.Toplevel(self.rootWindow.root)
-        optWindow.title("fitting parameters")
-        optWindow.minsize(500, 195)
-        self.optWindow=optWindow    
+        optWindow.title("Optimization parameters")
+        optWindow.minsize(500, 300)
+        u = self.u
+        self.ne_lo = tk.StringVar()
+        self.ne_hi = tk.StringVar()
+        self.Ee_lo = tk.StringVar()
+        self.Ee_hi = tk.StringVar()
+        self.freq = tk.StringVar()
+        self.N = tk.StringVar()
+        self.MC = tk.StringVar()
+        self.rc_method = tk.StringVar()
+        self.abcFilename = tk.StringVar()
+        self.optWindow=optWindow  
         
+        # Save button
+        self.saveButton = u.createButton(buttonText="Save", 
+                                 row=1000, 
+                                 column=3, 
+                                 window=optWindow,
+                                 state=tk.NORMAL,
+                                 sticky="se",
+                                 weight=(0,0),
+                                 command=self.optSaveParameters)
+        # abc file
+        abcLabel = u.createLabel(labelText="abc file to use: ",
+                                 row=0,
+                                 column=0,
+                                 sticky="ne",
+                                 weight=(0,0),
+                                 window=optWindow)
+        self.abcFilename, abcBox = u.createTextBox(row=0,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,1),
+                        command=self.optSaveActive, 
+                        window=optWindow)
+        abcBox.config(width=20)
+        
+        # If the cState was already given, use the given value.
+        c = len(self.rootWindow.parameters["abcFilename"]) > 0
+        if c: 
+            abcBox.config(state=tk.DISABLED)
+            abcBox.config(textvariable=self.abcFilename.set(
+                value=self.rootWindow.parameters["abcFilename"])
+                )
+        
+        # ne lower and upper limits
+        neLabel = u.createLabel(labelText="Electron density limits",
+                                   row=1,
+                                   column=0,
+                                   sticky="nw",
+                                   weight=(0,1),
+                                   window=optWindow)
+        CreateToolTip(neLabel, "Units of 1/cm3")
+        neLabel_lo = u.createLabel(labelText="Lower",
+                                   row=2,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=optWindow)
+        CreateToolTip(neLabel_lo, "Can be estimated using the 1+ stopping method\
+                                    (doi: 10.1103/PhysRevAccelBeams.19.053402).\
+                                    Default value corresponds to 500 W @ 14.5 GHz.")
+        self.ne_lo, neBox_lo = u.createTextBox(row=2,
+                                               column=1,
+                                               sticky="w",
+                                               weight=(0,1),
+                                               window=optWindow,
+                                               command=self.optSaveActive) 
+        neBox_lo.config(width=10)
+        self.ne_lo.set(value=f"{1e+11:.3e}")
+        neLabel_hi = u.createLabel(labelText="Upper",
+                                   row=3,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=optWindow)
+        CreateToolTip(neLabel_hi, "Default is the cut-off frequency.")
+        self.ne_hi, neBox_hi = u.createTextBox(row=3,
+                                               column=1,
+                                               sticky="we",
+                                               weight=(0,0),
+                                               window=optWindow,
+                                               command=self.optSaveActive) 
+        neBox_hi.config(width=10)
+        
+        # Cut-off density calculation
+        cutoffLabel = u.createLabel(labelText="Calculate cut-off density",
+                                         row=2, column=2, sticky="we",
+                                         weight=(0,1), window=optWindow)
+        CreateToolTip(cutoffLabel, "Input the heating frequency (Hz) below\
+                      to automatically set the cut-off density \
+                          as the upper limit.")
+        u.createLabel(labelText="uW frequency: ",
+                                  row=3,column=2,sticky="e",
+                                  weight=(0,0), window=optWindow)
+        self.freq, freqBox = u.createTextBox(row=3, column=3, sticky="we",
+                                        weight=(0,1), window=optWindow, 
+                                        command=self.calculateCutoff) 
+        self.freq.set(value=14.5e9)
+        # <Ee> lower and upper limits
+        EeLabel = u.createLabel(labelText="Electron energy <Ee> limits",
+                                   row=4,
+                                   column=0,
+                                   sticky="nw",
+                                   weight=(0,1),
+                                   window=optWindow)
+        CreateToolTip(EeLabel, "Units of eV")
+        EeLabel_lo = u.createLabel(labelText="Lower",
+                                   row=5,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=optWindow)
+        CreateToolTip(EeLabel_lo, "Default is 10 eV, i.e.\
+                      order of magnitude of the plasma potential.")
+        self.Ee_lo, EeBox_lo = u.createTextBox(row=5,
+                                               column=1,
+                                               sticky="w",
+                                               weight=(0,1),
+                                               window=optWindow,
+                                               command=self.optSaveActive) 
+        EeBox_lo.config(width=10)
+        self.Ee_lo.set(value=10)
+        EeLabel_hi = u.createLabel(labelText="Upper",
+                                   row=6,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=optWindow)
+        CreateToolTip(EeLabel_hi, "Default is 10 keV.\
+                                    N.B. recommended cross section data \
+                                    only goes up to 10 keV.")
+        self.Ee_hi, EeBox_hi = u.createTextBox(row=6,
+                                               column=1,
+                                               sticky="we",
+                                               weight=(0,0),
+                                               window=optWindow,
+                                               command=self.optSaveActive) 
+        self.Ee_hi.set(value=9.999e3) 
+        EeBox_hi.config(width=10)
+        
+        # Solution set settings
+        u.createLabel(labelText="Solution set settings", row=7, column=0,
+                      sticky="w", weight=(0,0), window=optWindow)
+        # Number of elements in ne vector
+        NLabel = u.createLabel(labelText="N",
+                               row=8, column=0, sticky="e",
+                               weight=(0,0), window=optWindow)
+        CreateToolTip(NLabel, "Number of elements in ne-array.\
+                      Determines the density of the solution space.\
+                          Default is 1000.")
+        self.N, NBox = u.createTextBox(row=8, column=1, sticky="we",
+                                       weight=(0,0),window=optWindow,
+                                       command=self.optSaveActive) 
+        self.N.set(value=1000)
+        
+        # Number of Monte Carlo iterations
+        MCLabel = u.createLabel(labelText="MC iterations",
+                               row=9, column=0, sticky="e",
+                               weight=(0,0), window=optWindow)
+        CreateToolTip(MCLabel, "Number of Monte Carlo Iterations to perform.\
+                      The bigger the number, the better the uncertainty \
+                          of the rate coefficients is sampled.\
+                          Default is 1000.")
+        self.MC, MCBox = u.createTextBox(row=9, column=1, sticky="we",
+                                       weight=(0,0),window=optWindow,
+                                       command=self.optSaveActive) 
+        self.MC.set(value=1000)
+        
+        
+
+        
+        
+        # Rate coefficient evaluation method
+        choices = {"Voronov", "Maxwell-Boltzmann"}
+        self.rc_method.set("Maxwell-Boltzmann")
+        popupLabel = tk.Label(optWindow, text="Rate coefficient evaluation: ")
+        popupLabel.grid(row=10, column=0)
+        popupMenu = tk.OptionMenu(optWindow, self.rc_method, *choices)
+        popupMenu.grid(row=10, column=1)
+        popupMenu.config(width=20)
+        self.rc_method.trace("w", self.optSaveActive)
+        
+    def calculateCutoff(self, *_):
+        '''Calculates the cut-off density for input into ne_hi.'''
+        eps0 = 8.8542e-12
+        e = 1.6021773e-19
+        me = 9.10938356e-31
+        f = float(self.freq.get())
+        cutoff = eps0*me*(2*np.pi*f)**2/e**2
+        cutoff = f"{cutoff:.3e}"
+        self.ne_hi.set(value=cutoff)
+        
+    def optSaveActive(self, *_):
+        '''If all the fields have been filled (correctly OR incorrectly)
+        change the state of the Save button to NORMAL. If the fields
+        are cleared, set state back to DISABLED.'''
+        lenLo = len(self.ne_lo.get())*len(self.Ee_lo.get())
+        lenHi = len(self.ne_hi.get())*len(self.Ee_hi.get())
+        lenN = len(self.N.get())
+        lenMC = len(self.MC.get())
+        lenRC = len(self.rc_method.get())
+        lenABC = len(self.abcFilename.get())
+        if (lenLo*lenHi*lenN*lenMC*lenRC*lenABC > 0):
+            self.saveButton.config(state=tk.NORMAL)
+        else:
+            self.saveButton.config(state=tk.DISABLED)
+    
+    def optSaveParameters(self):
+        '''Save the parameters given.
+        TODO! The validity of given parameters need to be checked!
+        '''
+        params = self.rootWindow.parameters
+        params["abcFilename"]=self.abcFilename.get()
+        params["ne_lo"]=float(self.ne_lo.get())
+        params["ne_hi"]=float(self.ne_hi.get())
+        params["Ee_lo"]=float(self.Ee_lo.get())
+        params["Ee_hi"]=float(self.Ee_hi.get())
+        # TODO! Set the method
+        if self.rc_method.get() == "Maxwell-Boltzmann":
+            params["method"]="interpMB"
+        elif self.rc_method.get() == "Voronov":
+            params["method"]="voronov"
+        params["N"]=int(self.N.get())
+        params["N_MC"]=int(self.MC.get())
+        self.optWindow.destroy()
         
 # Instantiate the window and run its mainloop
 window = MainWindow()
