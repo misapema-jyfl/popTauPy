@@ -72,17 +72,23 @@ class MainWindow:
         self.root = tk.Tk()
         self.root.title("Parameters YAML file generator")
         self.root.minsize(500,220)
-        self.parameters = {"species":"",
-                                  "onePlusFilenames":[],
-                                  "nPlusFilenames":[],
-                                  "cStates":[],
-                                  "header":0,
-                                  "footer":0,
-                                  "separator":",",
-                                  "pathToRawData":""}
+        self.parameters = {
+            "workingDir":"",
+            "saveToPath":"",
+            "species":"",
+            "cStates":[],
+            "onePlusFilenames":[],
+            "nPlusFilenames":[],
+            "header":0,
+            "footer":0,
+            "separator":",",
+            "pathToRawData":"",
+            "abcFilename":"",
+            "rkStepsize":1.0e-3}
+        self.workingDir = tk.StringVar()
+        self.saveToPath = tk.StringVar()
         self.createLayout()
         
-    
     def createLayout(self):
         '''Creates the MainWindow layout'''
         u = Utils()
@@ -97,7 +103,7 @@ class MainWindow:
         CreateToolTip(workLabel, "Directory containing the code files.\
                       E.g. './misapema/popTauPy-v1.2.3/'\
                           (without the \'\')")
-        self.workingDirInp = u.createTextBox(row=0,
+        self.workingDir, wDirBox = u.createTextBox(row=0,
                                                 column=1,
                                                 columnspan=1,
                                                 weight=(0,1),
@@ -112,7 +118,7 @@ class MainWindow:
                          sticky="nwe",
                          window=self.root)
         CreateToolTip(saveToLabel, "All results will be saved to this directory.")
-        self.saveToPathInp = u.createTextBox(row=1,
+        self.saveToPath, saveToBox = u.createTextBox(row=1,
                                                 column=1,
                                                 columnspan=1,
                                                 weight=(0,1),
@@ -169,7 +175,7 @@ class MainWindow:
                           state=tk.DISABLED,
                           window=self.root)
         a = abcWindow(self)
-        self.fitButton = u.createButton(buttonText="abc fitting", # TODO!
+        self.fitButton = u.createButton(buttonText="abc fitting",
                           row=4,
                           column=1,
                           weight=(0,1),
@@ -203,8 +209,11 @@ class MainWindow:
                                      window=self.root)
         
     def broadCastParameters(self, *_):
-        print("Parsing parameters:")
-        print(self.parameters)
+        self.parameters["workingDir"] = self.workingDir.get()
+        self.parameters["saveToPath"] = self.saveToPath.get()
+        print("Parameters:")
+        for key in self.parameters:
+            print(key, self.parameters[key])
             
 class ParsingWindow:
     
@@ -583,8 +592,11 @@ class abcWindow:
         '''Create the parsing dialog window attached to the rootWindow.'''
         self.u = Utils()
         self.abcFilename = tk.StringVar()
-        self.rootWindow=rootWindow
         self.species = tk.StringVar()
+        self.cState_i = tk.StringVar()
+        self.cState_f = tk.StringVar()
+        self.h = tk.StringVar()
+        self.rootWindow=rootWindow
         
     def createABCWindow(self):
         '''Create the layout'''
@@ -597,7 +609,7 @@ class abcWindow:
         u = self.u
         
         # Ion species
-        speciesLabel = u.createLabel(labelText="Ion species: ",
+        u.createLabel(labelText="Ion species: ",
                                      row=0,
                                      column=0,
                                      sticky="ne",
@@ -608,7 +620,7 @@ class abcWindow:
                                                    sticky="nw",
                                                    weight=(0,0),
                                                    window=abcWindow,
-                                                   command=u.dummy) # TODO!
+                                                   command=self.abcSaveActive) 
         speciesBox.config(width=5)
         
         # If the species was already given, use the given value.
@@ -643,7 +655,7 @@ class abcWindow:
                         column=1,
                         sticky="nw",
                         weight=(0,1),
-                        command=u.dummy, # TODO!
+                        command=self.abcSaveActive, 
                         window=abcWindow)
         cStateBox_i.config(width=5)
         # If the cState was already given, use the given value.
@@ -667,7 +679,7 @@ class abcWindow:
                         column=1,
                         sticky="nw",
                         weight=(0,1),
-                        command=u.dummy, # TODO!
+                        command=self.abcSaveActive, 
                         window=abcWindow)
         cStateBox_f.config(width=5)
         # If the cState was already given, use the given value.
@@ -690,12 +702,12 @@ class abcWindow:
                       used for fitting the differential current balance equation\
                           to the measurement data.")
         self.h, hBox = u.createTextBox(row=4,
-                                                        column=1,
-                                                        columnspan=1,
-                                                        sticky="nw",
-                                                        weight=(0,1),
-                                                        window=abcWindow,
-                                                        command=u.dummy) # TODO!
+                                    column=1,
+                                    columnspan=1,
+                                    sticky="nw",
+                                    weight=(0,1),
+                                    window=abcWindow,
+                                    command=self.abcSaveActive) 
         hBox.config(width=10)
         
         # filename for abc.csv
@@ -709,22 +721,65 @@ class abcWindow:
                       No spaces. Ending must be .csv.\
                           E.g. abc_h1e-3.csv")
         self.abcFilename, filenameBox = u.createTextBox(row=5,
-                                                        column=1,
-                                                        columnspan=1,
-                                                        sticky="new",
-                                                        weight=(0,1),
-                                                        window=abcWindow,
-                                                        command=u.dummy) # TODO!
-        
+                                                    column=1,
+                                                    columnspan=1,
+                                                    sticky="new",
+                                                    weight=(0,1),
+                                                    window=abcWindow,
+                                                    command=self.abcSaveActive) 
+    
         # Save button
-        saveABC = u.createButton(buttonText="Save", 
+        self.saveButton = u.createButton(buttonText="Save", 
                                  row=1000, 
                                  column=2, 
                                  window=abcWindow,
                                  state=tk.DISABLED,
                                  sticky="se",
                                  weight=(0,0),
-                                 command=u.dummy) # TODO!
+                                 command=self.abcSaveParameters)
+        
+    def abcSaveActive(self, *_):
+        '''If all the fields have been filled (correctly OR incorrectly)
+        change the state of the Save button to NORMAL. If the fields
+        are cleared, set state back to DISABLED.'''
+        lenSpecies = len(self.species.get())
+        lenStates = len(self.cState_i.get())*len(self.cState_f.get())
+        lenH = len(self.h.get())
+        lenF = len(self.abcFilename.get())
+        
+        if (lenSpecies*lenStates*lenH*lenF > 0):
+            self.saveButton.config(state=tk.NORMAL)
+        else:
+            self.saveButton.config(state=tk.DISABLED)
+    
+    def abcSaveParameters(self):
+        '''Save the parameters given.
+        TODO! The validity of given parameters need to be checked!
+        '''
+        params = self.rootWindow.parameters
+        params["species"]=self.species.get()
+        # Create the list of charge states
+        cState_i = int(self.cState_i.get())
+        cState_f = int(self.cState_f.get())
+        listOfStates = [i for i in range(cState_i, cState_f+1)]
+        params["cStates"]=listOfStates
+        params["abcFilename"]=self.abcFilename.get()
+        params["rkStepsize"]=float(self.h.get())
+        self.abcWindow.destroy()
+
+class optimizeWindow:
+    
+    def __init__(self, rootWindow):
+        '''Create the optimization dialog window attached to the rootWindow.'''
+        self.u = Utils()
+        self.rootWindow=rootWindow
+        
+    def createOptWindow(self):
+        '''Create the layout'''
+        optWindow = tk.Toplevel(self.rootWindow.root)
+        optWindow.title("fitting parameters")
+        optWindow.minsize(500, 195)
+        self.optWindow=optWindow    
         
         
 # Instantiate the window and run its mainloop
