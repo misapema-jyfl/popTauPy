@@ -1063,6 +1063,8 @@ class optimizeWindow:
                                  sticky="ne",
                                  weight=(0,0),
                                  window=optWindow)
+        CreateToolTip(abcLabel, "The file is expected to be located in the\
+                      save to path.")
         self.abcFilename, abcBox = u.createTextBox(row=0,
                         column=1,
                         sticky="nw",
