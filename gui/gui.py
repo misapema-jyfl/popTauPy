@@ -3,10 +3,13 @@
 """
 Created on Mon May 10 12:42:59 2021
 
+TODO! Saved values must be broadcast to the YAML file.
+
 @author: miha
 """
 
 import tkinter as tk
+import tkinter.filedialog as fd
 import numpy as np 
 
 class Utils:
@@ -439,7 +442,7 @@ class MainWindow:
                           state=tk.DISABLED,
                           window=self.root)
         o = optimizeWindow(self)
-        self.optButton = u.createButton(buttonText="(ne, Ee)-optimization", # TODO!
+        self.optButton = u.createButton(buttonText="(ne, Ee)-optimization", 
                           row=5,
                           column=1,
                           weight=(0,1),
@@ -447,12 +450,13 @@ class MainWindow:
                           command=o.createOptWindow,
                           state=tk.DISABLED,
                           window=self.root)
+        pl = PlottingWindow(self)
         self.plotButton = u.createButton(buttonText="Plotting", # TODO!
                           row=6,
                           column=1,
                           weight=(0,1),
                           sticky="news",
-                          command=u.dummy,
+                          command=pl.createPlottingWindow,
                           state=tk.DISABLED,
                           window=self.root)
         self.button = u.createButton(buttonText="Button", #TODO! Placeholder button.
@@ -1262,6 +1266,367 @@ class optimizeWindow:
         params["N"]=int(self.N.get())
         params["N_MC"]=int(self.MC.get())
         self.optWindow.destroy()
+        
+        
+        
+        
+class PlottingWindow:
+    
+    def __init__(self, rootWindow):
+        '''Create the parsing dialog window attached to the rootWindow.'''
+        self.u = Utils()
+        self.ne_lo = tk.StringVar()
+        self.ne_hi = tk.StringVar()
+        self.Ee_lo = tk.StringVar()
+        self.Ee_hi = tk.StringVar()
+        self.F_hi = tk.StringVar()
+        self.confidence = tk.StringVar()
+        self.dataPoint = tk.StringVar()
+        
+        self.rootWindow=rootWindow
+        
+        
+    
+    def createPlottingWindow(self):
+        '''Generates the plotting window.'''
+        u = self.u
+        
+        window = tk.Toplevel(self.rootWindow.root)
+        window.title("Plotting parameters")
+        window.minsize(500, 350)
+        self.window=window
+        
+        # Save button
+        self.saveButton = u.createButton(buttonText="Save", 
+                                 row=1000, 
+                                 column=3, 
+                                 window=window,
+                                 state=tk.NORMAL,
+                                 sticky="se",
+                                 weight=(0,0),
+                                 command=self.saveParameters)
+        
+        
+        # Available charge states
+        availableLabel = u.createLabel(labelText="Designate by charge states",
+                      row=0, 
+                      column=0,
+                      window=window,
+                      sticky="ne",
+                      weight=(0,1))
+        CreateToolTip(availableLabel, "Specify charge states for which \
+                      solution sets are available.\
+                      Will search for solution sets corresponding to \
+                      chosen charge states within the results folder.")
+        
+        cStateLabel_i = u.createLabel(labelText="i: ", 
+                      row=1, 
+                      column=0,
+                      sticky="ne",
+                      weight=(0,0),
+                      window=window)
+        CreateToolTip(cStateLabel_i, "First measured charge state.")
+        
+        self.cState_i, cStateBox_i = u.createTextBox(row=1,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,1),
+                        command=self.saveActive, 
+                        window=window)
+        cStateBox_i.config(width=5)
+        # If the cState was already given, use the given value.
+        c = len(self.rootWindow.parameters["cStates"]) > 0
+        if c: 
+            cStateBox_i.config(state=tk.DISABLED)
+            cStateBox_i.config(textvariable=self.cState_i.set(
+                value=self.rootWindow.parameters["cStates"][0]+2)
+                )
+        
+        
+        cStateLabel_f = u.createLabel(labelText="f: ", 
+                      row=2, 
+                      column=0,
+                      sticky="ne",
+                      weight=(0,0),
+                      window=window)
+        CreateToolTip(cStateLabel_f, "Last measured charge state.")
+        
+        self.cState_f, cStateBox_f = u.createTextBox(row=2,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,1),
+                        command=self.saveActive, 
+                        window=window)
+        cStateBox_f.config(width=5)
+        # If the cState was already given, use the given value.
+        c = len(self.rootWindow.parameters["cStates"]) > 0
+        if c: 
+            cStateBox_f.config(state=tk.DISABLED)
+            cStateBox_f.config(textvariable=self.cState_f.set(
+                value=self.rootWindow.parameters["cStates"][-1]-2)
+                )
+        
+        # Designate manually 
+        openButton = tk.Button(window, text="Manually select files to use.", 
+                               command=self.selectFiles)
+        openButton.grid(row=2, column=2, sticky="e")
+        
+        # If the cStates were already given, disable the manual choice.
+        c = len(self.rootWindow.parameters["cStates"]) > 0
+        if c: 
+            openButton.config(state=tk.DISABLED)
+        
+        
+        u.createLabel(labelText="Set limits on results to consider in plots: ",
+                      row=3, column=0, sticky="w",
+                      weight=(0,0), window=window)
+        
+        
+        neLabel_lo = u.createLabel(labelText="ne lower",
+                                   row=4,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=window)
+        CreateToolTip(neLabel_lo, "Can be estimated using the 1+ stopping method\
+                                    (doi: 10.1103/PhysRevAccelBeams.19.053402).\
+                                    Default value corresponds to 500 W @ 14.5 GHz.")
+        self.ne_lo, neBox_lo = u.createTextBox(row=4,
+                                               column=1,
+                                               sticky="w",
+                                               weight=(0,1),
+                                               window=window,
+                                               command=self.saveActive) 
+        neBox_lo.config(width=10)
+        self.ne_lo.set(value=f"{1e+11:.3e}")
+        neLabel_hi = u.createLabel(labelText="ne upper",
+                                   row=5,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=window)
+        CreateToolTip(neLabel_hi, "Default is the cut-off frequency.")
+        self.ne_hi, neBox_hi = u.createTextBox(row=5,
+                                               column=1,
+                                               sticky="we",
+                                               weight=(0,0),
+                                               window=window,
+                                               command=self.saveActive) 
+        neBox_hi.config(width=10)
+        
+        # Cut-off density calculation
+        cutoffLabel = u.createLabel(labelText="Calculate cut-off density",
+                                         row=4, column=2, sticky="we",
+                                         weight=(0,1), window=window)
+        CreateToolTip(cutoffLabel, "Input the heating frequency (Hz) below\
+                      to automatically set the cut-off density \
+                          as the upper limit.")
+        u.createLabel(labelText="uW frequency: ",
+                                  row=5,column=2,sticky="e",
+                                  weight=(0,0), window=window)
+        self.freq, freqBox = u.createTextBox(row=5, column=3, sticky="we",
+                                        weight=(0,1), window=window, 
+                                        command=self.calculateCutoff) 
+        self.freq.set(value=14.5e9)
+        # <Ee> lower and upper limits
+        # EeLabel = u.createLabel(labelText="Electron energy <Ee> limits",
+        #                            row=4,
+        #                            column=0,
+        #                            sticky="nw",
+        #                            weight=(0,1),
+        #                            window=window)
+        # CreateToolTip(EeLabel, "Units of eV")
+        EeLabel_lo = u.createLabel(labelText="<Ee> lower",
+                                   row=6,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=window)
+        CreateToolTip(EeLabel_lo, "Default is 10 eV, i.e.\
+                      order of magnitude of the plasma potential.")
+        self.Ee_lo, EeBox_lo = u.createTextBox(row=6,
+                                               column=1,
+                                               sticky="w",
+                                               weight=(0,1),
+                                               window=window,
+                                               command=self.saveActive) 
+        EeBox_lo.config(width=10)
+        self.Ee_lo.set(value=10)
+        EeLabel_hi = u.createLabel(labelText="<Ee> upper",
+                                   row=7,
+                                   column=0,
+                                   sticky="e",
+                                   weight=(0,0),
+                                   window=window)
+        CreateToolTip(EeLabel_hi, "Default is 10 keV.\
+                                    N.B. recommended cross section data \
+                                    only goes up to 10 keV.")
+        self.Ee_hi, EeBox_hi = u.createTextBox(row=7,
+                                               column=1,
+                                               sticky="we",
+                                               weight=(0,0),
+                                               window=window,
+                                               command=self.saveActive) 
+        self.Ee_hi.set(value=9.999e3) 
+        EeBox_hi.config(width=10)
+        
+        # Penalty function upper limit
+        fLabel = u.createLabel(labelText="Upper limit of penalty function: ", 
+                               row=8, column=0, sticky="e", weight=(0,0),
+                               window=window)
+        CreateToolTip(fLabel, "") # TODO!
+        self.F_hi, FBox_hi = u.createTextBox(row=8,
+                                               column=1,
+                                               sticky="we",
+                                               weight=(0,0),
+                                               window=window,
+                                               command=self.saveActive) 
+        self.F_hi.set(value=1e-6) 
+        FBox_hi.config(width=10)
+        
+        u.createLabel(labelText="Uncertainty bar estimation: ",
+                      row=9, column=0, sticky="w",
+                      weight=(0,0), window=window)
+        
+        confidenceLabel = u.createLabel(labelText="Confidence %: ",
+                                        row=10, column=0, sticky="e",
+                                        weight=(0,0), window=window)
+        CreateToolTip(confidenceLabel, "Percentage of results that the \
+                      uncertainty bars will enclose below and above \
+                          the data point. (34.1 % corresponds to 1 sigma)")
+        self.confidence, confBox = u.createTextBox(row=10,
+                                               column=1,
+                                               sticky="we",
+                                               weight=(0,0),
+                                               window=window,
+                                               command=self.saveActive) 
+        self.confidence.set(value=34.1) 
+        confBox.config(width=10)
+        
+        # Data point selection
+        choices = {"Median"} # TODO! Most probable value...
+        self.dataPoint.set("Median")
+        popupLabel = tk.Label(window, text="Data point: ")
+        popupLabel.grid(row=11, column=0, sticky="e")
+        popupMenu = tk.OptionMenu(window, self.dataPoint, *choices)
+        popupMenu.grid(row=11, column=1)
+        popupMenu.config(width=20)
+        self.dataPoint.trace("w", self.saveActive)
+        
+        # Create check boxes for things to plot
+        u.createLabel(labelText="Things to plot:",
+                         row=12,
+                         column=0,
+                         sticky="w",
+                         weight=(0,0),
+                         window=window)
+        self.plotSolSets = u.createCheckBox(boxText=" Solution sets",
+                            row=13,
+                            column=0,
+                            weight=(0,0),
+                            sticky="nw",
+                            window=window)
+        self.plotSolSets.set(value=1)
+        self.numSols = u.createCheckBox(boxText=" Number of solutions vs. F",
+                            row=14,
+                            column=0,
+                            weight=(0,0),
+                            sticky="nw",
+                            window=window)
+        self.numSols.set(value=1)
+        self.plotChar = u.createCheckBox(boxText=" Characteristic times vs. q",
+                            row=15,
+                            column=0,
+                            weight=(0,0),
+                            sticky="nw",
+                            window=window)
+        self.plotChar.set(value=1)
+        self.plotEC = u.createCheckBox(boxText=" Energy content",
+                            row=16,
+                            column=0,
+                            weight=(0,0),
+                            sticky="nw",
+                            window=window)
+        self.plotEC.set(value=1)
+        self.plotTriple = u.createCheckBox(boxText=" Energy content",
+                            row=17,
+                            column=0,
+                            weight=(0,0),
+                            sticky="nw",
+                            window=window)
+        self.plotTriple.set(value=1)
+        
+        filesToUseLabel = tk.Label(window, text="Solution set files to use:")
+        filesToUseLabel.grid(row=18, column=0, columnspan=4, sticky="we")
+        # If the cStates were already given
+        c = len(self.rootWindow.parameters["cStates"]) > 0
+        if c: 
+            l = tk.Label(window, text="AUTOMATICALLY CHOSEN DURING RUNTIME")
+            l.grid(row=19, column=0, columnspan=4, sticky="we")
+            
+    def selectFiles(self, *_):
+        '''Manually select solution set files to use in plotting.'''
+        filez = fd.askopenfilenames(parent=self.window, title='Choose a file')
+        
+        for i, file in enumerate(filez):
+            label = tk.Label(self.window, text=file)
+            label.grid(row=19+i, column=0, columnspan=4, sticky="we")
+    
+    def parsingPrintFilenames(self):
+        '''Prints out the specified filenames for user to check.'''
+        u = self.u
+        self.parsingFilenameLabels={"1+":[], "n+":[]}
+        
+        # Print the 1+ filenames
+        for i, name in enumerate(self.onePlusFilenames):
+            
+            label = u.createLabel(labelText=name,
+                             row = i+12,
+                             column = 0,
+                             sticky = "wne",
+                             weight = (0,0),
+                             window = self.parsingWindow)
+            self.parsingFilenameLabels["1+"].append(label)
+            
+        # Print the N+ filenames
+        for i, name in enumerate(self.nPlusFilenames):
+            
+            label = u.createLabel(labelText=name,
+                             row = i+12,
+                             column = 1,
+                             sticky = "wne",
+                             weight = (0,1),
+                             window = self.parsingWindow)
+            self.parsingFilenameLabels["n+"].append(label)
+    
+    def calculateCutoff(self, *_):
+        '''Calculates the cut-off density for input into ne_hi.'''
+        eps0 = 8.8542e-12
+        e = 1.6021773e-19
+        me = 9.10938356e-31
+        f = float(self.freq.get())
+        cutoff = eps0*me*(2*np.pi*f)**2/e**2
+        cutoff = f"{cutoff:.3e}"
+        self.ne_hi.set(value=cutoff)
+    
+    def saveActive(self, *_):
+        '''If all the fields have been filled (correctly OR incorrectly)
+        change the state of the Save button to NORMAL. If the fields
+        are cleared, set state back to DISABLED.'''
+        lenLo = len(self.ne_lo.get())*len(self.Ee_lo.get())
+        lenHi = len(self.ne_hi.get())*len(self.Ee_hi.get())
+        
+        if (lenLo*lenHi > 0):
+            self.saveButton.config(state=tk.NORMAL)
+        else:
+            self.saveButton.config(state=tk.DISABLED)
+            
+    def saveParameters(self):
+        '''Save the parameters given.
+        TODO! The validity of given parameters need to be checked!
+        '''
+        
+        self.window.destroy()
         
 # Instantiate the window and run its mainloop
 window = MainWindow()

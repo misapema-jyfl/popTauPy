@@ -37,10 +37,10 @@ Fitting and optimization input
 - abc filename to save abc parameters under [x]
 - RK time step [x]
 - (Fitting range) 
-- Rate coefficient evaluation method
-- Lower and upper limits for ne and Ee
-- Number of ne steps
-- Number of MC iterations
+- Rate coefficient evaluation method [x]
+- Lower and upper limits for ne and Ee [x]
+- Number of ne steps [x]
+- Number of MC iterations [x]
 
 
 Plotting input
