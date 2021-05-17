@@ -39,9 +39,15 @@ class Parser:
         
         # Specify the naming conventions. 
         # Use placeholder {} for the (variable) name specifier.
-        self.nPlusInConvention = params["parsing"]["n_plus_naming_convention"]
-        self.onePlusInConvention = params["parsing"]["one_plus_naming_convention"]
-        self.names = params["parsing"]["names"]
+        # self.nPlusInConvention = params["parsing"]["n_plus_naming_convention"]
+        # self.onePlusInConvention = params["parsing"]["one_plus_naming_convention"]
+        # self.names = params["parsing"]["names"]
+        
+        # Retrieve 1+ & n+ filenames
+        self.onePlusFiles = params["parsing"]["one_plus_file_names"]
+        self.nPlusFiles = params["parsing"]["n_plus_file_names"]        
+        self.names = [(one, n) for one, n in zip(self.onePlusFiles, self.nPlusFiles)]
+        
         self.cStates = params["parsing"]["available_charge_states"]
         
         # Specify the output file naming conventions for 
@@ -96,8 +102,10 @@ class Parser:
     def parseData(self, cState, name):
         
         # Get the filenames for the one plus and n+ transient signals 
-        onePlusFileName = self.nameFile(self.onePlusInConvention, name)
-        nPlusFileName = self.nameFile(self.nPlusInConvention, name)
+        # onePlusFileName = self.nameFile(self.onePlusInConvention, name)
+        # nPlusFileName = self.nameFile(self.nPlusInConvention, name)
+        onePlusFileName = name[0]
+        nPlusFileName = name[1]
         
         # Open the data files
         dfOne = self.loadData(onePlusFileName)

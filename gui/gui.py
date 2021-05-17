@@ -3,7 +3,8 @@
 """
 Created on Mon May 10 12:42:59 2021
 
-TODO! Saved values must be broadcast to the YAML file.
+Dialog for creating parameters .YAML files 
+for the consecutive transients analyzer code.
 
 @author: miha
 """
@@ -11,6 +12,7 @@ TODO! Saved values must be broadcast to the YAML file.
 import tkinter as tk
 import tkinter.filedialog as fd
 import numpy as np 
+import yaml 
 
 class Utils:
     def __init__(self):
@@ -322,12 +324,14 @@ class MainWindow:
         
         self.root = tk.Tk()
         self.root.title("Parameters YAML file generator")
-        self.root.minsize(500,220)
+        self.root.minsize(500,220)        
         self.parameters = {
             "workingDir":"",
             "saveToPath":"",
             "species":"",
             "cStates":[],
+            "one_plus_naming_convention":"",
+            "n_plus_naming_convention":"",
             "onePlusFilenames":[],
             "nPlusFilenames":[],
             "header":0,
@@ -342,11 +346,26 @@ class MainWindow:
             "Ee_hi":0,
             "N_ne":1000,
             "N_MC":1000,
-            "method":""}
+            "method":"",
+            "solution_set_files":[],
+            "plotting":{
+                "ne_lo":0,
+                "ne_hi":0,
+                "Ee_lo":0,
+                "Ee_hi":0,
+                "F_hi":0,
+                "confidence":100,
+                "data_point":"median",
+                "plot_solution_sets":False,
+                "plot_solutions_v_F":False,
+                "plot_char_v_q":False,
+                "plot_ec_v_q":False,
+                "plot_triple_v_q":False
+                }}
         self.workingDir = tk.StringVar()
         self.saveToPath = tk.StringVar()
         self.createLayout()
-        
+
     def createLayout(self):
         '''Creates the MainWindow layout'''
         u = Utils()
@@ -367,7 +386,7 @@ class MainWindow:
                                                 weight=(0,1),
                                                 sticky="nwe",
                                                 window=self.root)
-        
+        self.workingDir.set(value="./")
         # Specify save to path
         saveToLabel = u.createLabel(labelText="Save to path:",
                          row=1,
@@ -382,6 +401,7 @@ class MainWindow:
                                                 weight=(0,1),
                                                 sticky="nwe",
                                                 window=self.root)
+        self.saveToPath.set(value="../results/")
     
         # Create check boxes for routines to run
         u.createLabel(labelText="Routines to run:",
@@ -451,7 +471,7 @@ class MainWindow:
                           state=tk.DISABLED,
                           window=self.root)
         pl = PlottingWindow(self)
-        self.plotButton = u.createButton(buttonText="Plotting", # TODO!
+        self.plotButton = u.createButton(buttonText="Plotting",
                           row=6,
                           column=1,
                           weight=(0,1),
@@ -459,9 +479,18 @@ class MainWindow:
                           command=pl.createPlottingWindow,
                           state=tk.DISABLED,
                           window=self.root)
-        self.button = u.createButton(buttonText="Button", #TODO! Placeholder button.
+        
+        # Field for inputting yaml file filename
+        self.yamlName = tk.StringVar(value="../params.yaml")
+        yamlEntry = tk.Entry(self.root,
+                             textvariable=self.yamlName)
+        yamlEntry.grid(row=1000,column=1,sticky="e",
+                       ipadx=5, ipady=5)
+        self.yamlName.trace_add(mode="write", callback=u.dummy)
+        
+        self.button = u.createButton(buttonText="Make YAML", 
                                      row=1000,
-                                     column=1,
+                                     column=2,
                                      weight=(0,1),
                                      sticky="en",
                                      command=self.broadCastParameters,
@@ -471,9 +500,103 @@ class MainWindow:
     def broadCastParameters(self, *_):
         self.parameters["workingDir"] = self.workingDir.get()
         self.parameters["saveToPath"] = self.saveToPath.get()
-        print("Parameters:")
-        for key in self.parameters:
-            print(key, self.parameters[key])
+        
+        plotting = self.parameters["plotting"] # plotting parameters 
+        
+        # Create the YAML file
+        data = dict(
+            general = dict(
+                working_directory = self.parameters["workingDir"],
+                elemental_data_directory = self.parameters["workingDir"] + "elemental_data/",
+                save_to_path = self.parameters["saveToPath"],
+                do_parse = self.parseVar.get(),
+                do_abc = self.fitVar.get(),
+                do_neTe = self.optVar.get(),
+                do_plots = self.plotVar.get()
+                ),
+            parsing = dict(
+                raw_data_path = self.parameters["pathToRawData"],
+                parsed_data_path = self.parameters["saveToPath"],
+                species = self.parameters["species"],
+                available_charge_states = self.parameters["cStates"],
+                header = self.parameters["header"],
+                footer = self.parameters["footer"],
+                separator = self.parameters["separator"],
+                one_plus_file_names = self.parameters["onePlusFilenames"],
+                n_plus_file_names = self.parameters["nPlusFilenames"]
+                ),
+            data = dict(
+                parsed_data_path = self.parameters["saveToPath"],
+                available_charge_states = self.parameters["cStates"],
+                species = self.parameters["species"],
+                abc_file_name = self.parameters["abcFilename"]
+                ),
+            optimizer = dict(
+                rk_time_step = self.parameters["rkStepsize"],
+                rate_coefficient_method = self.parameters["method"],
+                ne_lo = self.parameters["ne_lo"],
+                ne_hi = self.parameters["ne_hi"],
+                Ee_lo = self.parameters["Ee_lo"],
+                Ee_hi = self.parameters["Ee_hi"],
+                number_of_ne = self.parameters["N_ne"],
+                number_of_MC = self.parameters["N_MC"]
+                ),
+            plotting = dict(
+                solution_set_files = self.parameters["solution_set_files"],
+                available_charge_states = plotting["available_charge_states"],
+                ne_lo = plotting["ne_lo"],
+                ne_hi = plotting["ne_hi"],
+                Ee_lo = plotting["Ee_lo"],
+                Ee_hi = plotting["Ee_hi"],
+                F_hi = plotting["F_hi"],
+                confidence = plotting["confidence"]/100, # Conversion from % -> 1
+                plot_solution_sets = dict(
+                    do_plot = plotting["plot_solution_sets"],
+                    sigma = 10, # TODO!
+                    x_scale = "log",
+                    y_scale = "log"
+                    ),
+                plot_number_of_solutions_vs_F = dict(
+                    do_plot = plotting["plot_solutions_v_F"],
+                    list_of_F_values = [1.0e-3, 1.0e-4, 1.0e-5, 1.0e-6, 1.0e-7, 1.0e-8, 1.0e-9], # TODO!
+                    y_lo = 1,
+                    y_hi = False
+                    ),
+                plot_characteristic_time_vs_charge = dict(
+                    do_plot = plotting["plot_char_v_q"],
+                    output_data = True,
+                    conf_yscale = "linear", # TODO!
+                    conf_marker = "o",
+                    conf_color = "r",
+                    inz_yscale = "linear",
+                    inz_marker = "s",
+                    inz_color = "k",
+                    cx_yscale = "linear",
+                    cx_marker = "^",
+                    cx_color = "b"
+                    ),
+                plot_energy_content_vs_charge = dict(
+                    do_plot = plotting["plot_ec_v_q"],
+                    output_data = True, # TODO!
+                    marker = "s",
+                    color = "k",
+                    y_hi = False,
+                    y_lo = False,
+                    ),
+                plot_triple_product_vs_charge = dict(
+                    do_plot = plotting["plot_triple_v_q"],
+                    output_data = True, # TODO!
+                    marker = "s",
+                    color = "m",
+                    y_hi = False,
+                    y_lo = False
+                    )
+                )
+            )
+        
+        filename = str(self.yamlName.get())
+        with open(filename, "w") as outfile:
+            yaml.dump(data, outfile, default_flow_style=False)
             
 class ParsingWindow:
     
@@ -785,9 +908,6 @@ class ParsingWindow:
             
         self.onePlusFilenames = []
         self.nPlusFilenames = []
-        # self.nPlusTextBox.delete(0,"end")
-        # self.onePlusTextBox.delete(0,"end")
-        # self.filenameTextBox.delete(0,"end")
         self.parsingPrintFilenames()
         self.parsingSaveActive()
     
@@ -806,7 +926,6 @@ class ParsingWindow:
         # Check that an input is given
         if splittedTextVar[i] == "":
             c = False
-        
         while c:
             var = splittedTextVar[i]
             onePlusFilename = self.onePlusConvention.get().format(var)
@@ -834,11 +953,13 @@ class ParsingWindow:
         params = self.rootWindow.parameters
         params["onePlusFilenames"]=self.onePlusFilenames
         params["nPlusFilenames"]=self.nPlusFilenames
-        params["header"]=self.header.get()
-        params["footer"]=self.footer.get()
-        params["separator"]=self.separator.get()
-        params["pathToRawData"]=self.dataDir.get()
-        params["species"]=self.species.get()
+        params["one_plus_naming_convention"]=self.onePlusConvention.get()
+        params["n_plus_naming_convention"]=self.nPlusConvention.get()
+        params["header"]=int(self.header.get())
+        params["footer"]=int(self.footer.get())
+        params["separator"]=str(self.separator.get())
+        params["pathToRawData"]=str(self.dataDir.get())
+        params["species"]=str(self.species.get())
         # Create the list of charge states
         cState_i = int(self.cState_i.get())
         cState_f = int(self.cState_f.get())
@@ -1017,7 +1138,7 @@ class abcWindow:
         TODO! The validity of given parameters need to be checked!
         '''
         params = self.rootWindow.parameters
-        params["species"]=self.species.get()
+        params["species"]=str(self.species.get())
         # Create the list of charge states
         cState_i = int(self.cState_i.get())
         cState_f = int(self.cState_f.get())
@@ -1315,9 +1436,16 @@ class PlottingWindow:
                       sticky="ne",
                       weight=(0,1))
         CreateToolTip(availableLabel, "Specify charge states for which \
-                      solution sets are available.\
-                      Will search for solution sets corresponding to \
-                      chosen charge states within the results folder.")
+                                      solution sets are available.")
+        
+        # If the charge states are already known,
+        # designate the solution sets according to the 
+        # naming convention.
+        # TODO! Note that the optimization dialog needs to be
+        # already filled by this point.
+        if len(self.rootWindow.parameters["cStates"])>0:
+            self.designate_solution_sets()
+        
         
         cStateLabel_i = u.createLabel(labelText="i: ", 
                       row=1, 
@@ -1419,8 +1547,8 @@ class PlottingWindow:
                                          row=4, column=2, sticky="we",
                                          weight=(0,1), window=window)
         CreateToolTip(cutoffLabel, "Input the heating frequency (Hz) below\
-                      to automatically set the cut-off density \
-                          as the upper limit.")
+                                  to automatically set the cut-off density \
+                                  as the upper limit.")
         u.createLabel(labelText="uW frequency: ",
                                   row=5,column=2,sticky="e",
                                   weight=(0,0), window=window)
@@ -1527,13 +1655,13 @@ class PlottingWindow:
                             sticky="nw",
                             window=window)
         self.plotSolSets.set(value=1)
-        self.numSols = u.createCheckBox(boxText=" Number of solutions vs. F",
+        self.plotVsF = u.createCheckBox(boxText=" Number of solutions vs. F",
                             row=14,
                             column=0,
                             weight=(0,0),
                             sticky="nw",
                             window=window)
-        self.numSols.set(value=1)
+        self.plotVsF.set(value=1)
         self.plotChar = u.createCheckBox(boxText=" Characteristic times vs. q",
                             row=15,
                             column=0,
@@ -1548,7 +1676,7 @@ class PlottingWindow:
                             sticky="nw",
                             window=window)
         self.plotEC.set(value=1)
-        self.plotTriple = u.createCheckBox(boxText=" Energy content",
+        self.plotTriple = u.createCheckBox(boxText="Triple product",
                             row=17,
                             column=0,
                             weight=(0,0),
@@ -1561,43 +1689,35 @@ class PlottingWindow:
         # If the cStates were already given
         c = len(self.rootWindow.parameters["cStates"]) > 0
         if c: 
-            l = tk.Label(window, text="AUTOMATICALLY CHOSEN DURING RUNTIME")
+            l = tk.Label(window, text="AUTOMATICALLY CHOSEN")
             l.grid(row=19, column=0, columnspan=4, sticky="we")
             
+            
+    def designate_solution_sets(self):
+        '''If the charge states have already been specified
+        automatically designates the solution set file filenames
+        according to the solution set naming convention.'''
+        params = self.rootWindow.parameters
+        ci = params["cStates"][0]
+        cf = params["cStates"][-1]
+        N = str(params["N_ne"])
+        MC = str(params["N_MC"])
+        self.solution_set_files = []
+        for i in range(ci+2, cf-2+1):
+            s = (params["saveToPath"],"solset_MC_iters-",MC,"_N-",N,"q-",str(i),".csv")
+            fname = "".join(s)
+            self.solution_set_files.append(fname)
+        
+    
     def selectFiles(self, *_):
         '''Manually select solution set files to use in plotting.'''
         filez = fd.askopenfilenames(parent=self.window, title='Choose a file')
+        self.solution_set_files = []
         
         for i, file in enumerate(filez):
             label = tk.Label(self.window, text=file)
             label.grid(row=19+i, column=0, columnspan=4, sticky="we")
-    
-    def parsingPrintFilenames(self):
-        '''Prints out the specified filenames for user to check.'''
-        u = self.u
-        self.parsingFilenameLabels={"1+":[], "n+":[]}
-        
-        # Print the 1+ filenames
-        for i, name in enumerate(self.onePlusFilenames):
-            
-            label = u.createLabel(labelText=name,
-                             row = i+12,
-                             column = 0,
-                             sticky = "wne",
-                             weight = (0,0),
-                             window = self.parsingWindow)
-            self.parsingFilenameLabels["1+"].append(label)
-            
-        # Print the N+ filenames
-        for i, name in enumerate(self.nPlusFilenames):
-            
-            label = u.createLabel(labelText=name,
-                             row = i+12,
-                             column = 1,
-                             sticky = "wne",
-                             weight = (0,1),
-                             window = self.parsingWindow)
-            self.parsingFilenameLabels["n+"].append(label)
+            self.solution_set_files.append(file)
     
     def calculateCutoff(self, *_):
         '''Calculates the cut-off density for input into ne_hi.'''
@@ -1625,7 +1745,24 @@ class PlottingWindow:
         '''Save the parameters given.
         TODO! The validity of given parameters need to be checked!
         '''
-        
+        ci = int(self.cState_i.get())
+        cf = int(self.cState_f.get())
+        self.solset_cStates = [i for i in range(ci,cf+1)]
+        params = self.rootWindow.parameters
+        params["solution_set_files"] = self.solution_set_files
+        params["plotting"]["ne_lo"] = float(self.ne_lo.get())
+        params["plotting"]["ne_hi"] = float(self.ne_hi.get())
+        params["plotting"]["Ee_lo"] = float(self.Ee_lo.get())
+        params["plotting"]["Ee_hi"] = float(self.Ee_hi.get())
+        params["plotting"]["F_hi"] = float(self.F_hi.get())
+        params["plotting"]["confidence"] = float(self.confidence.get())
+        params["plotting"]["data_point"] = str(self.dataPoint.get())
+        params["plotting"]["plot_solution_sets"] = int(self.plotSolSets.get())
+        params["plotting"]["plot_solutions_v_F"] = int(self.plotVsF.get())
+        params["plotting"]["plot_char_v_q"] = int(self.plotChar.get())
+        params["plotting"]["plot_ec_v_q"] = int(self.plotEC.get())
+        params["plotting"]["plot_triple_v_q"] = int(self.plotTriple.get())
+        params["plotting"]["available_charge_states"] = self.solset_cStates
         self.window.destroy()
         
 # Instantiate the window and run its mainloop

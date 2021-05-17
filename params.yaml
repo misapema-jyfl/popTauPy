@@ -1,126 +1,96 @@
-general:
- working_directory: "./"
- elemental_data_directory: "./elemental_data/"
- save_to_path: "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/" # Path to which you wish to save your results
- do_parse: False
- do_abc: False
- do_neTe: False
- do_plots: True
- 
-parsing:
- raw_data_path: "/home/miha/Work/datasets/JA_2021-02-24_pulse_width/2021 02 24 vary pulse duration/2021 02 24 N+ pulse responses/"
- parsed_data_path: "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/parsed_data/"
- species: "K"
- available_charge_states: [3,4,5,6,7,8,9,10,11,12]
- header: 0 # If no header, set 0. If data has a header, set its length (e.g. 1)
- footer: 12 # If no footer, set 0. If data has a footer, set its length (e.g. 12)
- separator: "\t" # Separator for the raw data
- one_plus_naming_convention: "2021 02 24 - {} pulse 1+.txt"
- n_plus_naming_convention: "2021 02 24 - {} courant N+.txt"
- names: [
-"16 58 00",
-"16 35 19",
-"16 24 53",
-"16 04 31",
-"15 54 34",
-"15 35 39",
-"14 31 55",
-"14 52 36",
-"15 02 26",
-"15 23 34"
- ]
-
 data:
- # Set parsed_data_path to False
- # if it is the same as 
- # the one used in parsing.
- parsed_data_path: False # Path to the directory containing the data files
- 
- # Set available_charge_states as False
- # if it is the same as the one 
- # used in parsing
- available_charge_states: False # Charge states for which transient data is available
- species: "K"
- abc_file_name: "abc_h1e-3.csv" # Name of the abc file (to save / to load)
- 
+  abc_file_name: ''
+  available_charge_states: &id001 []
+  parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
+  species: ''
+general:
+  do_abc: 0
+  do_neTe: 0
+  do_parse: 0
+  do_plots: 1
+  elemental_data_directory: ./elemental_data/
+  save_to_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
+  working_directory: ./
 optimizer:
- rk_time_step: 1.0e-3 # Time step for the RK4 method (s) N.B. in scientific notation, use e.g. 1.0e-3 NOT 1e-3. Else error.
- rate_coefficient_method: "interpMB" # Available methods: ['voronov', 'interpMB']
- ne_lo: 1.0e+11 # (1/cm3) N.B. Must use e.g. 1.0e+11, NOT 1e11, or 1.0e11. Else error.
- ne_hi: 2.61e+12
- Ee_lo: 10.0 # (eV)
- Ee_hi: 9.99e+3 # TODO!
- number_of_ne: 100
- number_of_MC: 10
-
+  Ee_hi: 0
+  Ee_lo: 0
+  ne_hi: 0
+  ne_lo: 0
+  number_of_MC: 1000
+  number_of_ne: 1000
+  rate_coefficient_method: ''
+  rk_time_step: 0.001
+parsing:
+  available_charge_states: *id001
+  footer: 0
+  header: 0
+  n_plus_file_names: []
+  one_plus_file_names: []
+  parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
+  raw_data_path: ''
+  separator: ','
+  species: ''
 plotting:
-    # Set False, if files are specified by
-    # general["save_to_path"]
-    # and the number of ne, and number of MC.
-    # Otherwise, give list of files.  
-    solution_set_files: ["/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-3.csv",
-"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-4.csv",
-"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-5.csv",
-"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-6.csv",
-"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-7.csv",
-"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-8.csv",
-"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-9.csv",
-"/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/test_solsets/solset_MC_iters-1000_N-1000_q-10.csv"]
-    
-    # Set False, if same as data["available_charge_states"]
-    # Otherwise, give list of charge states for which 
-    # solution sets are available.
-    available_charge_states: [3,4,5,6,7,8,9,10]
-  
-    # Set values by which to constrain the choice of data.
-    # If False, the values from optimizer will be used
-    # for Ee and ne. 
-    # F_hi and confidence must always be given.
-    Ee_lo: False
-    Ee_hi: False
-    ne_lo: False
-    ne_hi: False
-    F_hi: 1.0e-7
-    confidence: 0.341
-  
-
-    plot_solution_sets:
-        do_plot: True
-        sigma: 10
-        x_scale: "log"
-        y_scale: "log"
-        
-    plot_number_of_solutions_vs_F: 
-        do_plot: False
-        list_of_F_values: [1.0e-3, 1.0e-4, 1.0e-5, 1.0e-6, 1.0e-7, 1.0e-8, 1.0e-9]
-        y_lo: 1
-        y_hi: False
-    
-    plot_characteristic_time_vs_charge:
-        do_plot: False
-        output_data: False
-        conf_yscale: "linear"
-        conf_marker: "o"
-        conf_color: "r"
-        inz_yscale: "linear"
-        inz_marker: "s"
-        inz_color: "k"
-        cx_yscale: "linear"
-        cx_marker: "^"
-        cx_color: "b"
-
-    plot_energy_content_vs_charge:
-        do_plot: False
-        output_data: False
-        marker: "s"
-        color: "k"
-        y_hi: False
-        y_lo: False
-        
-    plot_triple_product_vs_charge:
-        do_plot: False
-        output_data: False
-        marker: "s"
-        color: "m"
-        y_hi: False
-        y_lo: False
+  Ee_hi: 9999.0
+  Ee_lo: 10.0
+  F_hi: 1.0e-06
+  available_charge_states:
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  confidence: 0.341
+  ne_hi: 2.608e+18
+  ne_lo: 100000000000.0
+  plot_characteristic_time_vs_charge:
+    conf_color: r
+    conf_marker: o
+    conf_yscale: linear
+    cx_color: b
+    cx_marker: ^
+    cx_yscale: linear
+    do_plot: 1
+    inz_color: k
+    inz_marker: s
+    inz_yscale: linear
+    output_data: true
+  plot_energy_content_vs_charge:
+    color: k
+    do_plot: 1
+    marker: s
+    output_data: true
+    y_hi: false
+    y_lo: false
+  plot_number_of_solutions_vs_F:
+    do_plot: 1
+    list_of_F_values:
+    - 0.001
+    - 0.0001
+    - 1.0e-05
+    - 1.0e-06
+    - 1.0e-07
+    - 1.0e-08
+    - 1.0e-09
+    y_hi: false
+    y_lo: 1
+  plot_solution_sets:
+    do_plot: 1
+    sigma: 10
+    x_scale: log
+    y_scale: log
+  plot_triple_product_vs_charge:
+    color: m
+    do_plot: 1
+    marker: s
+    output_data: true
+    y_hi: false
+    y_lo: false
+  solution_set_files:
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-5.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-6.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-7.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-8.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-9.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-10.csv

@@ -45,14 +45,14 @@ Fitting and optimization input
 
 Plotting input
 --------------
-- Solution set files (if plotting only)
-- Available charge states (if plotting only)
-- Plotting constraints (if any)
+- Solution set files (if plotting only) [x]
+- Available charge states (if plotting only) [x]
+- Plotting constraints (if any) [x]
 - Select what to plot (and the associated plotting parameters):
-  - Solution sets
-  - Number of solutions vs F
-  - Characteristic times vs q 
-  - Energy content vs q
-  - Triple product vs q
+  - Solution sets [x]
+  - Number of solutions vs F [x]
+  - Characteristic times vs q [x]
+  - Energy content vs q [x]
+  - Triple product vs q [x]
 
 
