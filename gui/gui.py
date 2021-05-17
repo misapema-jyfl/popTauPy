@@ -401,7 +401,7 @@ class MainWindow:
                                                 weight=(0,1),
                                                 sticky="nwe",
                                                 window=self.root)
-        self.saveToPath.set(value="../results/")
+        self.saveToPath.set(value="")
     
         # Create check boxes for routines to run
         u.createLabel(labelText="Routines to run:",
@@ -1602,7 +1602,7 @@ class PlottingWindow:
         fLabel = u.createLabel(labelText="Upper limit of penalty function: ", 
                                row=8, column=0, sticky="e", weight=(0,0),
                                window=window)
-        CreateToolTip(fLabel, "") # TODO!
+        # CreateToolTip(fLabel, "") # TODO!
         self.F_hi, FBox_hi = u.createTextBox(row=8,
                                                column=1,
                                                sticky="we",

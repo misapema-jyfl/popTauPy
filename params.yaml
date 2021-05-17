@@ -1,35 +1,65 @@
 data:
-  abc_file_name: ''
-  available_charge_states: &id001 []
+  abc_file_name: abc.csv
+  available_charge_states: &id001
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
   parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
-  species: ''
+  species: K
 general:
-  do_abc: 0
-  do_neTe: 0
-  do_parse: 0
+  do_abc: 1
+  do_neTe: 1
+  do_parse: 1
   do_plots: 1
   elemental_data_directory: ./elemental_data/
   save_to_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
   working_directory: ./
 optimizer:
-  Ee_hi: 0
-  Ee_lo: 0
-  ne_hi: 0
-  ne_lo: 0
-  number_of_MC: 1000
+  Ee_hi: 9999.0
+  Ee_lo: 10.0
+  ne_hi: 2.608e+18
+  ne_lo: 100000000000.0
+  number_of_MC: 10
   number_of_ne: 1000
-  rate_coefficient_method: ''
+  rate_coefficient_method: interpMB
   rk_time_step: 0.001
 parsing:
   available_charge_states: *id001
-  footer: 0
+  footer: 12
   header: 0
-  n_plus_file_names: []
-  one_plus_file_names: []
+  n_plus_file_names:
+  - 2021 02 24 - 16 58 00 courant N+.txt
+  - 2021 02 24 - 16 35 19 courant N+.txt
+  - 2021 02 24 - 16 24 53 courant N+.txt
+  - 2021 02 24 - 16 04 31 courant N+.txt
+  - 2021 02 24 - 15 54 34 courant N+.txt
+  - 2021 02 24 - 15 35 39 courant N+.txt
+  - 2021 02 24 - 14 31 55 courant N+.txt
+  - 2021 02 24 - 14 52 36 courant N+.txt
+  - 2021 02 24 - 15 02 26 courant N+.txt
+  - 2021 02 24 - 15 23 34 courant N+.txt
+  one_plus_file_names:
+  - 2021 02 24 - 16 58 00 pulse 1+.txt
+  - 2021 02 24 - 16 35 19 pulse 1+.txt
+  - 2021 02 24 - 16 24 53 pulse 1+.txt
+  - 2021 02 24 - 16 04 31 pulse 1+.txt
+  - 2021 02 24 - 15 54 34 pulse 1+.txt
+  - 2021 02 24 - 15 35 39 pulse 1+.txt
+  - 2021 02 24 - 14 31 55 pulse 1+.txt
+  - 2021 02 24 - 14 52 36 pulse 1+.txt
+  - 2021 02 24 - 15 02 26 pulse 1+.txt
+  - 2021 02 24 - 15 23 34 pulse 1+.txt
   parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
-  raw_data_path: ''
-  separator: ','
-  species: ''
+  raw_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestData/extracted_transients/
+  separator: \t
+  species: K
 plotting:
   Ee_hi: 9999.0
   Ee_lo: 10.0
@@ -88,9 +118,9 @@ plotting:
     y_hi: false
     y_lo: false
   solution_set_files:
-  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-5.csv
-  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-6.csv
-  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-7.csv
-  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-8.csv
-  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-9.csv
-  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/solset_MC_iters-10_N-1000_q-10.csv
+  - solset_MC_iters-10_N-1000q-5.csv
+  - solset_MC_iters-10_N-1000q-6.csv
+  - solset_MC_iters-10_N-1000q-7.csv
+  - solset_MC_iters-10_N-1000q-8.csv
+  - solset_MC_iters-10_N-1000q-9.csv
+  - solset_MC_iters-10_N-1000q-10.csv
