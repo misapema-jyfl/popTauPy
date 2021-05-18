@@ -40,6 +40,3 @@ to be determined in the corresponding elemental data file.
 E.g. in the case where the rate coefficient is evaluated using the 
 Voronov formula, one would specify the charge state specific uncertainties
 in the file "./elemental_data/voronov_k.csv"
-
-* voronov_rate is now called as a function of the average energy of
-the MB distribution, instead of the temperature.
