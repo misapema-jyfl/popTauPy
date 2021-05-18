@@ -11,7 +11,7 @@ data:
   - 10
   - 11
   - 12
-  parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
+  parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/
   species: K
 general:
   do_abc: 1
@@ -19,7 +19,7 @@ general:
   do_parse: 1
   do_plots: 1
   elemental_data_directory: ./elemental_data/
-  save_to_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
+  save_to_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/
   working_directory: ./
 optimizer:
   Ee_hi: 9999.0
@@ -56,8 +56,8 @@ parsing:
   - 2021 02 24 - 14 52 36 pulse 1+.txt
   - 2021 02 24 - 15 02 26 pulse 1+.txt
   - 2021 02 24 - 15 23 34 pulse 1+.txt
-  parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestResults/
-  raw_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/guiTestData/extracted_transients/
+  parsed_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/
+  raw_data_path: /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/data/extracted_transients/
   separator: \t
   species: K
 plotting:
@@ -118,9 +118,9 @@ plotting:
     y_hi: false
     y_lo: false
   solution_set_files:
-  - solset_MC_iters-10_N-1000q-5.csv
-  - solset_MC_iters-10_N-1000q-6.csv
-  - solset_MC_iters-10_N-1000q-7.csv
-  - solset_MC_iters-10_N-1000q-8.csv
-  - solset_MC_iters-10_N-1000q-9.csv
-  - solset_MC_iters-10_N-1000q-10.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/solset_MC_iters-10_N-1000_q-5.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/solset_MC_iters-10_N-1000_q-6.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/solset_MC_iters-10_N-1000_q-7.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/solset_MC_iters-10_N-1000_q-8.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/solset_MC_iters-10_N-1000_q-9.csv
+  - /home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/solset_MC_iters-10_N-1000_q-10.csv

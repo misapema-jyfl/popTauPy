@@ -349,6 +349,7 @@ class MainWindow:
             "method":"",
             "solution_set_files":[],
             "plotting":{
+                "available_charge_states":[],
                 "ne_lo":0,
                 "ne_hi":0,
                 "Ee_lo":0,
@@ -387,6 +388,8 @@ class MainWindow:
                                                 sticky="nwe",
                                                 window=self.root)
         self.workingDir.set(value="./")
+        
+        
         # Specify save to path
         saveToLabel = u.createLabel(labelText="Save to path:",
                          row=1,
@@ -402,6 +405,10 @@ class MainWindow:
                                                 sticky="nwe",
                                                 window=self.root)
         self.saveToPath.set(value="")
+        u.createButton(buttonText="Set", 
+                                row=1, column=2, 
+                                command=self.setParameter,
+                                window=self.root)
     
         # Create check boxes for routines to run
         u.createLabel(labelText="Routines to run:",
@@ -496,10 +503,14 @@ class MainWindow:
                                      command=self.broadCastParameters,
                                      state=tk.NORMAL,
                                      window=self.root)
-        
-    def broadCastParameters(self, *_):
+    
+    def setParameter(self, *_):
+        '''Set values of workingDir and SaveToPath'''
         self.parameters["workingDir"] = self.workingDir.get()
         self.parameters["saveToPath"] = self.saveToPath.get()
+        
+    def broadCastParameters(self, *_):
+        
         
         plotting = self.parameters["plotting"] # plotting parameters 
         
@@ -1704,7 +1715,7 @@ class PlottingWindow:
         MC = str(params["N_MC"])
         self.solution_set_files = []
         for i in range(ci+2, cf-2+1):
-            s = (params["saveToPath"],"solset_MC_iters-",MC,"_N-",N,"q-",str(i),".csv")
+            s = (params["saveToPath"],"solset_MC_iters-",MC,"_N-",N,"_q-",str(i),".csv")
             fname = "".join(s)
             self.solution_set_files.append(fname)
         
