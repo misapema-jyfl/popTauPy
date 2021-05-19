@@ -779,14 +779,14 @@ class ParsingWindow:
         separatorBox.config(width=5)
         # Multiplying factor
         parsingFactorLabel = u.createLabel(labelText="Conversion factor:", 
-                         row=6,
+                         row=7,
                          column=0,
                          sticky="nw",
                          weight=(0,0),
                          window=parsingWindow)
         CreateToolTip(parsingFactorLabel, "Conversion factor required\
                       to convert the transient signal to units of Amperes.")
-        self.factor, factorBox = u.createTextBox(row=6,
+        self.factor, factorBox = u.createTextBox(row=7,
                         column=1,
                         sticky="nw",
                         weight=(0,1),
@@ -795,13 +795,13 @@ class ParsingWindow:
         factorBox.config(width=10)
         # Ion species and charge states
         speciesLabel = u.createLabel(labelText="Ion species: ", 
-                      row=7, 
+                      row=8, 
                       column=0,
                       sticky="nw",
                       weight=(0,0),
                       window=parsingWindow)
         CreateToolTip(speciesLabel, "Name of element, e.g. \'K\'.")
-        self.species, speciesBox = u.createTextBox(row=7,
+        self.species, speciesBox = u.createTextBox(row=8,
                         column=1,
                         sticky="nw",
                         weight=(0,0),
@@ -810,7 +810,7 @@ class ParsingWindow:
         speciesBox.config(width=5)
         
         availableLabel = u.createLabel(labelText="Available charge states",
-                      row=8, 
+                      row=9, 
                       column=0,
                       window=parsingWindow,
                       sticky="nw",
@@ -821,14 +821,14 @@ class ParsingWindow:
                               The order must be the same as for the filenames.")
         
         cStateLabel_i = u.createLabel(labelText="i: ", 
-                      row=9, 
+                      row=10, 
                       column=0,
                       sticky="ne",
                       weight=(0,0),
                       window=parsingWindow)
         CreateToolTip(cStateLabel_i, "First measured charge state.")
         
-        self.cState_i, cStateBox_i = u.createTextBox(row=9,
+        self.cState_i, cStateBox_i = u.createTextBox(row=10,
                         column=1,
                         sticky="nw",
                         weight=(0,0),
@@ -837,14 +837,14 @@ class ParsingWindow:
         cStateBox_i.config(width=5)
         
         cStateLabel_f = u.createLabel(labelText="f: ", 
-                      row=10, 
+                      row=11, 
                       column=0,
                       sticky="ne",
                       weight=(0,0),
                       window=parsingWindow)
         CreateToolTip(cStateLabel_f, "Last measured charge state.")
         
-        self.cState_f, cStateBox_f = u.createTextBox(row=10,
+        self.cState_f, cStateBox_f = u.createTextBox(row=11,
                         column=1,
                         sticky="nw",
                         weight=(0,0),
@@ -854,13 +854,13 @@ class ParsingWindow:
         
         # Create labels for 1+ and n+ filenames
         u.createLabel("1+ filenames:",
-                         row=11,
+                         row=12,
                          column=0,
                          sticky="nwe",
                          weight=(0,0),
                          window=parsingWindow)
         u.createLabel("N+ filenames:",
-                         row=11,
+                         row=12,
                          column=1,
                          sticky="nwe",
                          weight=(0,1),
@@ -909,7 +909,7 @@ class ParsingWindow:
         for i, name in enumerate(self.onePlusFilenames):
             
             label = u.createLabel(labelText=name,
-                             row = i+12,
+                             row = i+13,
                              column = 0,
                              sticky = "wne",
                              weight = (0,0),
@@ -920,7 +920,7 @@ class ParsingWindow:
         for i, name in enumerate(self.nPlusFilenames):
             
             label = u.createLabel(labelText=name,
-                             row = i+12,
+                             row = i+13,
                              column = 1,
                              sticky = "wne",
                              weight = (0,1),
