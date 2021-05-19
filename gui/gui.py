@@ -533,7 +533,7 @@ class MainWindow:
                 available_charge_states = self.parameters["cStates"],
                 header = self.parameters["header"],
                 footer = self.parameters["footer"],
-                factor = self.parameters["multiplying_factor"],
+                multiplying_factor = self.parameters["multiplying_factor"],
                 separator = self.parameters["separator"],
                 one_plus_file_names = self.parameters["onePlusFilenames"],
                 n_plus_file_names = self.parameters["nPlusFilenames"]
