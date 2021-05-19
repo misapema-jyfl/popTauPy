@@ -107,7 +107,7 @@ class Parser:
         
         # Get the time series data
         t_1, i_1 = dfOne["t"], dfOne["i"]
-        t_n, i_n = dfN["t"], dfN["i"]
+        t_n, i_n = dfN["t"], dfN["i"]*self.multiplyingFactor # Conversion to A
         
         # Remove time offset, i.e. set 1+ rise onset as t=0
         t_off = t_1[ i_1 > 0.1*max(i_1) ].values[0]
