@@ -620,6 +620,7 @@ class ParsingWindow:
         self.header = tk.StringVar()
         self.footer = tk.StringVar()
         self.separator = tk.StringVar()
+        self.factor = tk.StringVar()
         self.parsingFilenameLabels = {"1+":[],"n+":[]}
         self.species = tk.StringVar()
         self.cState_i = tk.StringVar()
