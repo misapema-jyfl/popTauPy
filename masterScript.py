@@ -84,10 +84,10 @@ def do_abc():
         
         # s = "{ " + str(charge_state) + "+}"
         
-        ax.plot(t*1e3,i*1e3,c="k", label="Measured")
-        ax.plot(T*1e3,y(T)*1e3,c="r", ls="--", label="Fitted")
+        ax.plot(t*1e3,i,c="k", label="Measured")
+        ax.plot(T*1e3,y(T),c="r", ls="--", label="Fitted")
         ax.set_xlabel("Time (ms)")
-        ax.set_ylabel("Current (enA)")
+        ax.set_ylabel(r"Current ($e$A)")
         ax.set_xlim(left=0)
         ax.set_ylim(bottom=0)
         ax.legend()
