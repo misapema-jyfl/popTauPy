@@ -336,6 +336,7 @@ class MainWindow:
             "nPlusFilenames":[],
             "header":0,
             "footer":0,
+            "multiplying_factor":0,
             "separator":",",
             "pathToRawData":"",
             "abcFilename":"",
@@ -532,6 +533,7 @@ class MainWindow:
                 available_charge_states = self.parameters["cStates"],
                 header = self.parameters["header"],
                 footer = self.parameters["footer"],
+                factor = self.parameters["multiplying_factor"],
                 separator = self.parameters["separator"],
                 one_plus_file_names = self.parameters["onePlusFilenames"],
                 n_plus_file_names = self.parameters["nPlusFilenames"]
@@ -774,7 +776,22 @@ class ParsingWindow:
                         window=parsingWindow,
                         command=self.parsingSaveActive)
         separatorBox.config(width=5)
-        
+        # Multiplying factor
+        parsingFactorLabel = u.createLabel(labelText="Conversion factor:", 
+                         row=6,
+                         column=0,
+                         sticky="nw",
+                         weight=(0,0),
+                         window=parsingWindow)
+        CreateToolTip(parsingFactorLabel, "Conversion factor required\
+                      to convert the transient signal to units of Amperes.")
+        self.factor, factorBox = u.createTextBox(row=6,
+                        column=1,
+                        sticky="nw",
+                        weight=(0,1),
+                        window=parsingWindow,
+                        command=self.parsingSaveActive)
+        factorBox.config(width=10)
         # Ion species and charge states
         speciesLabel = u.createLabel(labelText="Ion species: ", 
                       row=7, 
@@ -875,8 +892,9 @@ class ParsingWindow:
         lenSep = len(self.separator.get())
         lenSpecies = len(self.species.get())
         lenStates = len(self.cState_i.get())*len(self.cState_f.get())
+        lenFactor = len(self.factor.get())
         if (lenDir*lenOnePlus*lenNPlus\
-            *lenH*lenF*lenSep*lenSpecies*lenStates > 0):
+            *lenH*lenF*lenSep*lenSpecies*lenStates*lenFactor > 0):
             self.saveButton.config(state=tk.NORMAL)
         else:
             self.saveButton.config(state=tk.DISABLED)
@@ -968,6 +986,7 @@ class ParsingWindow:
         params["n_plus_naming_convention"]=self.nPlusConvention.get()
         params["header"]=int(self.header.get())
         params["footer"]=int(self.footer.get())
+        params["multiplying_factor"]=float(self.factor.get())
         params["separator"]=str(self.separator.get())
         params["pathToRawData"]=str(self.dataDir.get())
         params["species"]=str(self.species.get())

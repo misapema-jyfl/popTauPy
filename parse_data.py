@@ -36,18 +36,12 @@ class Parser:
             
         self.footer = params["parsing"]["footer"]
         self.sep = params["parsing"]["separator"]
+        self.multiplyingFactor = params["parsing"]["multiplying_factor"]
         
-        # Specify the naming conventions. 
-        # Use placeholder {} for the (variable) name specifier.
-        # self.nPlusInConvention = params["parsing"]["n_plus_naming_convention"]
-        # self.onePlusInConvention = params["parsing"]["one_plus_naming_convention"]
-        # self.names = params["parsing"]["names"]
-        
-        # Retrieve 1+ & n+ filenames
+        # Retrieve available 1+ & n+ filenames and charge states
         self.onePlusFiles = params["parsing"]["one_plus_file_names"]
         self.nPlusFiles = params["parsing"]["n_plus_file_names"]        
         self.names = [(one, n) for one, n in zip(self.onePlusFiles, self.nPlusFiles)]
-        
         self.cStates = params["parsing"]["available_charge_states"]
         
         # Specify the output file naming conventions for 

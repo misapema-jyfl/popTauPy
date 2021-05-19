@@ -323,6 +323,7 @@ class Plotter:
         parsing = params["parsing"]
         
         # Set the charge states for which data is available
+        # TODO! This looks bad. 
         if self.plotting["available_charge_states"] == False:
             if not self.data["available_charge_states"] == False:
                 self.cStates = self.data["available_charge_states"][2:-2]
@@ -332,6 +333,7 @@ class Plotter:
             self.cStates = self.plotting["available_charge_states"]
         
         # Set the available solution set file names
+        # TODO! --"--
         if self.plotting["solution_set_files"] == False:
             self.fNames = ["solset_MC_iters-{}_N-{}_q-{}.csv"\
                            .format(self.optimizer["number_of_MC"],
