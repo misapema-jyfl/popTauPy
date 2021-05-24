@@ -1382,6 +1382,7 @@ class optimizeWindow:
         me = 9.10938356e-31
         f = float(self.freq.get())
         cutoff = eps0*me*(2*np.pi*f)**2/e**2
+        cutoff *= 1e-6 # Conversion to cm-3
         cutoff = f"{cutoff:.3e}"
         self.ne_hi.set(value=cutoff)
         
@@ -1757,6 +1758,7 @@ class PlottingWindow:
         me = 9.10938356e-31
         f = float(self.freq.get())
         cutoff = eps0*me*(2*np.pi*f)**2/e**2
+        cutoff *= 1e-6 # Conversion to cm-3
         cutoff = f"{cutoff:.3e}"
         self.ne_hi.set(value=cutoff)
     
