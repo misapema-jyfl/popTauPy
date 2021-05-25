@@ -1,25 +1,15 @@
 data:
   abc_file_name: ''
-  available_charge_states: &id001
-  - 3
-  - 4
-  - 5
-  - 6
-  - 7
-  - 8
-  - 9
-  - 10
-  - 11
-  - 12
-  parsed_data_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_4/JA_2021-02-24_5ms/results/
-  species: K
+  available_charge_states: &id001 []
+  parsed_data_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/tmp/
+  species: ''
 general:
   do_abc: 0
   do_neTe: 0
-  do_parse: 1
-  do_plots: 0
+  do_parse: 0
+  do_plots: 1
   elemental_data_directory: ./elemental_data/
-  save_to_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_4/JA_2021-02-24_5ms/results/
+  save_to_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/tmp/
   working_directory: ./
 optimizer:
   Ee_hi: 0
@@ -32,44 +22,29 @@ optimizer:
   rk_time_step: 0.001
 parsing:
   available_charge_states: *id001
-  footer: 12
+  footer: 0
   header: 0
-  multiplying_factor: 1.1754e-06
-  n_plus_file_names:
-  - 2021 02 24 - 16 58 00 courant N+.txt
-  - 2021 02 24 - 16 35 19 courant N+.txt
-  - 2021 02 24 - 16 24 53 courant N+.txt
-  - 2021 02 24 - 16 04 31 courant N+.txt
-  - 2021 02 24 - 15 54 34 courant N+.txt
-  - 2021 02 24 - 15 35 39 courant N+.txt
-  - 2021 02 24 - 14 31 55 courant N+.txt
-  - 2021 02 24 - 14 52 36 courant N+.txt
-  - 2021 02 24 - 15 02 26 courant N+.txt
-  - 2021 02 24 - 15 23 34 courant N+.txt
-  one_plus_file_names:
-  - 2021 02 24 - 16 58 00 pulse 1+.txt
-  - 2021 02 24 - 16 35 19 pulse 1+.txt
-  - 2021 02 24 - 16 24 53 pulse 1+.txt
-  - 2021 02 24 - 16 04 31 pulse 1+.txt
-  - 2021 02 24 - 15 54 34 pulse 1+.txt
-  - 2021 02 24 - 15 35 39 pulse 1+.txt
-  - 2021 02 24 - 14 31 55 pulse 1+.txt
-  - 2021 02 24 - 14 52 36 pulse 1+.txt
-  - 2021 02 24 - 15 02 26 pulse 1+.txt
-  - 2021 02 24 - 15 23 34 pulse 1+.txt
-  parsed_data_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_4/JA_2021-02-24_5ms/results/
-  raw_data_path: /home/miha/Work/datasets/JA_2021-02-24_pulse_width/2021 02 24 vary
-    pulse duration/2021 02 24 N+ pulse responses/
-  separator: \t
-  species: K
+  multiplying_factor: 0
+  n_plus_file_names: []
+  one_plus_file_names: []
+  parsed_data_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/tmp/
+  raw_data_path: ''
+  separator: ','
+  species: ''
 plotting:
-  Ee_hi: 0
-  Ee_lo: 0
-  F_hi: 0
-  available_charge_states: []
-  confidence: 1.0
-  ne_hi: 0
-  ne_lo: 0
+  Ee_hi: 9999.0
+  Ee_lo: 10.0
+  F_hi: 1.0e-07
+  available_charge_states:
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  confidence: 0.341
+  ne_hi: 2608000000000.0
+  ne_lo: 100000000000.0
   plot_characteristic_time_vs_charge:
     conf_color: r
     conf_marker: o
@@ -77,20 +52,20 @@ plotting:
     cx_color: b
     cx_marker: ^
     cx_yscale: linear
-    do_plot: false
+    do_plot: 0
     inz_color: k
     inz_marker: s
     inz_yscale: linear
     output_data: true
   plot_energy_content_vs_charge:
     color: k
-    do_plot: false
+    do_plot: 0
     marker: s
     output_data: true
     y_hi: false
     y_lo: false
   plot_number_of_solutions_vs_F:
-    do_plot: false
+    do_plot: 0
     list_of_F_values:
     - 0.001
     - 0.0001
@@ -102,15 +77,21 @@ plotting:
     y_hi: false
     y_lo: 1
   plot_solution_sets:
-    do_plot: false
+    do_plot: 1
     sigma: 10
     x_scale: log
     y_scale: log
   plot_triple_product_vs_charge:
     color: m
-    do_plot: false
+    do_plot: 0
     marker: s
     output_data: true
     y_hi: false
     y_lo: false
-  solution_set_files: []
+  solution_set_files:
+  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-5.csv
+  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-6.csv
+  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-7.csv
+  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-8.csv
+  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-9.csv
+  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-10.csv

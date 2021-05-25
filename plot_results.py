@@ -195,9 +195,9 @@ class SolSetPlotter:
         
         extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
         
-# =============================================================================
-#         Generate the figure
-# =============================================================================
+        # =====================================================================
+        #         Generate the figure
+        # =====================================================================
         fig = plt.figure()
 
         # Settings for the subplots to add to the figure
@@ -236,44 +236,44 @@ class SolSetPlotter:
         
         # Set bins for the histograms
         if self.solSettings["x_scale"] == "log":
-            Elo = np.log10(self.Ee_lo)
-            Ehi = np.log10(self.Ee_hi)
-            Ebins = np.logspace(Elo, Ehi, 100)
+            Ebins = 100
+            E_log = True
         else:
-            Elo = self.Ee_lo
-            Ehi = self.Ee_hi
-            Ebins = np.linspace(Elo, Ehi, 100)
-        
+            Ebins = 100
+            E_log = False
+            
         if self.solSettings["y_scale"] == "log":
-            nlo = np.log10(self.ne_lo)
-            nhi = np.log10(self.ne_hi)
-            nbins = np.logspace(nlo, nhi, 100)
+            nbins = 100
+            n_log = True
         else:
-            nlo = self.ne_lo
-            nhi = self.ne_hi
-            nbins = np.linspace(nlo, nhi, 100)
-        
+            nbins = 100
+            n_log = False
+            
         # Plot x-projection histogram
         xmarg = fig.add_axes([xmargx, xmargy, xmargw, xmargh])
-        xmarg.hist(x, bins=Ebins, color="crimson")
-        xmarg.set(xscale=self.solSettings["x_scale"],
-        xlim=(self.Ee_lo, self.Ee_hi))
-        
+        xmarg.hist(x, bins=Ebins, color="crimson", log=E_log)
+        xmarg.set(xlim=(self.Ee_lo, self.Ee_hi))
+        xmarg.set(xscale=self.solSettings["x_scale"])
         xmarg.spines["left"].set_visible(False)
         xmarg.spines["right"].set_visible(False)
         xmarg.spines["top"].set_visible(False)
         xmarg.spines["bottom"].set_visible(False)
+        xmarg.yaxis.set_visible(False)
+        xmarg.xaxis.set_visible(False)
         
         # Plot y-projection histogram
         ymarg = fig.add_axes([ymargx, ymargy, ymargw, ymargh])
-        ymarg.hist(y, bins=nbins, orientation="horizontal", color="crimson")
-        ymarg.set(yscale=self.solSettings["y_scale"],
-        ylim=(self.ne_lo, self.ne_hi))
+        ymarg.hist(y, bins=nbins, orientation="horizontal", color="crimson",
+                   log = n_log)
+        ymarg.set(ylim=(self.ne_lo, self.ne_hi))
+        ymarg.set(yscale=self.solSettings["y_scale"])
         
         ymarg.spines["top"].set_visible(False)
         ymarg.spines["bottom"].set_visible(False)
         ymarg.spines["left"].set_visible(False)
         ymarg.spines["right"].set_visible(False)
+        ymarg.yaxis.set_visible(False)
+        ymarg.xaxis.set_visible(False)
         
         
         # Plot the colorbar
