@@ -40,6 +40,9 @@ nPlusFiles = ["/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/result
 "/home/miha/Work/codes/Consecutive_Transients_Analyzer/test/results/K12+.csv"]
 cStates = [3,4,5,6,7,8,9,10,11,12]
 
+# Conversion factor (in case the N+ current needs to be converted to units of A)
+# F = (1/1e6 + 1/5.7e6)
+F = 1
 
 def calculate_total_number_extracted(t, i, q):
     '''Integrate the given signal t, i to find the total number of 
@@ -127,7 +130,7 @@ for i in range(len(cStates)):
     
     # Select the N+ current
     nPlus = pd.read_csv(nPlusFile)
-    windowSize = int(.1*len(nPlus)/100) # rolling average
+    windowSize = int(1*len(nPlus)/100) # rolling average
     # nPlus = nPlus.rolling(window=windowSize, min_periods=1).mean() 
     tNP = nPlus["t"]
     iNP = nPlus["i"]
@@ -137,13 +140,10 @@ for i in range(len(cStates)):
     t, i = select_extraction_current(tNP,iNP)
     
     # Determine the CB time
-    t_cb = determine_cb_time(t=t, i=i*1e-6, q=cState)
+    t_cb = determine_cb_time(t=t, i=i, q=cState)
     
     # Store cb time in dictionary
     cb_times.append(t_cb)
-    
-    # Conversion factor 
-    F = (1/1e6 + 1/5.7e6)
     
     # Determine cb efficiency
     eff = determine_cb_efficiency(t=t,
