@@ -18,6 +18,23 @@ Sorry for the inconvenience. Use Linux.
 as its argument. E.g: In the working directory, run
 > python3 masterScript.py params.yaml
 
+The code expects to find the 1+ injection pulse 
+corresponding to the measured n+ current as separate files, 
+and it expects the time series data to be stored in two columns,
+with time in the first column, and the signal in the second column.
+
+A conversion factor must be passed as a parameter to the code
+to convert the signal to units of Amperes. 
+
+## Disclaimer
+
+This code is by no means foolproof, and there are many ways to
+use it in a way that produces undesirable behavior. 
+There is also a lack of flexibility and features.
+Then again, there are currently only two people in the world
+who are actively using the code, and the other guy will 
+(hopefully) forgive me.
+
 ## Major changes since v1.1.0
 * A GUI has been developed to make it easier to create 
 the parameters.yaml files.
