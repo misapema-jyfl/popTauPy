@@ -4,6 +4,20 @@ A numerical code for determining plasma characteristic values from
 short pulse mode 1+ injection induced extraction current transients
 in a CB-ECRIS.
 
+## Compatibility
+
+This code has been developed and tested on Linux Ubuntu (20.04). 
+It is known that the code is currently incompatible with Windows OS.
+Sorry for the inconvenience. Use Linux.
+
+## Instructions for use
+
+* Use the GUI to generate a parameters file.
+
+* Execute the masterScript.py from terminal, passing the parameters file
+as its argument. E.g: In the working directory, run
+> python3 masterScript.py params.yaml
+
 ## Major changes since v1.1.0
 * A GUI has been developed to make it easier to create 
 the parameters.yaml files.

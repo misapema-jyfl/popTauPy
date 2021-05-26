@@ -1,40 +1,70 @@
 data:
-  abc_file_name: ''
-  available_charge_states: &id001 []
-  parsed_data_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/tmp/
-  species: ''
+  abc_file_name: abc.csv
+  available_charge_states: &id001
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  parsed_data_path: /home/miha/Desktop/results/
+  species: K
 general:
-  do_abc: 0
-  do_neTe: 0
-  do_parse: 0
+  do_abc: 1
+  do_neTe: 1
+  do_parse: 1
   do_plots: 1
   elemental_data_directory: ./elemental_data/
-  save_to_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/tmp/
+  save_to_path: /home/miha/Desktop/results/
   working_directory: ./
 optimizer:
-  Ee_hi: 0
-  Ee_lo: 0
-  ne_hi: 0
-  ne_lo: 0
-  number_of_MC: 1000
+  Ee_hi: 9999.0
+  Ee_lo: 10.0
+  ne_hi: 2608000000000.0
+  ne_lo: 100000000000.0
+  number_of_MC: 10
   number_of_ne: 1000
-  rate_coefficient_method: ''
+  rate_coefficient_method: interpMB
   rk_time_step: 0.001
 parsing:
   available_charge_states: *id001
-  footer: 0
+  footer: 12
   header: 0
-  multiplying_factor: 0
-  n_plus_file_names: []
-  one_plus_file_names: []
-  parsed_data_path: /home/miha/Work/research/ppp-4_config_comparison/analysis/tmp/
-  raw_data_path: ''
-  separator: ','
-  species: ''
+  multiplying_factor: 1.1754e-06
+  n_plus_file_names:
+  - 2020 06 29 - 15 09 16 courant 1+.txt
+  - 2020 06 29 - 15 04 09 courant 1+.txt
+  - 2020 06 29 - 14 59 16 courant 1+.txt
+  - 2020 06 29 - 14 52 47 courant 1+.txt
+  - 2020 06 29 - 14 45 20 courant 1+.txt
+  - 2020 06 29 - 14 39 01 courant 1+.txt
+  - 2020 06 29 - 14 33 22 courant 1+.txt
+  - 2020 06 29 - 14 10 00 courant 1+.txt
+  - 2020 06 29 - 14 18 44 courant 1+.txt
+  - 2020 06 29 - 14 23 20 courant 1+.txt
+  one_plus_file_names:
+  - 2020 06 29 - 15 09 16 pulse 1+.txt
+  - 2020 06 29 - 15 04 09 pulse 1+.txt
+  - 2020 06 29 - 14 59 16 pulse 1+.txt
+  - 2020 06 29 - 14 52 47 pulse 1+.txt
+  - 2020 06 29 - 14 45 20 pulse 1+.txt
+  - 2020 06 29 - 14 39 01 pulse 1+.txt
+  - 2020 06 29 - 14 33 22 pulse 1+.txt
+  - 2020 06 29 - 14 10 00 pulse 1+.txt
+  - 2020 06 29 - 14 18 44 pulse 1+.txt
+  - 2020 06 29 - 14 23 20 pulse 1+.txt
+  parsed_data_path: /home/miha/Desktop/results/
+  raw_data_path: /home/miha/Work/research/ppp-4_config_comparison/data/JA_2020-06-29/transient_data/
+  separator: \t
+  species: K
 plotting:
   Ee_hi: 9999.0
   Ee_lo: 10.0
-  F_hi: 1.0e-07
+  F_hi: 1.0e-06
   available_charge_states:
   - 5
   - 6
@@ -52,20 +82,20 @@ plotting:
     cx_color: b
     cx_marker: ^
     cx_yscale: linear
-    do_plot: 0
+    do_plot: 1
     inz_color: k
     inz_marker: s
     inz_yscale: linear
     output_data: true
   plot_energy_content_vs_charge:
     color: k
-    do_plot: 0
+    do_plot: 1
     marker: s
     output_data: true
     y_hi: false
     y_lo: false
   plot_number_of_solutions_vs_F:
-    do_plot: 0
+    do_plot: 1
     list_of_F_values:
     - 0.001
     - 0.0001
@@ -83,15 +113,15 @@ plotting:
     y_scale: log
   plot_triple_product_vs_charge:
     color: m
-    do_plot: 0
+    do_plot: 1
     marker: s
     output_data: true
     y_hi: false
     y_lo: false
   solution_set_files:
-  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-5.csv
-  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-6.csv
-  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-7.csv
-  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-8.csv
-  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-9.csv
-  - /home/miha/Work/research/ppp-4_config_comparison/analysis/config_comparison_3/JA_2021-02-24/solset_MC_iters-1000_N-1000_q-10.csv
+  - /home/miha/Desktop/results/solset_MC_iters-10_N-1000_q-5.csv
+  - /home/miha/Desktop/results/solset_MC_iters-10_N-1000_q-6.csv
+  - /home/miha/Desktop/results/solset_MC_iters-10_N-1000_q-7.csv
+  - /home/miha/Desktop/results/solset_MC_iters-10_N-1000_q-8.csv
+  - /home/miha/Desktop/results/solset_MC_iters-10_N-1000_q-9.csv
+  - /home/miha/Desktop/results/solset_MC_iters-10_N-1000_q-10.csv

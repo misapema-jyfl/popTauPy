@@ -1416,7 +1416,7 @@ class optimizeWindow:
             params["method"]="interpMB"
         elif self.rc_method.get() == "Voronov":
             params["method"]="voronov"
-        params["N"]=int(self.N.get())
+        params["N_ne"]=int(self.N.get())
         params["N_MC"]=int(self.MC.get())
         self.optWindow.destroy()
         
