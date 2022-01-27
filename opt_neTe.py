@@ -388,7 +388,7 @@ class Optimizer:
 
         # # Use multiprocessing
         # if __name__ == "__main__":
-        with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=10) as executor: #TODO! max_workers -> controllable parameter
             
             # Create the ne array
             n = self.create_ne_array()
