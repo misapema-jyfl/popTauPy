@@ -56,15 +56,19 @@ class Optimizer:
         # Retrieve the elemental data parameters corresponding to 
         # the chosen method for evaluating the rate coefficient.
         # Retrieve the function by which to evaluate the rate coefficient.
-        if self.method=="voronov":
-            s = (self.elementalDir,self.method,"_",self.species,".csv")
-            filePath = "".join(s)
-            self.df_eldata = pd.read_csv(filePath, index_col="state")
+        s = (self.elementalDir,self.species,"/",self.method,"_",self.species,".csv")
+        filePath = "".join(s)
+        self.df_eldata = pd.read_csv(filePath, index_col="state")
         
-        if self.method=="interpMB":
-            s = (self.elementalDir,self.method,"_",self.species,".csv")
-            filePath = "".join(s)
-            self.df_eldata = pd.read_csv(filePath, index_col="state")
+        # if self.method=="voronov":
+        #     s = (self.elementalDir,self.species,"/",self.method,"_",self.species,".csv")
+        #     filePath = "".join(s)
+        #     self.df_eldata = pd.read_csv(filePath, index_col="state")
+        
+        # if self.method=="interpMB":
+        #     s = (self.elementalDir,self.species,"/",self.method,"_",self.species,".csv")
+        #     filePath = "".join(s)
+        #     self.df_eldata = pd.read_csv(filePath, index_col="state")
         
         # Set the function by which to evaluate the rate coefficients.
         self.rc = self.evaluate_rc()
@@ -120,12 +124,12 @@ class Optimizer:
         return rc
 
 
-    def load_interp_fun(self, chargeState, interpType):
+    def load_interp_fun(self, chargeState, method):
         '''
-        Returns the interpolation function of type interpType
+        Returns the interpolation function of type method
         (if exists) for the ion of the given charge state.
         '''
-        s = (self.elementalDir,interpType,"_",self.species,"_",
+        s = (self.elementalDir,self.species,"/",method,"_",self.species,"_",
              str(chargeState),"+.npy")
         filename = "".join(s)
         interpFun = np.load(filename,allow_pickle=True).item()
@@ -252,20 +256,6 @@ class Optimizer:
         F = 100*np.abs(tau_ratio - tau/tau_h)/tau_ratio
             
         return F
-
-        
-    # def make_constraints(self, n):
-    #     '''
-    #     Create constraints for the minimize_F algorithm
-    #     '''
-        
-    #     q = self.q
-        
-    #     cons = (NonlinearConstraint(lambda Ee: self.calculate_confinement_time(q, Ee, n), 0, np.inf),
-    #                 NonlinearConstraint(lambda Ee: self.calculate_confinement_time(q+1, Ee, n), 0, np.inf),
-    #                 NonlinearConstraint(lambda Ee: self.calculate_cx_rate(q, Ee, n), 0, np.inf))
-    
-    #     return cons
     
     
     
@@ -452,112 +442,3 @@ def make_biases(optimizeObject):
         biases_h = np.random.uniform(low=-h, high=h, size=Num) + 1
         
         return [biases_l, biases, biases_h]
-
-
-
-
-
-
-
-# def run_algorithm(charge_state):
-#     '''
-#     Run the optimisation routine on a chosen charge state,
-#     using the runtime parameters designated in 
-#     the settings file 'parameters.py'
-#     '''
-    
-#     print("Starting run for charge state {}...\n\n".format(str(charge_state)))
-    
-#     q = charge_state # Rename for brevity
-    
-#     # Instantiate the optimizer object for charge state q
-#     o = Optimizer(q)
-    
-#     # Create the list of Voronov biases to use
-#     b = make_biases(optimizeObject=o)
-    
-#     # Track number of iterations
-#     i=0
-    
-#     # Find the solution set with each given set of Voronov biases
-#     # and pack the solution set to the output dataframe
-#     ne = []
-#     Ee = []
-#     tau = []
-#     inz_rate = []
-#     cx_rate = []
-#     eC = []
-#     F = []
-#     used_biases_l = []
-#     used_biases = []
-#     used_biases_h = []
-    
-#     absoluteStart = time.perf_counter() # For tracking elapsed time
-#     for _ in range(o.number_of_MC_iters):
-        
-#         # Set the Voronov biases for this iteration    
-#         o.biases[q-1] = b[0][i]
-#         o.biases[q] = b[1][i]
-#         o.biases[q+1] = b[2][i]
-        
-#         # Find solution set using above biases
-#         start = time.perf_counter()
-#         result = o.find_solution_set()
-#         finish = time.perf_counter()
-        
-#         i += 1
-        
-#         # Append the output lists
-#         [ne.append(el) for el in result["ne"]]
-#         [Ee.append(el) for el in result["Ee"]]
-#         [tau.append(el) for el in result["tau"]]
-#         [inz_rate.append(el) for el in result["inz_rate"]]
-#         [cx_rate.append(el) for el in result["cx_rate"]]
-#         [F.append(el) for el in result["F"]]
-#         [eC.append(el) for el in result["eC"]]
-#         [used_biases_l.append(o.biases[q-1]) for _ in range(len(result["F"]))]
-#         [used_biases.append(o.biases[q]) for _ in range(len(result["F"]))]
-#         [used_biases_h.append(o.biases[q+1]) for _ in range(len(result["F"]))]
-        
-#         # Print runtime status...
-#         numSol = len(ne)
-#         totSol = i*o.N
-#         print("Finished iteration {} in {} s (total: {} s) | Cumulative accuracy: {} %"
-#               .format(i,
-#                       round(finish-start,1),
-#                       round(finish-absoluteStart,1),
-#                       round(100*numSol/totSol,1))
-#               )
-        
-    
-#     # Create the output dataframe
-#     df_out = pd.DataFrame()
-#     df_out["n"] = ne
-#     df_out["E"] = Ee
-#     df_out["tau"] = tau
-#     df_out["inz_rate"] = inz_rate
-#     df_out["cx_rate"] = cx_rate
-#     df_out["eC"] = eC
-#     df_out["bias_l"] = used_biases_l
-#     df_out["bias"] = used_biases
-#     df_out["bias_h"] = used_biases_h
-#     df_out["F"] = F
-    
-    
-    
-#     # Save results to file
-#     name = "solset_MC_iters-{}_N-{}_q-{}.csv".format(
-#         o.number_of_MC_iters,
-#         o.N,
-#         o.q)
-#     outputPath = p["output_directory"] + name
-#     df_out.to_csv( outputPath )
-    
-#     print("Run completed!\n\n")
-  
-
-
-# # Execute the routine
-# cStates = p["cStates"]
-# for q in cStates:
-#     run_algorithm(q)

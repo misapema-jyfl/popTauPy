@@ -10,8 +10,7 @@ where the parameters file (.yaml format) must also be specified.
 Example:
     >>> python3 masterScript.py params.yaml
 
-If you wish not to execute a given script, 
-set its execution option to false in the parameters file.
+Use the GUI to create the parameters file.
 
 @author: miha
 """
@@ -113,7 +112,7 @@ def do_abc():
 
 def run_algorithm(charge_state):
     '''
-    Run the optimisation routine on a chosen charge state,
+    Run the optimisation routine on chosen charge state,
     using the runtime parameters separately specified.
     '''
     
@@ -124,13 +123,13 @@ def run_algorithm(charge_state):
     # Instantiate the optimizer object for charge state q
     optimizer = Optimizer(q, params=params)
     
-    # Create the list of Voronov biases to use
+    # Create the list of uncertainty biases to use
     b = make_biases(optimizeObject=optimizer)
     
     # Track number of iterations
     i=0
     
-    # Find the solution set with each given set of Voronov biases
+    # Find the solution set with each given set of biases
     # and pack the solution set to the output dataframe
     ne = []
     Ee = []
