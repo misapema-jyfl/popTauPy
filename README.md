@@ -1,3 +1,8 @@
+# Developer's note
+
+This repository is no longer maintained. The new version of the code
+can be found from the [ct-analyzer](https://www.github.com/misapema-jyfl/ct-analyzer) repository.
+
 # popTauPy
 
 A numerical code for determining plasma characteristic values from 

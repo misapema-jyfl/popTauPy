@@ -15,8 +15,6 @@ from scipy.optimize import minimize
 # from parameters import general_parameters as gp
 
 
-
-
 class Optimizer:
     
     def __init__(self, q, params):
